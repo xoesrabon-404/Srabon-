@@ -3,7 +3,7 @@ const fetch = require("node-fetch");
 module.exports.config = {
     name: "rxhit",
     version: "1.0.2",
-    hasPermssion: 0,
+    hasPermssion: 2,
     credits: "rX Abdullah",
     description: "Ultra Fast Auto API Hitting Tool",
     commandCategory: "utility",
