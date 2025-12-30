@@ -245,51 +245,28 @@ catch (e) {
 }
 
 module.exports = function(loginData, options, callback) {
+    //const Language = global.Fca.Require.languageFile.find((/** @type {{ Language: string; }} */i) => i.Language == global.Fca.Require.FastConfig.Language).Folder.Index;
     var login;
     try {
         login = require('./Main');
-    } catch (e) {
+    }
+    catch (e) {
         console.log(e)
     }
     
-    require('./Extra/Database');
+ require('./Extra/Database');
+    
+    try {
+        login(loginData, options, function(err, api) {
+            if (err) return callback(err);
 
-try {
-    login(loginData, options, function(err, api) {
-        if (err) return callback(err);
+            try { api.createAITheme = require("./createAITheme")(api.defaultFuncs||api._defaultFuncs||api, api, api.ctx||api._ctx||{}); }
+            catch(e) { console.error("Failed to load createAITheme:", e); }
 
-        try {
-            api.createAITheme = require("./createAITheme")(
-                api.defaultFuncs || api._defaultFuncs || api,
-                api,
-                api.ctx || api._ctx || {}
-            );
-        } catch(e) {
-            console.error("Failed to load createAITheme:", e);
-        }
+            try { api.setThreadThemeMqtt = require("./setThreadThemeMqtt")(api.defaultFuncs||api._defaultFuncs||api, api, api.ctx||api._ctx||{}); }
+            catch(e) { console.error("Failed to load setThreadThemeMqtt:", e); }
 
-        try {
-            api.getThemePictures = require("./src/getThemePictures")(
-                api.defaultFuncs || api._defaultFuncs || api,
-                api,
-                api.ctx || api._ctx || {}
-            );
-        } catch(e) {
-            console.error("Failed to load getThemePictures:", e);
-        }
-
-        try {
-            api.setThreadTheme = require("./src/setThreadTheme")(
-                api.defaultFuncs || api._defaultFuncs || api,
-                api,
-                api.ctx || api._ctx || {}
-            );
-        } catch(e) {
-            console.error("Failed to load setThreadTheme:", e);
-        }
-
-        return callback(null, api);
-    });
-} catch(e) { 
-    console.log(e); 
-}
+            return callback(null, api);
+        });
+    } catch(e) { console.log(e); }
+};
