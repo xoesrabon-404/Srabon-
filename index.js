@@ -5,27 +5,7 @@ const deviceID = require('uuid');
 const adid = require('uuid');
 const totp = require('totp-generator');
 const logger = require("./utils/log");
-const path = require("path");
 
-const restartFile = path.join(process.cwd(), "restart.json");
-
-let data = { count: 0 };
-
-try {
-  if (fs.existsSync(restartFile)) {
-    data = JSON.parse(fs.readFileSync(restartFile, "utf8"));
-  }
-
-  data.count = (data.count || 0) + 1;
-
-  fs.writeFileSync(restartFile, JSON.stringify(data, null, 2));
-
-  console.log("🔁 Bot restart count:", data.count);
-  global.restartCount = data.count;
-
-} catch (e) {
-  console.error("Restart counter error:", e);
-}
 const colors = ["FF9900","FFFF33","33FFFF","FF99FF","FF3366","FFFF66","FF00FF","66FF99"];
 const randomColor = colors[Math.floor(Math.random() * colors.length)];
 
