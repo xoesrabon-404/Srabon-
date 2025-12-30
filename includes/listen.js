@@ -11,12 +11,12 @@ module.exports = function ({ api, models }) {
   const moment = require('moment-timezone');
   const axios = require("axios");
   const config = require("./../config.json");
-////////////////////////////////////// [ ENHANCED BY RX DEV ]/////////////////////////////////////// fixed bY rX
+/////////////////////////////////////////////////////////////////////////////
 
-  var day = moment.tz("Asia/Dhaka").day();
+  var day = moment.tz("Asia/Ho_Chi_Minh").day();
   const checkttDataPath = __dirname + '/../modules/commands/tt/';
   setInterval(async() => {
-    const day_now = moment.tz("Asia/Dhaka").day();
+    const day_now = moment.tz("Asia/Ho_Chi_Minh").day();
     if (day != day_now) {
       day = day_now;
       const checkttData = fs.readdirSync(checkttDataPath);
@@ -40,8 +40,8 @@ module.exports = function ({ api, models }) {
                 return a.name.localeCompare(b.name);
             }
         });
-   const timechecktt = moment.tz('Asia/Dhaka').format('DD/MM/YYYY || HH:mm:ss'); 
-    const haha = `\n────────────────────\n💬 Total messages: ${storage.reduce((a, b) => a + b.count, 0)}\n⏰ Time: ${timechecktt}\n✏️ Các bạn khác cố gắng tương tác nếu muốn lên top nha`;    
+   const timechecktt = moment.tz('Asia/Ho_Chi_Minh').format('DD/MM/YYYY || HH:mm:ss'); 
+    const haha = `\n────────────────────\n💬 Tổng tin nhắn: ${storage.reduce((a, b) => a + b.count, 0)}\n⏰ Time: ${timechecktt}\n✏️ Các bạn khác cố gắng tương tác nếu muốn lên top nha`;    
         let checkttBody = '[ TOP TƯƠNG TÁC NGÀY ]\n────────────────────\n📝 Top 10 người tương tác nhiều nhất hôm qua:\n\n';
         checkttBody += storage.slice(0, 10).map(item => {
           return `${count++}. ${item.name} - 💬 ${item.count} tin nhắn`;
@@ -76,9 +76,9 @@ module.exports = function ({ api, models }) {
                   return a.name.localeCompare(b.name);
               }
           });
-    const tctt = moment.tz('Asia/Dhaka').format('DD/MM/YYYY || HH:mm:ss');
-      const dzvcl = `\n────────────────────\n⏰ Time: ${tctt}\n✏️ Others, please try to interact more if you want to reach the top 😊`;    
-          let checkttBody = '[ WEEKLY TOP INTERACTIONS ]\n────────────────────\n📝 WEEKLY TOP INTERACTIONS\n\n';
+    const tctt = moment.tz('Asia/Ho_Chi_Minh').format('DD/MM/YYYY || HH:mm:ss');
+      const dzvcl = `\n────────────────────\n⏰ Time: ${tctt}\n✏️ Các bạn khác cố gắng tương tác nếu muốn lên top nha`;    
+          let checkttBody = '[ TOP TƯƠNG TÁC TUẦN ]\n────────────────────\n📝 Top 10 người tương tác nhiều nhất tuần qua:\n\n';
           checkttBody += storage.slice(0, 10).map(item => {
             return `${count++}. ${item.name} - 💬 ${item.count} tin nhắn`;
         }).join('\n');
@@ -136,15 +136,15 @@ module.exports = function ({ api, models }) {
 }());
   
   const admin = config.ADMINBOT; 
-logger("┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓", "[ rX ]");
+logger("┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓", "[ DGK ]");
   for(let i = 0; i <= admin.length -1; i++){
     dem = i + 1
-    logger(` ID ADMIN ${dem}: ${(!admin[i]) ? "Empty" : admin[i]}`, "[ MARIA ]");
+    logger(` ID ADMIN ${dem}: ${(!admin[i]) ? "Trống" : admin[i]}`, "[ GKHANH ]");
   }
-  logger(` ID BOT: ${api.getCurrentUserID()}`, "[ MARIA ]");
-  logger(` PREFIX: ${global.config.PREFIX}`, "[ MARIA ]");
-  logger(` NAME BOT: ${(!global.config.BOTNAME) ? "Main" : global.config.BOTNAME}`, "[ MARIA ]");
-  logger("┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛", "[ MARIA V3 ]");
+  logger(` ID BOT: ${api.getCurrentUserID()}`, "[ GKhanh ]");
+  logger(` PREFIX: ${global.config.PREFIX}`, "[ GKhanh ]");
+  logger(` NAME BOT: ${(!global.config.BOTNAME) ? "Qindy Gkhanh" : global.config.BOTNAME}`, "[ Gkhanh ]");
+  logger("┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛", "[ Gkhanh ]");
   /////////////////////////////////////////////
   //========= Require all handle need =========//  /////////////////////////////////////////////
   const handleCommand = require("./handle/handleCommand")({ api, models, Users, Threads, Currencies });
@@ -177,12 +177,12 @@ logger.loader(`Ping load source code: ${Date.now() - global.client.timeStart}ms`
   const checkTime = (time) => new Promise((resolve) => {
     time.forEach((e, i) => time[i] = parseInt(String(e).trim()));
     const getDayFromMonth = (month) => (month == 0) ? 0 : (month == 2) ? (time[2] % 4 == 0) ? 29 : 28 : ([1, 3, 5, 7, 8, 10, 12].includes(month)) ? 31 : 30;
-    if (time[1] > 12 || time[1] < 1) resolve("[🦑]➜ The month you entered seems invalid");
-    if (time[0] > getDayFromMonth(time[1]) || time[0] < 1) resolve("[🦑]➜ The day you entered seems invalid");
-    if (time[2] < 2022) resolve("[🦑]➜ Which era are you living in?");
-    if (time[3] > 23 || time[3] < 0) resolve("[🦑]➜ The hour you entered seems invalid");
-    if (time[4] > 59 || time[3] < 0) resolve("[🦑]➜ The minutes you entered seem invalid");
-    if (time[5] > 59 || time[3] < 0) resolve("[🦑]➜ The seconds you entered seem invalid");
+    if (time[1] > 12 || time[1] < 1) resolve("[🦑]➜ Tháng của bạn có vẻ không hợp lệ");
+    if (time[0] > getDayFromMonth(time[1]) || time[0] < 1) resolve("[🦑]➜ Ngày của bạn có vẻ không hợp lệ");
+    if (time[2] < 2022) resolve("[🦑]➜ Bạn sống ở kỷ nguyên nào thế?");
+    if (time[3] > 23 || time[3] < 0) resolve("[🦑]➜ Giờ của bạn có vẻ không hợp lệ");
+    if (time[4] > 59 || time[3] < 0) resolve("[🦑]➜ Phút của bạn có vẻ không hợp lệ");
+    if (time[5] > 59 || time[3] < 0) resolve("[🦑]➜ Giây của bạn có vẻ không hợp lệ");
     yr = time[2] - 1970;
     yearToMS = (yr) * 365 * 24 * 60 * 60 * 1000;
     yearToMS += ((yr - 2) / 4).toFixed(0) * 24 * 60 * 60 * 1000;
@@ -206,7 +206,7 @@ logger.loader(`Ping load source code: ${Date.now() - global.client.timeStart}ms`
     var data = JSON.parse(fs.readFileSync(datlichPath));
 
     //GET CURRENT TIME
-    var timeVN = moment().tz('Asia/Dhaka').format('DD/MM/YYYY_HH:mm:ss');
+    var timeVN = moment().tz('Asia/Ho_Chi_Minh').format('DD/MM/YYYY_HH:mm:ss');
     timeVN = timeVN.split("_");
     timeVN = [...timeVN[0].split("/"), ...timeVN[1].split(":")];
 
@@ -234,7 +234,7 @@ logger.loader(`Ping load source code: ${Date.now() - global.client.timeStart}ms`
       try {
         var all = (await Threads.getInfo(el["TID"])).participantIDs;
           all.splice(all.indexOf(api.getCurrentUserID()), 1);
-        var body = el.REASON || "EVERYONE", mentions = [], index = 0;
+        var body = el.REASON || "MỌI NGƯỜI ƠI", mentions = [], index = 0;
 
           for (let i = 0; i < all.length; i++) {
             if (i == body.length) body += " ‍ ";
@@ -269,7 +269,7 @@ logger.loader(`Ping load source code: ${Date.now() - global.client.timeStart}ms`
 
 return async (event) => {
  const { threadID, author, image,type,logMessageType, logMessageBody,logMessageData } = event;
-  const tm = process.uptime(),Tm=(require('moment-timezone')).tz('Asia/Dhaka').format('HH:mm:ss || DD/MM/YYYY')
+  const tm = process.uptime(),Tm=(require('moment-timezone')).tz('Asia/Ho_Chi_Minh').format('HH:mm:ss || DD/MM/YYYY')
     h=Math.floor(tm / (60 * 60)),H=h<10?'0'+h:h,
     m=Math.floor((tm % (60 * 60)) / 60),M=m<10?'0'+m:m,
     s=Math.floor(tm % 60),S=s<10?'0'+s:s,$=':'
@@ -285,16 +285,16 @@ return async (event) => {
       if (findAnti) {
         if (findAd || botID.includes(author)) {
           // api.sendMessage(
-          //   `» [ Made by rX ] ${event.snippet}`,
+          //   `» [ CẬP NHẬT NHÓM ] ${event.snippet}`,
           //   event.threadID
           // );
-          var img = global.utils.imgur(image.link, 'jpg');
+          var img = global.utils.imgur(imgage.link, 'jpg');
           findAnti.url = img;
           const jsonData = JSON.stringify(data_anti, null, 4);
            fs.writeFileSync(global.anti, jsonData);
         } else {
           const res = await axios.get(findAnti.url, { responseType: "stream" });
-          api.sendMessage(`⚠️ Group profile picture change protection mode activated\n⏰ Time: ${moment().tz("Asia/Dhaka").format("HH:mm:ss || DD/MM/YYYY")}`, threadID);
+          api.sendMessage(`⚠️ Kích hoạt chế độ chống đổi ảnh nhóm\n⏰ Time: ${moment().tz("Asia/Ho_Chi_Minh").format("HH:mm:ss || DD/MM/YYYY")}`, threadID);
           return api.changeGroupImage(res.data, threadID);
         }
       }
@@ -317,7 +317,7 @@ return async (event) => {
           const jsonData = JSON.stringify(data_anti, null, 4);
            fs.writeFileSync(global.anti, jsonData);
         } else {
-          api.sendMessage(`⚠️ Activate group name change protection mode\n⏰ Time: ${moment().tz("Asia/Dhaka").format("HH:mm:ss || DD/MM/YYYY")}`, threadID);
+          api.sendMessage(`⚠️ Kích hoạt chế độ chống đổi tên nhóm\n⏰ Time: ${moment().tz("Asia/Ho_Chi_Minh").format("HH:mm:ss || DD/MM/YYYY")}`, threadID);
           return api.setTitle(findAnti.name, threadID);
         }
       }
@@ -340,7 +340,7 @@ return async (event) => {
           const jsonData = JSON.stringify(data_anti, null, 4);
            fs.writeFileSync(global.anti, jsonData);
         } else {
-          api.sendMessage(`⚠️ User nickname change protection mode activated\n⏰ Time: ${moment().tz("Asia/Dhaka").format("HH:mm:ss || DD/MM/YYYY")}`, threadID);
+          api.sendMessage(`⚠️ Kích hoạt chế độ chống đổi biệt danh người dùng\n⏰ Time: ${moment().tz("Asia/Ho_Chi_Minh").format("HH:mm:ss || DD/MM/YYYY")}`, threadID);
           return api.changeNickname(
             findAnti.data[logMessageData.participant_id] || "",
             threadID,
@@ -363,10 +363,10 @@ logMessageData.leftParticipantFbId,
             threadID,
             (error, info) => {
               if (error) {
- api.sendMessage(`⚠️ Auto-add mode triggered when a user leaves the group\n🔰 Status: Failed\n👤 User: https://www.facebook.com/profile.php?id=${logMessageData.leftParticipantFbId}\n⏰ Time: ${moment().tz("Asia/Dhaka").format("HH:mm:ss || DD/MM/YYYY")}\n⛔ If the bot fails to add, the user may have blocked the bot.`, threadID);
-} else
-api.sendMessage(`⚠️ Auto-add mode triggered when a user leaves the group\n🔰 Status: Success\n👤 User: https://www.facebook.com/profile.php?id=${logMessageData.leftParticipantFbId}\n⏰ Time: ${moment().tz("Asia/Dhaka").format("HH:mm:ss || DD/MM/YYYY")}\n⛔ If the bot fails to add, the user may have blocked the bot.`, threadID);
-        });
+ api.sendMessage(`⚠️ Kích hoạt chế độ tự động thêm người dùng khi tự ý rời nhóm\n🔰 Trạng thái: Thất Bại\n👤 Người dùng: https://www.facebook.com/profile.php?id=${logMessageData.leftParticipantFbId}\n⏰ Thời gian: ${moment().tz("Asia/Ho_Chi_Minh").format("HH:mm:ss || DD/MM/YYYY")}\n⛔ Nếu bot thêm thất bại có thể người dùng đã chặn bot`, threadID);
+              } else
+  api.sendMessage(`⚠️ Kích hoạt chế độ tự động thêm người dùng khi tự ý rời nhóm\n🔰 Trạng thái: Thành Công\n👤 Người dùng: https://www.facebook.com/profile.php?id=${logMessageData.leftParticipantFbId}\n⏰ Thời gian: ${moment().tz("Asia/Ho_Chi_Minh").format("HH:mm:ss || DD/MM/YYYY")}\n⛔ Nếu bot thêm thất bại có thể người dùng đã chặn bot`, threadID);
+       });
      }
   }
 }
@@ -384,20 +384,20 @@ api.sendMessage(`⚠️ Auto-add mode triggered when a user leaves the group\n�
      };
      let find_thuebot = thuebot.find($ => $.t_id == event.threadID);
      if (((global.data.threadData.get(event.threadID)?.PREFIX || global.config.PREFIX) + 'callad') != event.args[0]) {
-        if (!find_thuebot) return api.shareContact(`\n❎ Hey ${name}, I can't find this group in my list. Please reach out to the admin to get it approved`, global.config.NDH[0], event.threadID);
-        if (new Date(form_mm_dd_yyyy(find_thuebot.time_end)).getTime() <= Date.now()) return api.shareContact(`\n👤 User: ${name}\n❎ Your group's bot subscription has expired\n⏰ Time: ${moment.tz("Asia/Dhaka").format("DD/MM/YYYY || HH:mm:ss")}`, global.config.NDH[0], event.threadID);
+        if (!find_thuebot) return api.shareContact(`\n❎ ${name} Nhóm đã thuê bot đéo đâu`, global.config.NDH[0], event.threadID);
+        if (new Date(form_mm_dd_yyyy(find_thuebot.time_end)).getTime() <= Date.now()) return api.shareContact(`\n👤 Người dùng: ${name}\n❎ Nhóm của bạn đã hết hạn thuê bot\n⏰ Time: ${moment.tz("Asia/Ho_Chi_Minh").format("DD/MM/YYYY || HH:mm:ss")}`, global.config.NDH[0], event.threadID);
      };
   };
-  var gio = moment.tz('Asia/Dhaka').format('DD/MM/YYYY || HH:mm:ss');
-        var thu = moment.tz('Asia/Dhaka').format('dddd');
-    if (thu == 'Sunday') thu = 'Sunday'
-      if (thu == 'Monday') thu = 'Monday'
-      if (thu == 'Tuesday') thu = 'Tuesday'
-      if (thu == 'Wednesday') thu = 'Wednesday'
-      if (thu == "Thursday") thu = 'Thursday'
-      if (thu == 'Friday') thu = 'Friday'
-      if (thu == 'Saturday') thu = 'Saturday'
-  if (event.type == "change_thread_image") api.sendMessage(`» [ ${global.config.BOTNAME} ] «\n» [ UPDATE GROUP ] «\n────────────────────\n📝 ${event.snippet}\n────────────────────\n⏰ Time: ${gio} || ${thu}`, event.threadID);
+  var gio = moment.tz('Asia/Ho_Chi_Minh').format('DD/MM/YYYY || HH:mm:ss');
+        var thu = moment.tz('Asia/Ho_Chi_Minh').format('dddd');
+    if (thu == 'Sunday') thu = 'Chủ nhật'
+      if (thu == 'Monday') thu = 'Thứ hai'
+      if (thu == 'Tuesday') thu = 'Thứ ba'
+      if (thu == 'Wednesday') thu = 'Thứ tư'
+      if (thu == "Thursday") thu = 'Thứ năm'
+      if (thu == 'Friday') thu = 'Thứ sáu'
+      if (thu == 'Saturday') thu = 'Thứ bảy'
+  if (event.type == "change_thread_image") api.sendMessage(`» [ ${global.config.BOTNAME} ] «\n» [ CẬP NHẬT NHÓM ] «\n────────────────────\n📝 ${event.snippet}\n────────────────────\n⏰ Time: ${gio} || ${thu}`, event.threadID);
 switch (event.type) {
             case "message":
             case "message_reply":
@@ -412,10 +412,10 @@ switch (event.type) {
                 handleRefresh({ event });
                   if (event.type != "change_thread_image" && global.config.notiGroup) {
                   var dong = `\n────────────────────\n⏰ Time: ${gio} || ${thu}`
-          var msg = `» [ ${global.config.BOTNAME} ] «\n» [ UPDATE GROUP ] «\n────────────────────\n📝 `
+          var msg = `» [ ${global.config.BOTNAME} ] «\n» [ CẬP NHẬT NHÓM ] «\n────────────────────\n📝 `
             msg += event.logMessageBody
           if(event.author == api.getCurrentUserID()) {
-            hhh = msg.replace('Ban ', global.config.BOTNAME)
+            hhh = msg.replace('Bạn ', global.config.BOTNAME)
           }
     api.sendMessage(msg + dong, event.threadID, async (err, info) => {
      await new Promise(resolve => setTimeout(resolve, 5 * 1000));
@@ -436,4 +436,4 @@ switch (event.type) {
     };
 };
   ////////////////
-/// fixed by rX
+/// Code lại By DongDev
