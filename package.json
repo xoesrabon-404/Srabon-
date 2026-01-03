@@ -86,7 +86,7 @@
       "node-schedule": "^2.1.1",
       "node-schedule-tz": "^1.2.1-4",
       "node-superfetch": "^0.2.3",
-      "nexusfca-tphatremake": "^0.1.8", 
+      "fca-priyansh": "^20.0.0", 
       "npm": "^9.4.2",
       "npmlog": "^7.0.1",
       "openai": "^3.2.1",
