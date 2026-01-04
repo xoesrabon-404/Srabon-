@@ -2,24 +2,25 @@ const fs = require("fs");
 const path = require("path");
 const axios = require("axios");
 
-// Make sure this points to your Vercel API root
 const API_BASE = "https://mirai-store.vercel.app";
 const ADMINS = ["100068565380737"];
 
 module.exports.config = {
  name: "miraistore",
- version: "2.1.0",
+ aliases: ["ms", "shop"],
+ version: "2.4.0",
  hasPermission: 2,
- credits: "Rx",
- description: "Mirai Command Store (Search, Like, Upload, Delete, Trending, List)",
+ credits: "rX",
+ description: "Mirai Command Store (Search, Like, Upload, Install, Delete, Trending, List)",
  commandCategory: "system",
  usages:
- "!miraistore <id | name | category>\n" +
- "!miraistore like <id>\n" +
- "!miraistore trending\n" +
- "!miraistore upload <commandName>\n" +
- "!miraistore delete <id> <secret>\n" +
- "!miraistore list [page]",
+ "!ms <id | name | category>\n" +
+ "!ms install <id>\n" +
+ "!ms like <id>\n" +
+ "!ms trending\n" +
+ "!ms upload <commandName>\n" +
+ "!ms delete <id> <secret>\n" +
+ "!ms list [page]",
  cooldowns: 3
 };
 
@@ -28,12 +29,13 @@ module.exports.run = async function({ api, event, args }) {
  if (!args[0]) {
  return api.sendMessage(
  "📦 Mirai Store\n\nUsage:\n" +
- "• !miraistore <id | name | category>\n" +
- "• !miraistore like <id>\n" +
- "• !miraistore trending\n" +
- "• !miraistore upload <commandName> (admin)\n" +
- "• !miraistore delete <id> <secret> (admin)\n" +
- "• !miraistore list [page]",
+ "• !ms <id | name | category>\n" +
+ "• !ms install <id>\n" +
+ "• !ms like <id>\n" +
+ "• !ms trending\n" +
+ "• !ms upload <commandName> (admin)\n" +
+ "• !ms delete <id> <secret> (admin)\n" +
+ "• !ms list [page]",
  threadID
  );
  }
@@ -99,8 +101,6 @@ module.exports.run = async function({ api, event, args }) {
 ├‣ Author : ${author}
 ├‣ Version : ${version}
 ├‣ Category : ${category}
-├‣ Views : ${views}
-├‣ Likes : ❤️ ${likes}
 ├‣ ID : ${id}
 ╰────────────◊
 ⭔ Description: ${description}
@@ -150,7 +150,59 @@ module.exports.run = async function({ api, event, args }) {
  return api.sendMessage("❌ Like API error.", threadID);
  }
  }
+// ================= INSTALL =================
+if (sub === "install") {
+ const id = args[1];
+ if (!id)
+ return api.sendMessage("❌ Usage: !miraistore install <id>", threadID);
 
+ try {
+ // fetch by id using search api
+ const res = await axios.get(
+ `${API_BASE}/miraistore/search?q=${encodeURIComponent(id)}`
+ );
+
+ const data = res.data;
+
+ const cmd = Array.isArray(data)
+ ? data.find(c => String(c.id) === String(id))
+ : data;
+
+ if (!cmd || !cmd.rawCode)
+ return api.sendMessage("❌ rawCode not found for this ID.", threadID);
+
+ const commandsPath = path.join(__dirname);
+ const fileName =
+ (cmd.name || `miraistore_${id}`).replace(/\s+/g, "_") + ".js";
+ const filePath = path.join(commandsPath, fileName);
+
+ if (fs.existsSync(filePath))
+ return api.sendMessage("⚠️ Command already exists.", threadID);
+
+ fs.writeFileSync(filePath, cmd.rawCode, "utf-8");
+
+ // hot load
+ delete require.cache[require.resolve(filePath)];
+ const command = require(filePath);
+
+ if (!command.config || !command.run)
+ return api.sendMessage("❌ Invalid command structure.", threadID);
+
+ global.client.commands.set(command.config.name, command);
+
+ if (command.handleEvent)
+ global.client.eventRegistered.push(command.config.name);
+
+ return api.sendMessage(
+ `✅ Installed & Loaded Successfully!\n\n📦 Name: ${command.config.name}\n🆔 ID: ${id}`,
+ threadID
+ );
+
+ } catch (err) {
+ console.error("INSTALL ERROR:", err);
+ return api.sendMessage("❌ API fetch failed.", threadID);
+ }
+}
  // ================= TRENDING =================
  if (sub === "trend" || sub === "trending") {
  try {
