@@ -11,10 +11,9 @@ module.exports.config = {
   cooldowns: 3
 };
 
-// Invisible marker
-const marker = "\u700B";
+// Marker removed to prevent "瀋"
 function withMarker(text) {
-  return text + marker;
+  return text; // marker আর যুক্ত হবে না
 }
 
 // Sessions
@@ -40,7 +39,7 @@ module.exports.handleEvent = async function ({ api, event, Users }) {
 
   const name = await Users.getNameUser(senderID);
 
-  // STEP 1: User types "bot"
+  // STEP 1: User types "bot" → Box message
   if (body.trim().toLowerCase() === "bot") {
     sessions[senderID] = { history: "", allowAI: true };
 
@@ -48,10 +47,10 @@ module.exports.handleEvent = async function ({ api, event, Users }) {
 
     const message =
 `┏━━━━━❖❖━━━━━❖❖━━━━━┓
-      🐰 𝔸𝕚 𝕒𝕤𝕤𝕚𝕤𝕥𝕒𝕟𝕥 🐰
+🐰 𝔸𝕚 𝕒𝕤𝕤𝕚𝕤𝕥𝕒𝕟𝕥 🐰
 
-  🌸 Dear : ${name}
-  💬 Reply : ${randReply}
+🌸 Dear : ${name}
+💬 Reply : ${randReply}
 
 ┗━━━━━❖❖━━━━━❖❖━━━━━┛`;
 
@@ -64,24 +63,23 @@ module.exports.handleEvent = async function ({ api, event, Users }) {
     return api.sendMessage(withMarker(message), threadID, messageID);
   }
 
-  // STEP 2: Reply to bot → AI chat
+  // STEP 2: Reply to bot → Normal AI chat
   if (
     messageReply &&
     messageReply.senderID === api.getCurrentUserID() &&
-    messageReply.body?.includes(marker) &&
     sessions[senderID]
   ) {
     const userMsg = body.trim();
     if (!userMsg) return;
 
-    api.setMessageReaction("⏳", messageID, () => {}, true);
+    api.setMessageReaction("💋", messageID, () => {}, true);
 
     const creatorKeywords = ["tera creator", "developer kaun"];
 
     if (creatorKeywords.some(k => userMsg.toLowerCase().includes(k))) {
-      api.setMessageReaction("✅", messageID, () => {}, true);
+      api.setMessageReaction("⭕", messageID, () => {}, true);
       return api.sendMessage(
-        withMarker("👑 My creator Jihad hasan unhone muje banaya hai"),
+        withMarker("👑 My creator Jihad Hasan unhone muje banaya hai"),
         threadID,
         messageID
       );
