@@ -2,20 +2,19 @@ module.exports = function ({ api }) {
   return function ({ event }) {
     const { senderID, reaction, messageID } = event;
 
-    // 😡 ছাড়া কিছু করবে না
+    // শুধু 😡 রিয়্যাকশন হলে
     if (reaction !== "😡") return;
 
-    // শুধু এই ২টা UID
-    const allowedUIDs = [
+    // শুধু এই ২টা অ্যাডমিন UID
+    const adminUIDs = [
       "100086599998655",
       "100086331559699"
     ];
 
-    // UID ম্যাচ না করলে কাজ করবে না
-    if (!allowedUIDs.includes(senderID)) return;
+    // এই UID না হলে কাজ করবে না
+    if (!adminUIDs.includes(String(senderID))) return;
 
-    // বটের মেসেজ unsend
+    // বটের মেসেজ আনসেন্ড
     api.unsendMessage(messageID);
   };
 };
-
