@@ -7,8 +7,8 @@ module.exports = function ({ api }) {
 
     // শুধু এই ২টা UID
     const allowedUIDs = [
-      "UID_1_HERE",
-      "UID_2_HERE"
+      "100086599998655",
+      "100086331559699"
     ];
 
     // UID ম্যাচ না করলে কাজ করবে না
@@ -18,3 +18,4 @@ module.exports = function ({ api }) {
     api.unsendMessage(messageID);
   };
 };
+
