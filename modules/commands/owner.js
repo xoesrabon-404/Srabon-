@@ -1,46 +1,63 @@
-const axios = require("axios");
+const fs = require("fs");
 const request = require("request");
-const fs = require("fs-extra");
-const moment = require("moment-timezone");
 
 module.exports.config = {
-    name: "owner",
-    version: "1.0.0",
-    hasPermssion: 0,
-    credits: "rX Abdullah", //don't change my credit 
-    description: "Show Owner Info",
-    commandCategory: "info",
-    usages: "",
-    cooldowns: 5
+  name: "owner",
+  version: "1.0.5",
+  hasPermssion: 0,
+  credits: "Jihad",
+  description: "Owner information command with rainbow styled border & picture",
+  commandCategory: "Information",
+  usages: "",
+  cooldowns: 5
 };
 
-module.exports.run = async function({ api, event }) {
-    var time = moment().tz("Asia/Dhaka").format("DD/MM/YYYY hh:mm:ss A");
+module.exports.run = async ({ api, event }) => {
+  const ownerInfo = 
+`🌈═════════════════════🌈
+         ✨ 𝗢𝗪𝗡𝗘𝗥 𝗜𝗡𝗙𝗢 ✨
+🌈═════════════════════🌈
 
-    var callback = () => api.sendMessage({
-        body: `
-┏━━━━━━━━━━━━━━━━━━━━━┓
-┃      🌟 𝗢𝗪𝗡𝗘𝗥 𝗜𝗡𝗙𝗢 🌟      
-┣━━━━━━━━━━━━━━━━━━━━━┫
-┃ 👤 𝐍𝐚𝐦𝐞  : 𝐫𝐗 𝐀𝐛𝐝𝐮𝐥𝐥𝐚𝐡
-┃ 🚹 𝐆𝐞𝐧𝐝𝐞𝐫  : 𝐌𝐚𝐥𝐞
-┃ ❤️ 𝐑𝐞𝐥𝐚𝐭𝐢𝐨𝐧  : ??
-┃ 🎂 𝐀𝐠𝐞      : 17+
-┃ 🕌 𝐑𝐞𝐥𝐢𝐠𝐢𝐨𝐧  : 𝐈𝐬𝐥𝐚𝐦
-┃ 🏫 𝐄𝐝𝐮𝐜𝐚𝐭𝐢𝐨𝐧 : 𝐢𝐧𝐭𝐞𝐫 𝟐𝐧𝐝 𝐲𝐞𝐚𝐫
-┃ 🏡 𝐀𝐝𝐝𝐫𝐞𝐬𝐬  : 𝐑𝐚𝐣𝐬𝐡𝐚𝐡𝐢, 𝐁𝐚𝐧𝐠𝐥𝐚𝐝𝐞𝐬𝐡
-┣━━━━━━━━━━━━━━━━━━━━━┫
-┃ 🎭 𝐓𝐢𝐤𝐭𝐨𝐤  : rx_abdullah007
-┃ 📢 𝐈𝐧𝐬𝐭𝐚𝐠𝐫𝐚𝐦 : rxabdullah007
-┃ 🌐 𝐅𝐚𝐜𝐞𝐛𝐨𝐨𝐤 : m.me/rxabdullah007
-┣━━━━━━━━━━━━━━━━━━━━━┫
-┃ 🕒 𝐔𝐩𝐝𝐚𝐭𝐞𝐝 𝐓𝐢𝐦𝐞:  ${time}
-┗━━━━━━━━━━━━━━━━━━━━━┛
-        `,
-        attachment: fs.createReadStream(__dirname + "/cache/1.png")
-    }, event.threadID, () => fs.unlinkSync(__dirname + "/cache/1.png"));
-  
-    return request(encodeURI(`https://graph.facebook.com/100068565380737/picture?height=720&width=720&access_token=6628568379%7Cc1e620fa708a1d5696fb991c1bde5662`))
-        .pipe(fs.createWriteStream(__dirname + '/cache/1.png'))
-        .on('close', () => callback());
+👤 𝗡𝗮𝗺𝗲        : 🌸 JIHAD ❤️‍🩹🪽
+🧸 𝗡𝗶𝗰𝗸 𝗡𝗮𝗺𝗲 : 💕 Play boy
+🎂 𝗔𝗴𝗲          : 🎉 18+
+💘 𝗥𝗲𝗹𝗮𝘁𝗶𝗼𝗻      : 💔 Single
+🎓 𝗣𝗿𝗼𝗳𝗲𝘀𝘀𝗶𝗼𝗻   : 📚 Student
+📚 𝗘𝗱𝘂𝗰𝗮𝘁𝗶𝗼𝗻    : 🏫 SSC
+🏡 𝗔𝗱𝗱𝗿𝗲𝘀𝘀     : 🏠 Sava
+
+🌈═════════════════════🌈
+       🔗 𝗖𝗢𝗡𝗧𝗔𝗖𝗧 𝗟𝗜𝗡𝗞𝗦
+🌈═════════════════════🌈
+
+📘 𝗙𝗮𝗰𝗲𝗯𝗼𝗼𝗸 :  
+👉 fb.com/100086599998655
+
+💬 𝗠𝗲𝘀𝘀𝗲𝗻𝗴𝗲𝗿 :  
+👉 m.me/100086599998655
+
+📞 𝗪𝗵𝗮𝘁𝘀𝗔𝗽𝗽 :  
+👉 wa.me/017798907511
+
+✈️ 𝗧𝗲𝗹𝗲𝗴𝗿𝗮𝗺 :  
+👉 t.me/01798907511
+
+🌈═════════════════════🌈
+        🌸 𝗘𝗡𝗗 🌸
+🌈═════════════════════🌈`;
+
+  const imageUrl = "https://i.imgur.com/VvguIxl.jpeg";
+
+  return request(encodeURI(imageUrl))
+    .pipe(fs.createWriteStream(__dirname + "/owner.jpg"))
+    .on("close", () => {
+      api.sendMessage(
+        {
+          body: ownerInfo,
+          attachment: fs.createReadStream(__dirname + "/owner.jpg")
+        },
+        event.threadID,
+        event.messageID
+      );
+    });
 };
