@@ -5,102 +5,86 @@ const { alldown } = require("rx-dawonload");
 
 module.exports.config = {
     name: "autodl",
-    version: "2.1.1",
-    credits: "rX Abdullah",
+    version: "2.2.1",
+    credits: "Jihad",
     hasPermission: 0,
-    description: "Auto detect any link and ask for download confirm",
+    description: "Public Auto Download (No Reaction Needed)",
     usePrefix: false,
     commandCategory: "utility",
-    usages: "",
     cooldowns: 2
 };
 
 module.exports.run = async function () {};
 
 // -------------------------
-// 🔥 Auto Detect Link
+// 🔥 Detect Link & Auto Download
 // -------------------------
 module.exports.handleEvent = async function ({ api, event }) {
-    const content = event.body ? event.body.trim() : "";
-    if (!content.startsWith("http")) return;
 
-    // Detect Platform
+    if (!event.body || !event.body.startsWith("http")) return;
+
+    // Determine platform
     let site = "Unknown";
-    if (content.includes("youtube.com") || content.includes("youtu.be")) site = "YouTube";
-    else if (content.includes("tiktok.com")) site = "TikTok";
-    else if (content.includes("instagram.com")) site = "Instagram";
-    else if (content.includes("facebook.com")) site = "Facebook";
+    if (event.body.includes("youtube")) site = "YouTube";
+    else if (event.body.includes("tiktok")) site = "TikTok";
+    else if (event.body.includes("instagram")) site = "Instagram";
+    else if (event.body.includes("facebook")) site = "Facebook";
 
-    // Ask for confirmation
-    api.sendMessage(
-        `🔍 Platform detected: ${site}\n\n❮ React ❤ this message to start download ❯.`,
-        event.threadID,
-        (err, info) => {
-            if (err) return;
+    // Send detect message
+    const detectBox =
+`╔══════════════════╗
+║ 🔍 PLATFORM DETECTED
+╠══════════════════╣
+║ 📍 Platform : ${site}
+║ ⬇️ Downloading.......
+╚══════════════════╝`;
 
-            // Register Reaction Listener
-            global.client.handleReaction = global.client.handleReaction || [];
-            global.client.handleReaction.push({
-                type: "autodl_confirm",
-                name: module.exports.config.name,
-                messageID: info.messageID,
-                author: event.senderID,
-                url: content,
-                site
-            });
+    // প্রথম মেসেজ পাঠানো এবং ⬇️ রিয়েক্ট
+    api.sendMessage(detectBox, event.threadID, async (err, info) => {
+        if (!err) {
+            await api.setMessageReaction("⬇️", info.messageID, event.senderID);
         }
-    );
-};
+    });
 
-// -------------------------
-// ❤️ Reaction Handler
-// -------------------------
-module.exports.handleReaction = async function ({ api, event, handleReaction }) {
     try {
-        if (handleReaction.type !== "autodl_confirm") return;
-
-        // Anyone can react now
-        const reaction = event.reaction;
-        if (reaction !== "❤") return;
-
-        // Edit confirmation message to show downloading
-        api.editMessage(`⬇️ Downloading...`, handleReaction.messageID);
-
-        const videoURL = handleReaction.url;
-        const site = handleReaction.site;
-
-        // Download using alldown
-        const data = await alldown(videoURL);
-        if (!data || !data.url) {
-            api.sendMessage(`❌ Failed to fetch download link!`, event.threadID);
-            return;
+        // Get download info
+        const data = await alldown(event.body);
+        if (!data?.url) {
+            return api.sendMessage("❌ Download link পাওয়া যায়নি!", event.threadID);
         }
 
         const title = data.title || "video";
-        const dlUrl = data.url;
-
-        // Download buffer
-        const buffer = (await axios.get(dlUrl, { responseType: "arraybuffer" })).data;
+        const buffer = (await axios.get(data.url, { responseType: "arraybuffer" })).data;
         const safeTitle = title.replace(/[^\w\s]/gi, "_");
         const filePath = path.join(__dirname, "cache", `${safeTitle}.mp4`);
         fs.writeFileSync(filePath, buffer);
 
         // Send downloaded file
+        const doneBox =
+`╔════════════════════╗
+║ 🎀 DOWNLOAD COMPLETE ✅
+╠════════════════════╣
+║ 🅹🅸🅷🅰🅳 💮
+║ 📍 Platform : ${site}
+║ 🎬 Title : ${title}
+╚════════════════════╝`;
+
         api.sendMessage(
             {
-                body: `🎀 Download Complete!\n📍 Platform: ${site}\n🎬 Title: ${title}`,
+                body: doneBox,
                 attachment: fs.createReadStream(filePath)
             },
             event.threadID,
-            () => {
+            async (err, info) => {
                 fs.unlinkSync(filePath);
-                // Remove the "Downloading" message
-                api.unsendMessage(handleReaction.messageID);
+                if (!err) {
+                    await api.setMessageReaction("✅", info.messageID, event.senderID);
+                }
             }
         );
 
     } catch (e) {
-        console.log("autodl reaction error:", e);
+        console.log("AutoDL error:", e);
         api.sendMessage("❌ Download failed!", event.threadID);
     }
 };
