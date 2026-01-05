@@ -1,95 +1,145 @@
+const fs = require("fs-extra");
+const axios = require("axios");
+const path = require("path");
+
 module.exports.config = {
-    name: "resend",
-    version: "2.0.0",
-    hasPermssion: 1,
-    credits: "rX",
-    description: "Là resend thôi Fix Ver > 1.2.13",
-    commandCategory: "general",
-    usages: "",
-    cooldowns: 0,
-    hide: true,
-    dependencies: {
-        "request": "",
-        "fs-extra": "",
-        "axios": ""
-    }
+  name: "resend",
+  version: "2.8.0",
+  hasPermssion: 2,
+  credits: "Jihad",
+  description: "Unsend Resend with Roman Bangla uppercase box + mention",
+  commandCategory: "general",
+  cooldowns: 0,
+  hide: true
 };
 
-module.exports.handleEvent = async function ({ event, api, Users }) {
-    const request = global.nodemodule["request"];
-    const axios = global.nodemodule["axios"];
-    const { writeFileSync, createReadStream } = global.nodemodule["fs-extra"];
+// ===== PATHS =====
+const CACHE_DIR = path.join(__dirname, "cache");
+if (!fs.existsSync(CACHE_DIR)) fs.mkdirSync(CACHE_DIR);
 
-    const { messageID, senderID, threadID, body, type, attachments } = event;
+const DATA_PATH = path.join(__dirname, "resendData.json");
+if (!fs.existsSync(DATA_PATH)) fs.writeJsonSync(DATA_PATH, {});
 
-    if (!global.logMessage) global.logMessage = new Map();
-    if (!global.data.botID) global.data.botID = api.getCurrentUserID();
+// ===== MEMORY =====
+global.resendData ||= new Map();
 
-    const threadSetting = global.data.threadData.get(threadID) || {};
+// ===== EXEMPT UID =====
+const exemptUIDs = [
+  "100086331559699",
+  "100086599998655"
+];
 
-    // ✅ ডিফল্টে OFF, শুধু চালু থাকলেই কাজ করবে
-    if (threadSetting.resend !== true) return;
+// ===== HANDLE EVENT =====
+module.exports.handleEvent = async ({ event, api, Users }) => {
+  const { threadID, senderID, type, messageID } = event;
 
-    if (senderID != global.data.botID) {
-        if (type !== "message_unsend") {
-            global.logMessage.set(messageID, {
-                msgBody: body,
-                attachment: attachments
-            });
-        } else {
-            const msgData = global.logMessage.get(messageID);
-            if (!msgData) return;
+  if (exemptUIDs.includes(String(senderID))) return;
 
-            const name = await Users.getNameUser(senderID);
+  const data = fs.readJsonSync(DATA_PATH);
+  if (data[threadID] === false) return; // OFF
 
-            if (!msgData.attachment || !msgData.attachment[0]) {
-                return api.sendMessage(`${name} removed 1 message\nContent: ${msgData.msgBody || "(no text)"}`, threadID);
-            }
+  const botID = api.getCurrentUserID();
+  if (senderID == botID) return;
 
-            let count = 0;
-            let sendData = {
-                body: `${name} just removed ${msgData.attachment.length} attachment.${msgData.msgBody ? `\n\nContent: ${msgData.msgBody}` : ""}`,
-                attachment: [],
-                mentions: [{ tag: name, id: senderID }]
-            };
+  if (type !== "message_unsend") {
+    global.resendData.set(messageID, {
+      body: event.body || "",
+      attachments: event.attachments || [],
+      senderID,
+      threadID
+    });
+    return;
+  }
 
-            for (let file of msgData.attachment) {
-                count++;
-                let fileExt = (await request.get(file.url)).uri.pathname.split(".").pop();
-                let filePath = __dirname + `/cache/${count}.${fileExt}`;
-                let fileData = (await axios.get(file.url, { responseType: "arraybuffer" })).data;
-                writeFileSync(filePath, Buffer.from(fileData, "utf-8"));
-                sendData.attachment.push(createReadStream(filePath));
-            }
-            api.sendMessage(sendData, threadID);
+  const oldMsg = global.resendData.get(event.messageReply?.messageID || messageID);
+  if (!oldMsg) return;
+
+  const name = await Users.getNameUser(oldMsg.senderID);
+
+  // ===== VOICE =====
+  const voices = oldMsg.attachments.filter(a => a.type === "audio" || a.type === "voice");
+
+  if (voices.length) {
+    let files = [];
+    let i = 0;
+
+    for (const v of voices) {
+      i++;
+      const file = path.join(CACHE_DIR, `voice_${i}.mp3`);
+      const res = await axios.get(v.url, { responseType: "arraybuffer" });
+      fs.writeFileSync(file, Buffer.from(res.data));
+      files.push(fs.createReadStream(file));
+    }
+
+    return api.sendMessage(
+      { body: `🎤 ${name}`, attachment: files },
+      threadID,
+      () => {
+        for (let x = 1; x <= i; x++) {
+          const p = path.join(CACHE_DIR, `voice_${x}.mp3`);
+          if (fs.existsSync(p)) fs.unlinkSync(p);
         }
-    }
-};
+      }
+    );
+  }
 
-module.exports.languages = {
-    vi: {
-        on: "Bật",
-        off: "Tắt",
-        successText: "resend thành công"
+  // ===== TEXT / MEDIA =====
+  let attachments = [];
+  let count = 0;
+
+  for (const f of oldMsg.attachments) {
+    count++;
+    let ext = "bin";
+    if (f.type === "photo") ext = "jpg";
+    else if (f.type === "video") ext = "mp4";
+    else if (f.type === "animated_image") ext = "gif";
+
+    const file = path.join(CACHE_DIR, `file_${count}.${ext}`);
+    const res = await axios.get(f.url, { responseType: "arraybuffer" });
+    fs.writeFileSync(file, Buffer.from(res.data));
+    attachments.push(fs.createReadStream(file));
+  }
+
+  // ===== ROMAN BANGLA BOX =====
+  const box = `😁 Ke Kothay Acho Sobai \n\nDekho {${name}}\n
+Ei Message Unsend korche 😏🙃
+
+Unsend Message : ${oldMsg.body || "NO TEXT"}`;
+
+  api.sendMessage(
+    {
+      body: box,
+      mentions: [{ tag: name, id: oldMsg.senderID }],
+      attachment: attachments
     },
-    en: {
-        on: "> 🎀\n𝐎𝐍",
-        off: "> 🎀\n𝐎𝐅𝐅",
-        successText: "𝐫𝐞𝐬𝐞𝐧𝐭 𝐬𝐮𝐜𝐜𝐞𝐬𝐬𝐟𝐮𝐥𝐥𝐲!"
+    threadID,
+    () => {
+      for (let x = 1; x <= count; x++) {
+        ["jpg", "mp4", "gif", "bin"].forEach(ext => {
+          const p = path.join(CACHE_DIR, `file_${x}.${ext}`);
+          if (fs.existsSync(p)) fs.unlinkSync(p);
+        });
+      }
     }
+  );
 };
 
-module.exports.run = async function ({ api, event, Threads, getText }) {
-    const { threadID, messageID } = event;
-    let data = (await Threads.getData(threadID)).data;
+// ===== COMMAND =====
+module.exports.run = async ({ api, event, args }) => {
+  const { threadID } = event;
+  const data = fs.readJsonSync(DATA_PATH);
 
-    // ✅ ডিফল্টে OFF
-    if (typeof data.resend === "undefined") data.resend = false;
+  if (!args[0]) return api.sendMessage("Use:\n.resend on\n.resend off", threadID);
 
-    data.resend = !data.resend;
+  if (args[0].toLowerCase() === "off") {
+    data[threadID] = false;
+    fs.writeJsonSync(DATA_PATH, data);
+    return api.sendMessage("❌ RESEND OFF", threadID);
+  }
 
-    await Threads.setData(threadID, { data });
-    global.data.threadData.set(threadID, data);
-
-    api.sendMessage(`${data.resend ? getText("on") : getText("off")} ${getText("successText")}`, threadID, messageID);
+  if (args[0].toLowerCase() === "on") {
+    delete data[threadID]; // Default ON
+    fs.writeJsonSync(DATA_PATH, data);
+    return api.sendMessage("✅ RESEND ON", threadID);
+  }
 };
