@@ -7,7 +7,7 @@ module.exports.config = {
   credits: "rX Abdullah",
   description: "Maria custom frame only first time, then normal AI chat",
   commandCategory: "noprefix",
-  usages: "ai",
+  usages: "bot",
   cooldowns: 3
 };
 
@@ -23,39 +23,37 @@ const sessions = {};
 // Maria API endpoint
 const MARIA_API_URL = "https://maria-languages-model.onrender.com/api/chat";
 
-// Custom first message replies
-const customReplies = [
-  "বেশি Bot Bot করলে leave নিবো কিন্তু😒",
-  "🥛-🍍👈 -লে খাহ্..!😒",
+// Custom replies
+const replies = [
+  "𝕁𝕚 𝕊𝕚𝕣 𝕓𝕠𝕝𝕖𝕟 𝕜𝕚 𝕜𝕠𝕣𝕥𝕖 𝕡𝕒𝕣𝕚 ______💮🪽",
+  "𝔸𝕞𝕒𝕣 𝕓𝕠𝕤𝕤 𝕁𝕚𝕙𝕒𝕕 k 𝔾𝕗 𝕕𝕒𝕨 ____💮👀",
   "শুনবো না😼 তুমি আমাকে প্রেম করাই দাও নাই🥺",
-  "আমি আবাল দের সাথে কথা বলি না😒",
+  "ℍ𝕦𝕦𝕦 𝕏𝕒𝕟𝕟 𝕓𝕠𝕝𝕠 𝕒𝕞𝕚 𝕒𝕔𝕙𝕚 ......💮🐰",
   "এতো ডেকো না, প্রেমে পরে যাবো 🙈",
   "বার বার ডাকলে মাথা গরম হয়ে যায়😑",
-  "𝐓𝐨𝐫 𝐧𝐚𝐧𝐢𝐫 𝐮𝐢𝐝 𝐦𝐞 𝐝𝐞 𝐤𝐡𝐚𝐢 𝐝𝐢 𝐚𝐦𝐢 🦆",
-  "এতো ডাকছিস কেন? গালি শুনবি নাকি? 🤬"
+  "এতো ডাকছিস কেন? 😒"
 ];
 
-module.exports.handleEvent = async function({ api, event, Users }) {
+module.exports.handleEvent = async function ({ api, event, Users }) {
   const { threadID, messageID, body, senderID, messageReply } = event;
   if (!body) return;
 
   const name = await Users.getNameUser(senderID);
 
-  // ---------------------------------------------------------------------
-  // STEP 1: User types "ai" → First stylish message only
-  // ---------------------------------------------------------------------
+  // STEP 1: User types "bot"
   if (body.trim().toLowerCase() === "bot") {
     sessions[senderID] = { history: "", allowAI: true };
 
-    const rand = customReplies[Math.floor(Math.random() * customReplies.length)];
+    const randReply = replies[Math.floor(Math.random() * replies.length)];
 
-    const firstMessage =
-`╭──────•◈•──────╮
-  ʜᴇʏ xᴀɴ ɪᴀᴍ ᴍᴀʀɪᴀ ʙᴀʙᴢ 
+    const message =
+`┏━━━━━❖❖━━━━━❖❖━━━━━┓
+      🐰 𝔸𝕚 𝕒𝕤𝕤𝕚𝕤𝕥𝕒𝕟𝕥 🐰
 
- ✰ Hi ${name}, 
- 💌 ${rand}
-╰──────•◈•──────╯`;
+  🌸 Dear : ${name}
+  💬 Reply : ${randReply}
+
+┗━━━━━❖❖━━━━━❖❖━━━━━┛`;
 
     try {
       await api.sendTypingIndicatorV2(true, threadID);
@@ -63,12 +61,10 @@ module.exports.handleEvent = async function({ api, event, Users }) {
       await api.sendTypingIndicatorV2(false, threadID);
     } catch {}
 
-    return api.sendMessage(withMarker(firstMessage), threadID, messageID);
+    return api.sendMessage(withMarker(message), threadID, messageID);
   }
 
-  // ---------------------------------------------------------------------
-  // STEP 2: User replies to Maria → Normal AI message
-  // ---------------------------------------------------------------------
+  // STEP 2: Reply to bot → AI chat
   if (
     messageReply &&
     messageReply.senderID === api.getCurrentUserID() &&
@@ -78,27 +74,19 @@ module.exports.handleEvent = async function({ api, event, Users }) {
     const userMsg = body.trim();
     if (!userMsg) return;
 
-    // Add ⏳ loading react
     api.setMessageReaction("⏳", messageID, () => {}, true);
 
-    // If user asks about creator
-    const creatorKeywords = [
-      "tera creator", "developer kaun"
-    ];
+    const creatorKeywords = ["tera creator", "developer kaun"];
 
     if (creatorKeywords.some(k => userMsg.toLowerCase().includes(k))) {
-
-      // SUCCESS ✔ react
       api.setMessageReaction("✅", messageID, () => {}, true);
-
       return api.sendMessage(
-        withMarker("👑 My creator rX Abdullah unhone muje banaya hai"),
+        withMarker("👑 My creator Jihad hasan unhone muje banaya hai"),
         threadID,
         messageID
       );
     }
 
-    // Add to session memory
     sessions[senderID].history += `User: ${userMsg}\nMaria: `;
 
     try {
@@ -108,7 +96,6 @@ module.exports.handleEvent = async function({ api, event, Users }) {
     } catch {}
 
     try {
-      // Send to Maria API
       const resp = await axios.post(MARIA_API_URL, {
         user_id: senderID,
         query: sessions[senderID].history,
@@ -116,23 +103,15 @@ module.exports.handleEvent = async function({ api, event, Users }) {
       });
 
       let reply = resp.data?.answer?.text || "🙂 I didn't understand.";
-
-      // Replace OpenAI → rX Abdullah
       reply = reply.replace(/openai/gi, "rX Abdullah");
 
       sessions[senderID].history += reply + "\n";
 
-      // SUCCESS ✔ react
       api.setMessageReaction("✅", messageID, () => {}, true);
-
-      // NORMAL plain answer
       return api.sendMessage(withMarker(reply), threadID, messageID);
 
     } catch (err) {
-
-      // ERROR ❌ react
       api.setMessageReaction("❌", messageID, () => {}, true);
-
       console.log(err);
       return api.sendMessage("❌ Maria API error.", threadID, messageID);
     }
