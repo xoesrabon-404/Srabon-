@@ -9,7 +9,7 @@ const baseApiUrl = async () => {
 };
 
 module.exports.config = {
-  name: "song",
+  name: "yt",
   version: "2.3.0",
   aliases: ["music", "play"],
   credits: "𝐫𝐗", //special thanks to dipto ===api from dipto===
