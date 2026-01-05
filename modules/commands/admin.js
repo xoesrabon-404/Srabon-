@@ -7,7 +7,7 @@ module.exports.config = {
 	description: "Admin Config",
 	commandCategory: "Admin",
 	usages: "Admin",
-    cooldowns: 2,
+    cooldowns: 3,
     dependencies: {
         "fs-extra": ""
     }
