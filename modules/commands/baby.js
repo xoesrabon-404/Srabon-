@@ -4,7 +4,7 @@ let simsim = "";
 
 (async () => {
   try {
-    const res = await axios.get("https://raw.githubusercontent.com/rxabdullah0007/rX-apis/main/xApis/rXallApi.json");
+    const res = await axios.get("https://raw.githubusercontent.com/rummmmna21/rx-api/main/baseApiUrl.json");
     if (res.data && res.data.baby) {
       simsim = res.data.baby;
     }
@@ -44,7 +44,7 @@ module.exports.run = async function ({ api, event, args, Users }) {
     if (args[0] === "list") {
       const res = await axios.get(`${simsim}/list`);
       return api.sendMessage(
-        `╭─╼🌟 𝐁𝐚𝐛𝐲 𝐀𝐈 𝐒𝐭𝐚𝐭𝐮𝐬\n├ 📝 𝐓𝐞𝐚𝐜𝐡𝐞𝐝 𝐐𝐮𝐞𝐬𝐭𝐢𝐨𝐧𝐬: ${res.data.totalQuestions}\n├ 📦 𝐒𝐭𝐨𝐫𝐞𝐝 𝐑𝐞𝐩𝐥𝐢𝐞𝐬: ${res.data.totalReplies}\n╰─╼👤 𝐃𝐞𝐯𝐞𝐥𝐨𝐩𝐞𝐫: 𝐫𝐗 𝐀𝐛𝐝𝐮𝐥𝐥𝐚𝐡`,
+        `╭─╼🌟 𝐁𝐚𝐛𝐲 𝐀𝐈 𝐒𝐭𝐚𝐭𝐮𝐬\n├ 📝 𝐓𝐞𝐚𝐜𝐡𝐞𝐝 𝐐𝐮𝐞𝐬𝐭𝐢𝐨𝐧𝐬: ${res.data.totalQuestions}\n├ 📦 𝐒𝐭𝐨𝐫𝐞𝐝 𝐑𝐞𝐩𝐥𝐢𝐞𝐬: ${res.data.totalReplies}\n╰─╼👤 𝐃𝐞𝐯𝐞𝐥𝐨𝐩𝐞𝐫: Jihad Hasan `,
         event.threadID,
         event.messageID
       );
@@ -152,22 +152,22 @@ module.exports.handleEvent = async function ({ api, event, Users }) {
   if (!text || !simsim) return;
 
   const senderName = await Users.getNameUser(event.senderID);
-  const triggers = ["baby", "bby", "xan", "bbz", "mari", "মারিয়া"];
+  const triggers = ["baby", "bby", "xan", "bbz", "mari", "Jakiya"];
 
   if (triggers.includes(text)) {
     const replies = [
-      "𝐀𝐬𝐬𝐚𝐥𝐚𝐦𝐮 𝐰𝐚𝐥𝐚𝐢𝐤𝐮𝐦 ♥",
+      "𝔸𝕤𝕤𝕒𝕝𝕒𝕞𝕦𝕒𝕝𝕒𝕚𝕜𝕦𝕞 🌸🎀 \n\n\n\n𝕁𝕀ℍ𝔸𝔻 ℂℍ𝔸𝕋 𝔹𝕆𝕋\nℍ𝕆𝕎 ℂ𝔸ℕ 𝕀 ℍ𝔼𝕃ℙ 𝕐𝕆𝕌 ........⚠️☣️",
       "বলেন sir__😌",
       "𝐁𝐨𝐥𝐨 𝐣𝐚𝐧 𝐤𝐢 𝐤𝐨𝐫𝐭𝐞 𝐩𝐚𝐫𝐢 𝐭𝐨𝐦𝐫 𝐣𝐨𝐧𝐧𝐨 🐸",
-      "𝐋𝐞𝐛𝐮 𝐤𝐡𝐚𝐰 𝐝𝐚𝐤𝐭𝐞 𝐝𝐚𝐤𝐭𝐞 𝐭𝐨 𝐡𝐚𝐩𝐚𝐲 𝐠𝐞𝐬𝐨",
-      "𝐆𝐚𝐧𝐣𝐚 𝐤𝐡𝐚 𝐦𝐚𝐧𝐮𝐬𝐡 𝐡𝐨 🍁",
-      "𝐋𝐞𝐦𝐨𝐧 𝐭𝐮𝐬 🍋",
-      "মুড়ি খাও 🫥",
+      "বলেন sir__😌",
+      "Hea baby bolo ami aci 🥵💋",
+      "Bolo baby 🥵💋",
+      "𝔸𝕤𝕤𝕒𝕝𝕒𝕞𝕦𝕒𝕝𝕒𝕚𝕜𝕦𝕞 🌸🎀 \n\n\n\n𝕁𝕀ℍ𝔸𝔻 ℂℍ𝔸𝕋 𝔹𝕆𝕋\nℍ𝕆𝕎 ℂ𝔸ℕ 𝕀 ℍ𝔼𝕃ℙ 𝕐𝕆𝕌 ........⚠️☣️",
       ".__𝐚𝐦𝐤𝐞 𝐬𝐞𝐫𝐞 𝐝𝐞𝐰 𝐚𝐦𝐢 𝐚𝐦𝐦𝐮𝐫 𝐤𝐚𝐬𝐞 𝐣𝐚𝐛𝐨!!🥺.....😗",
-      "লুঙ্গি টা ধর মুতে আসি🙊🙉",
+      "বলেন sir__😌",
       "──‎ 𝐇𝐮𝐌..? 👉👈",
       "আম গাছে আম নাই ঢিল কেন মারো, তোমার সাথে প্রেম নাই বেবি কেন ডাকো 😒🐸",
-      "কি হলো, মিস টিস করচ্ছো নাকি 🤣",
+      "𝕁𝕚 𝕤𝕚𝕣 𝕓𝕠𝕝𝕖𝕟 𝔸𝕞𝕚 𝕒𝕔𝕀 ......😌",
       "𝐓𝐫𝐮𝐬𝐭 𝐦𝐞 𝐢𝐚𝐦 𝐦𝐚𝐫𝐢𝐚 🧃",
       "𝐇ᴇʏ 𝐗ᴀɴ 𝐈’ᴍ 𝐌ᴀ𝐫ɪ𝐚 𝐁ᴀ𝐛𝐲✨"
     ];
