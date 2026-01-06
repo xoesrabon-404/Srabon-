@@ -159,7 +159,7 @@ async function sendSong(api, threadID, index, replyToID) {
     fs.writeFileSync(filePath, res.data);
 
     api.sendMessage({
-      body: "🅙🅘🅗🅐🅓 🅲🅷🅰🆃 🅱🅾🆃 💮🥺\nℝ𝕖𝕡𝕝𝕪 𝕥𝕠 °ℕ𝕖𝕩𝕥° 𝕗𝕠𝕣 𝕟𝕖𝕨 𝕤𝕠𝕟𝕘",
+      body: "🅙🅘🅗🅐🅓 💮🎀",
       attachment: fs.createReadStream(filePath)
     }, threadID, (err, info) => {
       fs.unlinkSync(filePath);
