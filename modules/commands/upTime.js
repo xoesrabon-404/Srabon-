@@ -98,7 +98,7 @@ module.exports.run = async function ({ api, event }) {
     ctx.shadowColor = "#00f2ff";
     ctx.fillStyle = "#ffffff";
     ctx.font = "bold 20px Arial";
-    ctx.fillText("JIHAD CHAT BOT", 240, 40);
+    ctx.fillText("MARIA V3 UPTIME INFO", 240, 40);
     ctx.shadowBlur = 0;
 
     // 1. CPU
@@ -193,6 +193,17 @@ module.exports.run = async function ({ api, event }) {
 
     // -------- OVER TEXT SYSTEM --------
     const textInfo =
+`📊 𝗠𝗔𝗥𝗜𝗔 𝗩𝟯 𝗨𝗣𝗧𝗜𝗠𝗘
+━━━━━━━━━━━━━━
+⚙ CPU: ${cpu}%
+🧠 RAM: ${(usedRAM / 1024 ** 3).toFixed(1)}G / ${(totalRAM / 1024 ** 3).toFixed(1)}G
+💾 Disk: ${disk.percent}%
+⏱ Uptime: ${d}D ${h}H ${m}M
+🔁 Restart: ${restartCount}
+👥 Active Users: ${realUserCount}
+📡 Data: ↑${dataSent}GB ↓${dataReceived}GB
+━━━━━━━━━━━━━━
+✨ Status: ONLINE`;
 
     api.sendMessage(
       {
