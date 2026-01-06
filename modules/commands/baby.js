@@ -1,4 +1,4 @@
-const axios = require("axios");
+ const axios = require("axios");
 
 let simsim = "";
 
@@ -95,7 +95,7 @@ module.exports.run = async function ({ api, event, args, Users }) {
     }
 
     if (!query) {
-      const texts = ["Hey baby 💖", "Yes, I'm here 😘"];
+      const texts = [""];
       const reply = texts[Math.floor(Math.random() * texts.length)];
       return api.sendMessage(reply, event.threadID);
     }
