@@ -32,14 +32,14 @@ module.exports.run = async function({ event, api, args }) {
  }
  
  const message = {
- body: `╔══════════❖🌺❖══════════╗
+ body: `╔═════❖🌺❖═════╗
 ║ 👤 𝐍𝐚𝐦𝐞 : ${name}
 ║ 🆔 𝐔𝐬𝐞𝐫 𝐔𝐈𝐃 : ${uid}
 ║ 🔗 𝐌𝐞𝐬𝐬𝐚𝐠𝐞 𝐋𝐢𝐧𝐤 :
 ║ m.me/${uid}
 ║ 🌐 𝐅𝐁 𝐏𝐫𝐨𝐟𝐢𝐥𝐞 : 
 ║ fb.com/${uid}
-╚══════════❖🌺❖══════════╝`,
+╚══════❖🌺❖══════╝`,
  attachment: fs.createReadStream(path)
  };
  
