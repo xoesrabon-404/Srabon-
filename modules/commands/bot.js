@@ -1,91 +1,91 @@
 const axios = require("axios");
+const fs = global.nodemodule["fs-extra"];
+
+const apiJsonURL = "https://raw.githubusercontent.com/rummmmna21/rx-api/refs/heads/main/baseApiUrl.json";
 
 module.exports.config = {
-  name: "bot",
-  version: "3.0.0",
+  name: "obot",
+  version: "1.2.3",
   hasPermssion: 0,
-  credits: "rX Abdullah",
-  description: "Maria custom frame only first time, then normal AI chat",
+  credits: "𝐫𝐗",
+  description: "Maria Baby-style reply system with typing effect",
   commandCategory: "noprefix",
-  usages: "bot",
+  usages: "bot / বট",
   cooldowns: 3
 };
 
-// Marker removed to prevent "瀋"
-function withMarker(text) {
-  return text; // marker আর যুক্ত হবে না
+// RX API fetch
+async function getRxAPI() {
+  try {
+    const res = await axios.get(apiJsonURL);
+    if (res.data && res.data.rx) return res.data.rx;
+    throw new Error("rx key not found");
+  } catch (e) {
+    console.error("RX API error:", e.message);
+    return null;
+  }
 }
 
-// Sessions
-const sessions = {};
+// marker
+const marker = "\u200B";
+function withMarker(text) {
+  return text + marker;
+}
 
-// Maria API endpoint
-const MARIA_API_URL = "https://maria-languages-model.onrender.com/api/chat";
-
-// Custom replies
-const replies = [
-  "𝕁𝕚 𝕊𝕚𝕣 𝕓𝕠𝕝𝕖𝕟 𝕜𝕚 𝕜𝕠𝕣𝕥𝕖 𝕡𝕒𝕣𝕚 ______💮🪽",
-  "𝔸𝕞𝕒𝕣 𝕓𝕠𝕤𝕤 𝕁𝕚𝕙𝕒𝕕 k 𝔾𝕗 𝕕𝕒𝕨 ____💮👀",
-  "শুনবো না😼 তুমি আমাকে প্রেম করাই দাও নাই🥺",
-  "ℍ𝕦𝕦𝕦 𝕏𝕒𝕟𝕟 𝕓𝕠𝕝𝕠 𝕒𝕞𝕚 𝕒𝕔𝕙𝕚 ......💮🐰",
-  "এতো ডেকো না, প্রেমে পরে যাবো 🙈",
-  "বার বার ডাকলে মাথা গরম হয়ে যায়😑",
-  "এতো ডাকছিস কেন? 😒"
-];
-
-module.exports.handleEvent = async function ({ api, event, Users }) {
-  const { threadID, messageID, body, senderID, messageReply } = event;
+module.exports.handleEvent = async function({ api, event, Users }) {
+  const { threadID, messageID, body, senderID, messageReply, mentions } = event;
   if (!body) return;
 
   const name = await Users.getNameUser(senderID);
 
-  // STEP 1: User types "bot" → Box message
-  if (body.trim().toLowerCase() === "bot") {
-    sessions[senderID] = { history: "", allowAI: true };
+  // ✅ Two target UIDs
+  const TARGET_IDS = ["61555373897001", "61559621819754"];
 
+  if (
+    body.trim().toLowerCase() === "bot" ||
+    (mentions && Object.keys(mentions).some(id => TARGET_IDS.includes(id)))
+  ) {
+    const replies = [
+      "𝕁𝕚 𝕊𝕚𝕣 𝕓𝕠𝕝𝕖𝕟 𝕜𝕚 𝕜𝕠𝕣𝕥𝕖 𝕡𝕒𝕣𝕚 ______💮🪽",
+      "𝔸𝕞𝕒𝕣 𝕓𝕠𝕤𝕤 𝕁𝕚𝕙𝕒𝕕 k 𝔾𝕗 𝕕𝕒𝕨 ____💮👀",
+      "শুনবো না😼 তুমি আমাকে প্রেম করাই দাও নাই🥺",
+      "ℍ𝕦𝕦𝕦 𝕏𝕒𝕟𝕟 𝕓𝕠𝕝𝕠 𝕒𝕞𝕚 𝕒𝕔𝕙𝕚 ......💮🐰",
+      "এতো ডেকো না, প্রেমে পরে যাবো 🙈",
+      "বার বার ডাকলে মাথা গরম হয়ে যায়😑",
+      "এতো ডাকছিস কেন? 😒"
+    ];
     const randReply = replies[Math.floor(Math.random() * replies.length)];
 
+    // ✅ NEW BOX STYLE
     const message =
 `┏━━━━━❖❖━━━━━❖❖━━━━━┓
-🐰 𝔸𝕚 𝕒𝕤𝕤𝕚𝕤𝕥𝕒𝕟𝕥 🐰
+      🐰 𝔸𝕚 𝕒𝕤𝕤𝕚𝕤𝕥𝕒𝕟𝕥 🐰
 
-🌸 Dear : ${name}
-💬 Reply : ${randReply}
+  🌸 Dear : ${name}
+  💬 Reply : ${randReply}
 
 ┗━━━━━❖❖━━━━━❖❖━━━━━┛`;
 
     try {
       await api.sendTypingIndicatorV2(true, threadID);
-      await new Promise(r => setTimeout(r, 2500));
+      await new Promise(r => setTimeout(r, 5000));
       await api.sendTypingIndicatorV2(false, threadID);
     } catch {}
 
     return api.sendMessage(withMarker(message), threadID, messageID);
   }
 
-  // STEP 2: Reply to bot → Normal AI chat
+  // reply trigger
   if (
     messageReply &&
     messageReply.senderID === api.getCurrentUserID() &&
-    sessions[senderID]
+    messageReply.body?.includes(marker)
   ) {
-    const userMsg = body.trim();
-    if (!userMsg) return;
+    const replyText = body.trim();
+    if (!replyText) return;
 
-    api.setMessageReaction("💋", messageID, () => {}, true);
-
-    const creatorKeywords = ["tera creator", "developer kaun"];
-
-    if (creatorKeywords.some(k => userMsg.toLowerCase().includes(k))) {
-      api.setMessageReaction("⭕", messageID, () => {}, true);
-      return api.sendMessage(
-        withMarker("👑 My creator Jihad Hasan unhone muje banaya hai"),
-        threadID,
-        messageID
-      );
-    }
-
-    sessions[senderID].history += `User: ${userMsg}\nMaria: `;
+    const rxAPI = await getRxAPI();
+    if (!rxAPI) return api.sendMessage("❌ RX API load failed.", threadID, messageID);
 
     try {
       await api.sendTypingIndicatorV2(true, threadID);
@@ -94,26 +94,20 @@ module.exports.handleEvent = async function ({ api, event, Users }) {
     } catch {}
 
     try {
-      const resp = await axios.post(MARIA_API_URL, {
-        user_id: senderID,
-        query: sessions[senderID].history,
-        meta: { need_realtime: true }
-      });
+      const res = await axios.get(
+        `${rxAPI}/simsimi?text=${encodeURIComponent(replyText)}&senderName=${encodeURIComponent(name)}`
+      );
+      const responses = Array.isArray(res.data.response) ? res.data.response : [res.data.response];
 
-      let reply = resp.data?.answer?.text || "🙂 I didn't understand.";
-      reply = reply.replace(/openai/gi, "rX Abdullah");
-
-      sessions[senderID].history += reply + "\n";
-
-      api.setMessageReaction("✅", messageID, () => {}, true);
-      return api.sendMessage(withMarker(reply), threadID, messageID);
-
+      for (const reply of responses) {
+        await new Promise(resolve => {
+          api.sendMessage(withMarker(reply), threadID, () => resolve(), messageID);
+        });
+      }
     } catch (err) {
-      api.setMessageReaction("❌", messageID, () => {}, true);
-      console.log(err);
-      return api.sendMessage("❌ Maria API error.", threadID, messageID);
+      return api.sendMessage(`| Error: ${err.message}`, threadID, messageID);
     }
   }
 };
 
-module.exports.run = () => {};
+module.exports.run = function() {};
