@@ -1,4 +1,4 @@
- const axios = require("axios");
+const axios = require("axios");
 
 let simsim = "";
 
@@ -167,7 +167,7 @@ module.exports.handleEvent = async function ({ api, event, Users }) {
       "বলেন sir__😌",
       "──‎ 𝐇𝐮𝐌..? 👉👈",
       "আম গাছে আম নাই ঢিল কেন মারো, তোমার সাথে প্রেম নাই বেবি কেন ডাকো 😒🐸",
-      "𝕁𝕚 𝕤𝕚𝕣 𝕓𝕠𝕝𝕖𝕟 𝔸𝕞𝕚 𝕒𝕔𝕀 ......😌",
+      "Trust me I am baby",
       "𝐓𝐫𝐮𝐬𝐭 𝐦𝐞 𝐢𝐚𝐦 𝐦𝐚𝐫𝐢𝐚 🧃",
       "𝐇ᴇʏ 𝐗ᴀɴ 𝐈’ᴍ 𝐌ᴀ𝐫ɪ𝐚 𝐁ᴀ𝐛𝐲✨"
     ];
