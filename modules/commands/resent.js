@@ -101,9 +101,8 @@ module.exports.handleEvent = async ({ event, api, Users }) => {
   }
 
   // ===== ROMAN BANGLA BOX =====
-  const box = `Ke Kothay Acho Sobai \n\nDekho ${name}\n
-Ei Message Unsend korche 😏😁
-
+  const box = `Ke Kothay Acho Sobai Dekho ${name}\n
+Ei Message Unsend korche 😏😁\n
 Unsend Message : ${oldMsg.body || "NO TEXT"}`;
 
   api.sendMessage(
