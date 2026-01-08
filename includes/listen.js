@@ -155,48 +155,10 @@ module.exports = function ({ api, models }) {
   /////////////////////////////////////////////////////////////////////////////
   const thuebotPath = process.cwd() + "/modules/commands/data/thuebot.json";
 
-  const autoApprove = async (event) => {
-    if (event.logMessageType === "log:subscribe") {
-      const added = event.logMessageData.addedParticipants || [];
-      const botAdded = added.some(i => i.userFbId == api.getCurrentUserID());
-
-      if (botAdded) {
-        let thuebot = [];
-        try { thuebot = JSON.parse(fs.readFileSync(thuebotPath)); } catch {}
-
-        if (!thuebot.find(t => t.t_id == event.threadID)) {
-          thuebot.push({ t_id: event.threadID, time: Date.now() });
-          fs.writeFileSync(thuebotPath, JSON.stringify(thuebot, null, 2));
-          api.sendMessage(
-            "",
-            event.threadID
-          );
-        }
-      }
-    }
-  }
-
   /////////////////////////////////////////////////////////////////////////////
   return async (event) => {
     const { threadID, senderID, type, logMessageType } = event;
     const name = await Users.getNameUser(senderID);
-
-    // AUTO APPROVE TRIGGER
-    await autoApprove(event);
-
-    // HANDLE COMMAND BLOCK (OLD BOT RENT CHECK)
-    let prefix = (global.data.threadData.get(event.threadID) || {}).PREFIX || global.config.PREFIX;
-    if ((event.body || '').startsWith(prefix) && event.senderID != api.getCurrentUserID()) {
-      let thuebot;
-      try { thuebot = JSON.parse(fs.readFileSync(thuebotPath)); } catch { thuebot = []; }
-      let find_thuebot = thuebot.find($ => $.t_id == event.threadID);
-      if (!find_thuebot && !global.config.ADMINBOT.includes(event.senderID)) {
-        return api.sendMessage(
-          `❎ Hi ${name}, this group has not rented the bot yet ...!\n Bot approve korte Bot admin JIHAD HASAN──😘😈🪼🩶🪽  ke nok den \n Facebook https://www.facebook.com/Md.Jihad.Hasan.Devel.Cyber.69`,
-          event.threadID
-        );
-      }
-    }
 
     // ORIGINAL HANDLERS
     switch (type) {
