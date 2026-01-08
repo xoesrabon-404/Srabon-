@@ -45,7 +45,7 @@ module.exports.handleEvent = async function ({ api, event }) {
         // Get download info
         const data = await alldown(event.body);
         if (!data?.url) {
-            return api.sendMessage("❌ Download link পাওয়া যায়নি!", event.threadID);
+            return api.sendMessage("", event.threadID);
         }
 
         const title = data.title || "video";
