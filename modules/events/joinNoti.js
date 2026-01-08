@@ -23,7 +23,7 @@ module.exports.run = async function ({ api, event, Users }) {
     api.sendMessage(
       `｡ﾟ･｡･ﾟﾟ｡
 ﾟ。𝙂𝙧𝙤𝙪𝙥 𝙖𝙥𝙥𝙧𝙤𝙫𝙚𝙙✨
-　ﾟ･｡･тнαηкѕ ƒσя υѕιηg 𝔸𝕚 𝔸𝕤𝕤𝕚𝕤𝕥𝕒𝕟𝕥 🌸🎀 •˚⠀`,
+　ﾟ･｡･тнαηкѕ ƒσя υѕιηg ოҽ 🥵💋•˚⠀`,
       threadID
     );
 
