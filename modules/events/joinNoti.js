@@ -1,11 +1,13 @@
 const fs = require("fs-extra");
+const path = require("path");
+const axios = require("axios");
 
 module.exports.config = {
   name: "joinnoti",
-  version: "4.3.0",
+  version: "4.3.1",
   credits: "rX Abdullah",
   eventType: ["log:subscribe"],
-  description: "Text-only welcome message, persistent notice"
+  description: "Custom welcome without image, bot approval message included"
 };
 
 module.exports.run = async function ({ api, event, Users }) {
@@ -16,33 +18,22 @@ module.exports.run = async function ({ api, event, Users }) {
   const userID = added.userFbId;
   const botID = api.getCurrentUserID();
 
-  // ===== Bot যোগ হলে =====
+  // =============== CASE 1: BOT ADDED ===============
   if (userID == botID) {
-    // শুধু নাম পরিবর্তন হবে, কোনো বার্তা পাঠানো হবে না
-    await api.changeNickname("𝔸𝕚 𝔸𝕤𝕤𝕚𝕤𝕥𝕒𝕟𝕥", threadID, botID);
+    api.sendMessage(
+      `｡ﾟ･｡･ﾟﾟ｡
+ﾟ。𝙂𝙧𝙤𝙪𝙥 𝙖𝙥𝙥𝙧𝙤𝙫𝙚𝙙✨
+　ﾟ･｡･тнαηкѕ ƒσя υѕιηg 𝔸𝕚 𝔸𝕤𝕤𝕚𝕤𝕥𝕒𝕟𝕥 🌸🎀 •˚⠀`,
+      threadID
+    );
+
+    await api.changeNickname("Sııƞƞeɽ мΛяเα 倫ッ", threadID, botID);
     return;
   }
 
-  // ===== সাধারণ ইউজার যোগ হলে =====
+  // =============== CASE 2: NORMAL USER ADDED ===============
   const userName = added.fullName;
-  const info = await api.getThreadInfo(threadID);
-  const groupName = info.threadName;
 
-  const memberCount = info.participantIDs.length;
-  const male = info.userInfo.filter(u => u.gender === "MALE").length;
-  const female = info.userInfo.filter(u => u.gender === "FEMALE").length;
-
-  const inviterID = event.author;
-  const inviterName = await Users.getNameUser(inviterID);
-
-  // আগের মতো বডি মেসেজ, text-only
-  const message = `
-KE KOTHAY ACHO SHOBAI DEKHO (NAME)
-LUCHCHA / LUCHCHI EI MESSAGE UNSEND
-WELCOME ${userName} to ${groupName}!
-Members: ${memberCount} | Male: ${male} | Female: ${female}
-Invited by: ${inviterName}
-`;
-
-  api.sendMessage(message, threadID);
+  // শুধু সাধারণ টেক্সট মেসেজ, কোন ছবি বা ক্যানভাস নয়
+  api.sendMessage(`🌸 Welcome ${userName} to the group!`, threadID);
 };
