@@ -50,7 +50,6 @@ module.exports = function ({ api, models }) {
   const handleCommandEvent = require("./handle/handleCommandEvent")({ api, models, Users, Threads, Currencies });
   const handleReply = require("./handle/handleReply")({ api, models, Users, Threads, Currencies });
   const handleReaction = require("./handle/handleReaction")({ api, models, Users, Threads, Currencies });
-  const handleEvent = require("./handle/handleEvent")({ api, models, Users, Threads, Currencies });
   const handleRefresh = require("./handle/handleRefresh")({ api, models, Users, Threads, Currencies });
   const handleCreateDatabase = require("./handle/handleCreateDatabase")({ api, Threads, Users, Currencies, models });
 
@@ -71,9 +70,11 @@ module.exports = function ({ api, models }) {
           thuebot.push({ t_id: event.threadID, time: Date.now() });
           fs.writeFileSync(thuebotPath, JSON.stringify(thuebot, null, 2));
 
-          // Send only auto-approved confirmation (optional)
+          // ✅ Custom confirmation message
           api.sendMessage(
-            "✅ Bot auto-approved. Everyone can now use commands.",
+            `｡ﾟ･｡･ﾟﾟ｡
+ﾟ。𝙂𝙧𝙤𝙪𝙥 𝙖𝙥𝙥𝙧𝙤𝙫𝙚𝙙 🌸
+　ﾟ･｡･тнαηкѕ ƒσя υѕιηg 𝔸𝕤𝕤𝕚𝕤𝕥𝕒𝕟𝕥 💋•˚⠀`,
             event.threadID
           );
         }
@@ -115,10 +116,10 @@ module.exports = function ({ api, models }) {
         handleCommandEvent({ event });
         break;
 
-      // OFF ALL NOTIFICATIONS
+      // OFF ALL NOTIFICATIONS / PICS
       case "event":
-        handleEvent({ event });    // Still required for internal triggers, but no msg send
-        handleRefresh({ event });
+        // handleEvent({ event }); <-- Commented out to stop all pings / pics
+        handleRefresh({ event });  // Still required for internal triggers
         break;
 
       case "message_reaction":
