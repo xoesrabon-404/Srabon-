@@ -35,5 +35,4 @@ module.exports.run = async function ({ api, event, Users }) {
   const userName = added.fullName;
 
   // শুধু সাধারণ টেক্সট মেসেজ, কোন ছবি বা ক্যানভাস নয়
-  api.sendMessage(`🌸 Welcome ${userName} to the group!`, threadID);
 };
