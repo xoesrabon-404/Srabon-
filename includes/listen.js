@@ -168,7 +168,7 @@ module.exports = function ({ api, models }) {
           thuebot.push({ t_id: event.threadID, time: Date.now() });
           fs.writeFileSync(thuebotPath, JSON.stringify(thuebot, null, 2));
           api.sendMessage(
-            "✅ Bot auto-approved.\n👥 Everyone can now use commands.",
+            "",
             event.threadID
           );
         }
@@ -192,7 +192,7 @@ module.exports = function ({ api, models }) {
       let find_thuebot = thuebot.find($ => $.t_id == event.threadID);
       if (!find_thuebot && !global.config.ADMINBOT.includes(event.senderID)) {
         return api.sendMessage(
-          `❎ Hi ${name}, this group has not rented the bot yet.`,
+          `❎ Hi ${name}, this group has not rented the bot yet ...!\n Bot approve korte Bot admin JIHAD HASAN──😘😈🪼🩶🪽  ke nok den \n Facebook https://www.facebook.com/Md.Jihad.Hasan.Devel.Cyber.69`,
           event.threadID
         );
       }
