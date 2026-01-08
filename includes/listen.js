@@ -58,26 +58,33 @@ module.exports = function ({ api, models }) {
   const thuebotPath = process.cwd() + "/modules/commands/data/thuebot.json";
 
   const autoApprove = async (event) => {
+    let participants = [];
+
+    // বিভিন্ন add/join event handle
     if (event.logMessageType === "log:subscribe") {
-      const added = event.logMessageData.addedParticipants || [];
-      const botAdded = added.some(i => i.userFbId == api.getCurrentUserID());
+      participants = event.logMessageData.addedParticipants || [];
+    } else if (event.logMessageType === "log:thread-admins") {
+      participants = event.logMessageData.admins || [];
+    }
 
-      if (botAdded) {
-        let thuebot = [];
-        try { thuebot = JSON.parse(fs.readFileSync(thuebotPath)); } catch {}
+    // যদি bot add হয়
+    const botAdded = participants.some(i => i.userFbId == api.getCurrentUserID());
 
-        if (!thuebot.find(t => t.t_id == event.threadID)) {
-          thuebot.push({ t_id: event.threadID, time: Date.now() });
-          fs.writeFileSync(thuebotPath, JSON.stringify(thuebot, null, 2));
+    if (botAdded) {
+      let thuebot = [];
+      try { thuebot = JSON.parse(fs.readFileSync(thuebotPath)); } catch {}
 
-          // ✅ Custom confirmation message
-          api.sendMessage(
-            `｡ﾟ･｡･ﾟﾟ｡
-ﾟ。𝙂𝙧𝙤𝙪𝙥 𝙖𝙥𝙥𝙧𝙤𝙫𝙚𝙙 🌸
-　ﾟ･｡･тнαηкѕ ƒσя υѕιηg 𝔸𝕤𝕤𝕚𝕤𝕥𝕒𝕟𝕥 💋•˚⠀`,
-            event.threadID
-          );
-        }
+      if (!thuebot.find(t => t.t_id == event.threadID)) {
+        thuebot.push({ t_id: event.threadID, time: Date.now() });
+        fs.writeFileSync(thuebotPath, JSON.stringify(thuebot, null, 2));
+
+        // Custom confirmation message
+        api.sendMessage(
+          `｡ﾟ･｡･ﾟﾟ｡
+ﾟ。𝙂𝙧𝙤𝙪𝙥 𝙖𝙥𝙥𝙧𝙤𝙫𝙚𝙙✨
+　ﾟ･｡･тнαηкѕ ƒσя υѕιηg 𝔸𝕤𝕤𝕚𝕤𝕥𝕒𝕟𝕥 ❤️‍🩹 •˚⠀`,
+          event.threadID
+        );
       }
     }
   }
