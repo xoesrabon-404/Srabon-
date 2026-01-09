@@ -61,17 +61,13 @@ module.exports.run = async ({ api, event, args }) => {
   });
 
   const msg =
-`━━━━━━━━━━━━━━━━━━━━━
-FROM JIHAD HASAN──😘😈🪼🩶🪽
-━━━━━━━━━━━━━━━━━━━━━━
+`FROM JIHAD HASAN──😘😈🪼🩶🪽
+━━━━━━━━━━━━━━━━━━━━━
 
 ${input}
 
 
-━━━━━━━━━━━━━━━━━━━━━
-🕒 TIME : ${time}
 
-👑 NOTICE BY : ADMIN JIHAD 
 ━━━━━━━━━━━━━━━━━━━━━`;
 
   let threads = [];
