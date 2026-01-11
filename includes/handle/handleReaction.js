@@ -9,7 +9,7 @@ module.exports = function ({ api, models, Users, Threads, Currencies }) {
         }
 
         // ®️ নির্দিষ্ট reaction দিলে মেসেজ unsend
-        const unsendReactions = ['😾', '😡', '🥵'];
+        const unsendReactions = ['⭕', '😡', '🤬'];
         if (unsendReactions.includes(reaction)) {
             return api.unsendMessage(messageID);
         }
