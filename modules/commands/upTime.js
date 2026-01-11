@@ -98,7 +98,7 @@ module.exports.run = async function ({ api, event }) {
     ctx.shadowColor = "#00f2ff";
     ctx.fillStyle = "#ffffff";
     ctx.font = "bold 20px Arial";
-    ctx.fillText("MARIA V3 UPTIME INFO", 240, 40);
+    ctx.fillText("🅙🅘🅗🅐🅓 🅗🅐🅢🅐🅝", 240, 40);
     ctx.shadowBlur = 0;
 
     // 1. CPU
