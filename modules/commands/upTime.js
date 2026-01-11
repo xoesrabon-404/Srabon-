@@ -193,17 +193,7 @@ module.exports.run = async function ({ api, event }) {
 
     // -------- OVER TEXT SYSTEM --------
     const textInfo =
-`🅙🅘🅗🅐🅓 🅒🅗🅐🅣 🅑🅞🅣
-━━━━━━━━━━━━━━
-⚙ CPU: ${cpu}%
-🧠 RAM: ${(usedRAM / 1024 ** 3).toFixed(1)}G / ${(totalRAM / 1024 ** 3).toFixed(1)}G
-💾 Disk: ${disk.percent}%
-⏱ Uptime: ${d}D ${h}H ${m}M
-🔁 Restart: ${restartCount}
-👥 Active Users: ${realUserCount}
-📡 Data: ↑${dataSent}GB ↓${dataReceived}GB
-━━━━━━━━━━━━━━
-✨ Status: ONLINE`;
+``;
 
     api.sendMessage(
       {
