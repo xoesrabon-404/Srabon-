@@ -193,7 +193,7 @@ module.exports.run = async function ({ api, event }) {
 
     // -------- OVER TEXT SYSTEM --------
     const textInfo =
-`📊 𝗠𝗔𝗥𝗜𝗔 𝗩𝟯 𝗨𝗣𝗧𝗜𝗠𝗘
+`🅙🅘🅗🅐🅓 🅒🅗🅐🅣 🅑🅞🅣
 ━━━━━━━━━━━━━━
 ⚙ CPU: ${cpu}%
 🧠 RAM: ${(usedRAM / 1024 ** 3).toFixed(1)}G / ${(totalRAM / 1024 ** 3).toFixed(1)}G
