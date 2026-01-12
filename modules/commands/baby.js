@@ -36,12 +36,11 @@ function random(arr) {
 
 function isAdminQuestion(text) {
   return (
-    text.includes("বস") ||
-    text.includes("admin") ||
-    text.includes("এডমিন") ||
+    text.includes("Bot admin") ||
+    text.includes("Tor admin k") ||
+    text.includes("তোর বস কে") ||
     text.includes("developer") ||
     text.includes("ডেভেলপার") ||
-    text.includes("boss")
   );
 }
 
