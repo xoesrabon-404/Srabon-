@@ -102,7 +102,7 @@ module.exports.run = async ({ api, args, event }) => {
 
       // Send audio
       const sentMsg = await api.sendMessage({
-        body: `🎧 Title: ${title}\n📺 Channel: ${firstResult.channel.name}\n🎶 Quality: ${quality}`,
+        body: `⏤͟͟͞͞ᰔ 𝐽𝐼𝐻𝐴𝐷 𝐻𝐴𝑆𝐴𝑁 ☻ᰔᩚ \nTitle: ${title}\n📺 Channel: ${firstResult.channel.name}\n🎶 Quality: ${quality}`,
         attachment: await downloadAudio(downloadLink, 'audio.mp3')
       }, event.threadID, () => fs.unlinkSync('audio.mp3'), event.messageID);
 
