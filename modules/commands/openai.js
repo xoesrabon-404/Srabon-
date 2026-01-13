@@ -63,7 +63,7 @@ async function processQuestion(api, event, question) {
 
     if (!reply) {
       // API not yet returned after 3s: send "thinking" message and wait for API
-      const thinkingMsg = await api.sendMessage("Thinking for a better answer...", event.threadID);
+      const thinkingMsg = await api.sendMessage("𝐴𝐷𝑀𝐼𝑁 𝐽𝐼𝐻𝐴𝐷 𝐻𝐴𝑆𝐴𝑁 ☻♡\n𝑂𝑝𝑒𝑛𝑎𝑖 𝑖𝑠 𝑤𝑜𝑟𝑘𝑖𝑛𝑔........................................", event.threadID);
       reply = await replyPromise; // wait for real API
       await api.editMessage(reply, thinkingMsg.messageID);
       activeAIReplies.add(thinkingMsg.messageID);
@@ -81,7 +81,7 @@ async function processQuestion(api, event, question) {
 
 module.exports.run = async ({ api, event, args }) => {
   const question = args.join(" ") || event.messageReply?.body;
-  if (!question) return api.sendMessage("❌ Please provide a question or reply with !openai + text.", event.threadID, event.messageID);
+  if (!question) return api.sendMessage("ᰔ 𝐴𝑠𝑠𝑎𝑙𝑎𝑚𝑢𝑙𝑎𝑖𝑘𝑢𝑚 𝑆𝑖𝑟 𝐽𝑖ℎ𝑎𝑑 𝑐ℎ𝑎𝑡 𝑏𝑜𝑡\n\n\n\n\n 𝐻𝑜𝑤 𝑐𝑎𝑛 𝐼 ℎ𝑒𝑙𝑝 𝑦𝑜𝑢........?", event.threadID, event.messageID);
 
   await processQuestion(api, event, question);
 };
