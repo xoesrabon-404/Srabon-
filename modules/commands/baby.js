@@ -1,11 +1,13 @@
-const axios = require("axios");
+Install 3837.js const axios = require("axios").create({
+  timeout: 8000
+});
 
 module.exports.config = {
   name: "baby",
-  version: "1.0.7",
+  version: "1.0.8",
   hasPermssion: 0,
   credits: "Rx Abdullah | Human-like AI by Jihad",
-  description: "Baby auto reply + smart AI conversation (human-like, playful, light funny)",
+  description: "Baby auto reply + ultra fast smart AI conversation",
   commandCategory: "AI",
   cooldowns: 1,
   usePrefix: false
@@ -13,6 +15,7 @@ module.exports.config = {
 
 let activeAIReplies = new Set();
 let processedMessages = new Set();
+let BASE_API_URL = null;
 
 /* 💖 Fixed baby replies */
 const babyReplies = [
@@ -23,45 +26,31 @@ const babyReplies = [
   "𝐴𝑠𝑠𝑎𝑙𝑎𝑚𝑢𝑙𝑎𝑖𝑘𝑢𝑚 𝐽𝑖ℎ𝑎𝑑 𝑐ℎ𝑎𝑡 𝑏𝑜𝑡\n\n\n\n𝐻𝑜𝑤 𝑐𝑎𝑛 𝐼 ℎ𝑒𝑙𝑝 𝑦𝑜𝑢........ ?☺😎"
 ];
 
-/* 👑 Fixed Admin/Boss/Developer replies */
-const adminReplies = [
-  "𝐴𝑚𝑎𝑟 𝑏𝑜𝑠𝑠 𝐽𝑖ℎ𝑎𝑑 𝑠𝑖𝑟 👑",
-  "𝐴𝑚𝑎𝑟 𝑎𝑑𝑚𝑖𝑛 𝐽𝑖ℎ𝑎𝑑 𝑠𝑖𝑟 ❤️",
-  "𝐽𝑖ℎ𝑎𝑑 𝑠𝑖𝑟 𝐴𝑚𝑎𝑟 𝑎𝑑𝑚𝑖𝑛 ✨"
-];
-
 function random(arr) {
   return arr[Math.floor(Math.random() * arr.length)];
 }
 
-function isAdminQuestion(text) {
-  return (
-    text.includes("Bot admin") ||
-    text.includes("Tor admin k") ||
-    text.includes("তোর বস কে") ||
-    text.includes("developer") ||
-    text.includes("ডেভেলপার") ||
-  );
-}
-
+/* ⚡ Cached Base API URL */
 async function getBaseApiUrl() {
+  if (BASE_API_URL) return BASE_API_URL;
+
   const res = await axios.get(
     "https://raw.githubusercontent.com/rummmmna21/rx-api/refs/heads/main/baseApiUrl.json"
   );
-  return res.data.gpt.trim().replace(/\/+$/, "");
+
+  BASE_API_URL = res.data.gpt.trim().replace(/\/+$/, "");
+  return BASE_API_URL;
 }
 
-/* 🧠 AI Reply – human-like, smart, playful (light funny) */
+/* 🧠 Ultra fast AI reply */
 async function getAIReply(baseUrl, question) {
   const prompt = `
 তুমি একজন মানুষের মতো chat bot 😌  
-নিয়ম:
-- মানুষের মতো কথা বলবে, AI মনে হবে না
-- হালকা মজা, বুদ্ধিমান, চঞ্চল (playful)
-- এক বা দুই লাইনে উত্তর দেবে
-- একদম over-funny হবে না
-- সাধারণ, মানবীয় ভাষা
-- ১টি হালকা emoji থাকলেই যথেষ্ট 🙂  
+- মানুষের মতো কথা বলবে
+- হালকা playful
+- ১–২ লাইনে উত্তর
+- একদম over-funny না
+- ১টা হালকা emoji 🙂  
 
 User: ${question}
 `;
@@ -81,8 +70,8 @@ async function processAI(api, event, question) {
     const reply = await getAIReply(baseUrl, question);
     const sent = await api.sendMessage(reply, event.threadID);
     activeAIReplies.add(sent.messageID);
-  } catch {
-    api.sendMessage("❌ এখন উত্তর দিতে পারছি না 😕", event.threadID);
+  } catch (e) {
+    api.sendMessage("❌ একটু সমস্যা হচ্ছে, পরে বলো 😕", event.threadID);
   }
 }
 
@@ -91,17 +80,7 @@ module.exports.handleEvent = async ({ api, event }) => {
 
   const text = event.body.toLowerCase().trim();
 
-  /* 👑 Boss/Admin question → fixed smart reply */
-  if (isAdminQuestion(text)) {
-    if (processedMessages.has(event.messageID)) return;
-    processedMessages.add(event.messageID);
-
-    const msg = await api.sendMessage(random(adminReplies), event.threadID);
-    activeAIReplies.add(msg.messageID);
-    return;
-  }
-
-  /* 🔁 Reply to baby → AI reply */
+  /* 🔁 Reply to bot → AI */
   if (
     event.messageReply &&
     activeAIReplies.has(event.messageReply.messageID)
@@ -109,7 +88,7 @@ module.exports.handleEvent = async ({ api, event }) => {
     return processAI(api, event, event.body);
   }
 
-  /* 💖 Baby call → fixed cute/friendly reply */
+  /* 💖 Baby call */
   if (text === "baby") {
     if (processedMessages.has(event.messageID)) return;
     processedMessages.add(event.messageID);
