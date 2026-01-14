@@ -87,7 +87,7 @@ module.exports.run = async function ({ api, event, args }) {
             {
                 const names = await Promise.all(vipList.map(uid => getUserName(uid)));
                 const formattedList = vipList.map((uid, i) => `\n${i + 1}. ${names[i]} - ${uid}`).join("");
-                return api.sendMessage(`📋 𝐕𝐈𝐏 𝐔𝐬𝐞𝐫𝐬:${formattedList}`, event.threadID);
+                return api.sendMessage( `⏤͟͟͞͞𝑉𝐼⃠𝑃 𝑈𝑆⃠𝐸𝑅𝑆⃟:${formattedList}`, event.threadID);
             }
 
         default:
