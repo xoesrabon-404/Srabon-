@@ -63,8 +63,8 @@ module.exports.run = async function ({ api, event, args }) {
             return api.sendMessage("⏤͟͟͞͞𝑉𝐼⃝𝑃 ⃟𝑀𝑂𝐷𝐸 ⏤͟͟͞͞𝐷𝐼𝑆𝐴𝐵𝐿𝐸𝐷\n\n⏤͟͟͞͞𝐴𝐿𝐿⃝ 𝑈𝑆𝐸𝑅𝑆 𝐶𝐴𝑁 \n\n𝑈⃝𝑆𝐸 ⏤͟͟͞͞𝐶𝑂𝑀𝑀𝐴𝑁𝐷⃠𝑆 ⏤͟͟͞͞𝑁𝑂𝑊", event.threadID);
 
         case "add":
-            if (!targetID) return api.sendMessage("❌ Please provide a userID or reply to add.", event.threadID);
-            if (vipList.includes(targetID)) return api.sendMessage("❌ User is already VIP.", event.threadID);
+            if (!targetID) return api.sendMessage("⏤͟͟͞͞❌ Please provide a userID or reply to add.", event.threadID);
+            if (vipList.includes(targetID)) return api.sendMessage("⏤͟͟͞͞❌ User is already VIP.", event.threadID);
             vipList.push(targetID);
             saveVIP(vipList);
             {
@@ -73,8 +73,8 @@ module.exports.run = async function ({ api, event, args }) {
             }
 
         case "remove":
-            if (!targetID) return api.sendMessage("❌ Provide a userID or reply to remove.", event.threadID);
-            if (!vipList.includes(targetID)) return api.sendMessage("❌ User is not in VIP list.", event.threadID);
+            if (!targetID) return api.sendMessage("❌ ⏤͟͟͞͞Provide a userID or reply to remove.", event.threadID);
+            if (!vipList.includes(targetID)) return api.sendMessage("❌ ⏤͟͟͞͞User is not in VIP list.", event.threadID);
             vipList = vipList.filter(id => id !== targetID);
             saveVIP(vipList);
             {
