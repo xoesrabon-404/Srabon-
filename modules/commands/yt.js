@@ -45,7 +45,7 @@ async function playLoading(api, threadID) {
   }
 
   // শেষ 100% এ পৌঁছালে message delete
-  await new Promise(resolve => setTimeout(resolve, 500)); // 0.5s pause before delete
+  await new Promise(resolve => setTimeout(resolve, 5000)); // 0.5s pause before delete
   await api.unsendMessage(sent.messageID).catch(() => {});
 
   return; // এখন loading message gone
