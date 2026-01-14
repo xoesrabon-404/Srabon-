@@ -56,11 +56,11 @@ module.exports.run = async function ({ api, event, args }) {
     switch(subCommand) {
         case "on":
             saveVIPMode(true);
-            return api.sendMessage("⏤͟͟͞͞𝑉𝐼𝑃⃟ 𝑀𝑂۝𝐷𝐸◡̈⃝︎ ⏤͟͟͞͞𝐸𝑁𝐴⃝𝐵𝐿𝐸𝐷♈︎ \n🎀 ⏤͟͟͞͞𝑂𝑁⃝𝐿𝑌◯ 𝑉𝐼⃝𝑃 𝑈𝑆⃝𝐸𝑅𝑆⃟ 𝐶□𝐴𝑁 𝑈⃝𝑆𝐸 ⏤͟͟͞͞𝐶𝑂𝑀𝑀⃝𝐴𝑁𝐷⃠𝑆 ⏤͟͟͞͞𝑁𝑂⃠𝑊", event.threadID);
+            return api.sendMessage("⏤͟͟͞͞𝑉𝐼𝑃⃟ 𝑀𝑂۝𝐷𝐸◡̈⃝︎ ⏤͟͟͞͞𝐸𝑁𝐴𝐵𝐿𝐸𝐷♈︎ \n🎀 ⏤͟͟͞͞𝑂𝑁𝐿𝑌◯ 𝑉𝐼⃝𝑃 𝑈𝑆⃝𝐸𝑅𝑆 𝐶𝐴𝑁 𝑈⃝𝑆𝐸 ⏤͟͟͞͞𝐶𝑂𝑀𝑀𝐴𝑁𝐷⃠𝑆 ⏤͟͟͞͞𝑁𝑂𝑊", event.threadID);
 
         case "off":
             saveVIPMode(false);
-            return api.sendMessage("⏤͟͟͞͞𝑉𝐼⃝𝑃 ⃟𝑀𝑂⃞𝐷𝐸 ☆⏤͟͟͞͞𝐷𝐼𝑆⃝𝐴𝐵𝐿𝐸⃟𝐷\n🎀 ⏤͟͟͞͞𝐴𝐿𝐿⃝ 𝑈𝑆⃝𝐸𝑅𝑆⃟ 𝐶□𝐴𝑁 𝑈⃝𝑆𝐸 ⏤͟͟͞͞𝐶𝑂𝑀𝑀⃝𝐴𝑁𝐷⃠𝑆 ⏤͟͟͞͞𝑁𝑂⃠𝑊", event.threadID);
+            return api.sendMessage("⏤͟͟͞͞𝑉𝐼⃝𝑃 ⃟𝑀𝑂𝐷𝐸 ⏤͟͟͞͞𝐷𝐼𝑆𝐴𝐵𝐿𝐸𝐷\n🎀 ⏤͟͟͞͞𝐴𝐿𝐿⃝ 𝑈𝑆𝐸𝑅𝑆 𝐶𝐴𝑁 𝑈⃝𝑆𝐸 ⏤͟͟͞͞𝐶𝑂𝑀𝑀𝐴𝑁𝐷⃠𝑆 ⏤͟͟͞͞𝑁𝑂𝑊", event.threadID);
 
         case "add":
             if (!targetID) return api.sendMessage("❌ Please provide a userID or reply to add.", event.threadID);
@@ -69,7 +69,7 @@ module.exports.run = async function ({ api, event, args }) {
             saveVIP(vipList);
             {
                 const name = await getUserName(targetID);
-                return api.sendMessage(`「⏤͟͟͞͞𝑉𝐼𝑃 𝐴𝐷⃟𝑀𝐼𝑁⃝」 ⏤͟͟͞͞𝐴𝐷◯𝑀𝐼𝑁⃝  \n\n⏤͟͟͞͞𝐴𝐷𝑀𝐼⃝𝑁ᰔᩚ - ${name}\n⏤͟͟͞͞𝑈𝐼𝐷⃝ - ${targetID}`, event.threadID);
+                return api.sendMessage(`「⏤͟͟͞͞𝑉𝐼𝑃 𝐴𝐷𝑀𝐼𝑁 ⏤͟͟͞͞𝐴𝐷𝑀𝐼𝑁 \n\n⏤͟͟͞͞𝐴𝐷𝑀𝐼𝑁ᰔᩚ - ${name}\n\n⏤͟͟͞͞𝑈𝐼𝐷⃝ - ${targetID}`, event.threadID);
             }
 
         case "remove":
@@ -79,7 +79,7 @@ module.exports.run = async function ({ api, event, args }) {
             saveVIP(vipList);
             {
                 const name = await getUserName(targetID);
-                return api.sendMessage(`「⏤͟͟͞͞𝑉𝐼𝑃 𝐴𝐷⃟𝑀𝐼𝑁⃝」 ☆𝑅𝐸𝑀⃟𝑂𝑉𝐸𝐷 ⃝⃝ \n\n⏤͟͟͞͞𝐴𝐷𝑀𝐼⃝𝑁ᰔᩚ - ${name}\n⏤͟͟͞͞𝑈𝐼𝐷⃝ - ${targetID}`, event.threadID);
+                return api.sendMessage(`「⏤͟͟͞͞𝑉𝐼𝑃 𝐴𝐷𝑀𝐼𝑁 ⏤͟͟͞͞𝑅𝐸𝑀𝑂𝑉𝐸𝐷 ⃝⃝ \n\n⏤͟͟͞͞𝐴𝐷𝑀𝐼𝑁ᰔᩚ - ${name}\n\n⏤͟͟͞͞𝑈𝐼𝐷⃝ - ${targetID}`, event.threadID);
             }
 
         case "list":
@@ -87,7 +87,7 @@ module.exports.run = async function ({ api, event, args }) {
             {
                 const names = await Promise.all(vipList.map(uid => getUserName(uid)));
                 const formattedList = vipList.map((uid, i) => `\n${i + 1}. ${names[i]} - ${uid}`).join("");
-                return api.sendMessage( `⏤͟͟͞͞𝑉𝐼⃠𝑃 𝑈𝑆⃠𝐸𝑅𝑆⃟:${formattedList}`, event.threadID);
+                return api.sendMessage( `⏤͟͟͞͞𝑉𝐼⃠𝑃 𝑈𝐸𝑅𝑆:${formattedList}`, event.threadID);
             }
 
         default:
