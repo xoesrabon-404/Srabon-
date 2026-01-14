@@ -22,8 +22,8 @@ module.exports.run = async function ({ api, event, Users }) {
   if (userID == botID) {
     api.sendMessage(
       `｡ﾟ･｡･ﾟﾟ｡
-ﾟ。𝙂𝙧𝙤𝙪𝙥 𝙖𝙥𝙥𝙧𝙤𝙫𝙚𝙙✨
-　ﾟ･｡･тнαηкѕ ƒσя υѕιηg ოҽ 🥵💋•˚⠀`,
+ﾟ。⏤͟͟͞͞☻𝐺𝑅𝑂𝑈𝑃 𝐴𝑃𝑃𝑅𝑂𝑉𝐸ᥫ᭡꫞
+　ﾟ･｡･⏤͟͟͞͞ღтнαηкѕ ƒσя υѕιηg ოҽ 🥵💋•˚⠀`,
       threadID
     );
 
