@@ -59,11 +59,11 @@ users.needObject=অবশ্যই একটি Object হতে হবে
 # includes/handle/handleCommand.js
 
 handleCommand.userBanned=
-handleCommand.threadBanned=গ্রুপটি ব্যান করা হয়েছে..!⛔️\nআনব্যানের জন্য মালিক rX Abdullah এর সাথে যোগাযোগ করুন ⚠️
+handleCommand.threadBanned=গ্রুপটি ব্যান করা হয়েছে..!⛔️\nআনব্যানের জন্য মালিক ⏤͟͟͞͞𝐽𝐼𝐻𝑎𝑑 এর সাথে যোগাযোগ করুন ⚠️
 handleCommand.onlyprefix=> 🎀\nএটি শুধুমাত্র আমার প্রিফিক্স
 handleCommand.commandNotExist=> 🎀\nএই কমান্ডটি এখানে নেই। আপনি কি「 %1 」 ব্যবহার করতে চেয়েছিলেন?
 handleCommand.commandUserBanned=আপনি "%1" কমান্ড ব্যবহার করতে পারবেন না
-handleCommand.threadNotAllowNSFW=এই কমান্ডটি শুধুমাত্র rX এর জন্য
+handleCommand.threadNotAllowNSFW=এই কমান্ডটি শুধুমাত্র 𝐽𝑖ℎ𝑎𝑑এর জন্য
 handleCommand.cantGetInfoThread=আপনার থ্রেডের তথ্য আনা যায়নি, ত্রুটি: %1
 handleCommand.permissionNotEnough="%1" শুধুমাত্র অ্যাডমিন এই কমান্ড ব্যবহার করতে পারবে
 handleCommand.cantSetMessageReaction=MessageReaction সেট করতে অপ্রত্যাশিত ত্রুটি হয়েছে, ত্রুটি: %1
