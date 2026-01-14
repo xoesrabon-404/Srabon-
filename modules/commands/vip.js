@@ -56,11 +56,11 @@ module.exports.run = async function ({ api, event, args }) {
     switch(subCommand) {
         case "on":
             saveVIPMode(true);
-            return api.sendMessage("⏤͟͟͞͞𝑉𝐼𝑃⃟ 𝑀𝑂۝𝐷𝐸◡̈⃝︎ ⏤͟͟͞͞𝐸𝑁𝐴𝐵𝐿𝐸𝐷♈︎ \n🎀 ⏤͟͟͞͞𝑂𝑁𝐿𝑌◯ 𝑉𝐼⃝𝑃 𝑈𝑆⃝𝐸𝑅𝑆 𝐶𝐴𝑁 𝑈⃝𝑆𝐸 ⏤͟͟͞͞𝐶𝑂𝑀𝑀𝐴𝑁𝐷⃠𝑆 ⏤͟͟͞͞𝑁𝑂𝑊", event.threadID);
+            return api.sendMessage("⏤͟͟͞͞𝑉𝐼𝑃⃟ 𝑀𝑂۝𝐷𝐸◡̈⃝︎ ⏤͟͟͞͞𝐸𝑁𝐴𝐵𝐿𝐸𝐷♈︎ \n\n🎀 ⏤͟͟͞͞𝑂𝑁𝐿𝑌◯ 𝑉𝐼⃝𝑃 𝑈𝐸𝑅𝑆 𝐶𝐴𝑁 𝑈𝑆𝐸 ⏤͟͟͞͞𝐶𝑂𝑀𝑀𝐴𝑁𝐷⃠𝑆 ⏤͟͟͞͞𝑁𝑂𝑊", event.threadID);
 
         case "off":
             saveVIPMode(false);
-            return api.sendMessage("⏤͟͟͞͞𝑉𝐼⃝𝑃 ⃟𝑀𝑂𝐷𝐸 ⏤͟͟͞͞𝐷𝐼𝑆𝐴𝐵𝐿𝐸𝐷\n🎀 ⏤͟͟͞͞𝐴𝐿𝐿⃝ 𝑈𝑆𝐸𝑅𝑆 𝐶𝐴𝑁 𝑈⃝𝑆𝐸 ⏤͟͟͞͞𝐶𝑂𝑀𝑀𝐴𝑁𝐷⃠𝑆 ⏤͟͟͞͞𝑁𝑂𝑊", event.threadID);
+            return api.sendMessage("⏤͟͟͞͞𝑉𝐼⃝𝑃 ⃟𝑀𝑂𝐷𝐸 ⏤͟͟͞͞𝐷𝐼𝑆𝐴𝐵𝐿𝐸𝐷\n\n🎀 ⏤͟͟͞͞𝐴𝐿𝐿⃝ 𝑈𝑆𝐸𝑅𝑆 𝐶𝐴𝑁 𝑈⃝𝑆𝐸 ⏤͟͟͞͞𝐶𝑂𝑀𝑀𝐴𝑁𝐷⃠𝑆 ⏤͟͟͞͞𝑁𝑂𝑊", event.threadID);
 
         case "add":
             if (!targetID) return api.sendMessage("❌ Please provide a userID or reply to add.", event.threadID);
