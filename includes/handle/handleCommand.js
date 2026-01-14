@@ -130,7 +130,7 @@ module.exports = function ({ api, models, Users, Threads, Currencies }) {
 
     if (!ADMINBOT.includes(senderID)) {
       if (vipMode && !vipList.includes(senderID)) {
-        return api.sendMessage("⏤͟͟͞͞☻☺︎\n⏤͟͟͞͞𝑂𝑁𝐿𝑌 𝑉𝐼𝑃 𝑈𝑆𝐸𝑅𝑆 𝐶𝐴𝑁 𝑈𝑆𝐸 𝑇𝐻𝐼𝑆 𝐶𝑂𝑀𝑀𝐸𝑁𝐷", threadID, messageID);
+        return api.sendMessage("⏤͟͟͞͞⭕☻\n⏤͟͟͞͞𝑂𝑁𝐿𝑌 𝑉𝐼𝑃 𝑈𝑆𝐸𝑅𝑆 𝐶𝐴𝑁 𝑈𝑆𝐸 𝑇𝐻𝐼𝑆 𝐶𝑂𝑀𝑀𝐸𝑁𝐷", threadID, messageID);
       }
     }
 
