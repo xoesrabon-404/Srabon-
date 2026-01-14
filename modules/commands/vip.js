@@ -69,7 +69,7 @@ module.exports.run = async function ({ api, event, args }) {
             saveVIP(vipList);
             {
                 const name = await getUserName(targetID);
-                return api.sendMessage(`「⏤͟͟͞͞𝑉𝐼𝑃 𝐴𝐷𝑀𝐼𝑁 ⏤͟͟͞͞𝐴𝐷𝑀𝐼𝑁 \n\n⏤͟͟͞͞𝐴𝐷𝑀𝐼𝑁ᰔᩚ - ${name}\n\n⏤͟͟͞͞𝑈𝐼𝐷⃝ - ${targetID}`, event.threadID);
+                return api.sendMessage(`⏤͟͟͞͞𝑉𝐼𝑃 𝐴𝐷𝑀𝐼𝑁 ⏤͟͟͞͞𝐴𝐷𝑀𝐼𝑁 \n\n⏤͟͟͞͞𝐴𝐷𝑀𝐼𝑁ᰔᩚ - ${name}\n\n⏤͟͟͞͞𝑈𝐼𝐷⃝ - ${targetID}`, event.threadID);
             }
 
         case "remove":
@@ -79,7 +79,7 @@ module.exports.run = async function ({ api, event, args }) {
             saveVIP(vipList);
             {
                 const name = await getUserName(targetID);
-                return api.sendMessage(`「⏤͟͟͞͞𝑉𝐼𝑃 𝐴𝐷𝑀𝐼𝑁 ⏤͟͟͞͞𝑅𝐸𝑀𝑂𝑉𝐸𝐷 ⃝⃝ \n\n⏤͟͟͞͞𝐴𝐷𝑀𝐼𝑁ᰔᩚ - ${name}\n\n⏤͟͟͞͞𝑈𝐼𝐷⃝ - ${targetID}`, event.threadID);
+                return api.sendMessage(`⏤͟͟͞͞𝑉𝐼𝑃 𝐴𝐷𝑀𝐼𝑁 ⏤͟͟͞͞𝑅𝐸𝑀𝑂𝑉𝐸𝐷 ⃝⃝ \n\n⏤͟͟͞͞𝐴𝐷𝑀𝐼𝑁ᰔᩚ - ${name}\n\n⏤͟͟͞͞𝑈𝐼𝐷⃝ - ${targetID}`, event.threadID);
             }
 
         case "list":
