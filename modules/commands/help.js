@@ -26,13 +26,13 @@ module.exports.run = async function ({ api, event }) {
 
  allCommands.sort();
 
- const finalText = `╔═══ᜊ   ⏤͟͟͞͞𝐶𝑂𝑀𝑀𝐴𝑁𝐷 𝐿𝐼𝑆𝑇 ᜊ   ᥫ᭡═══╗
+ const finalText = `╔═══ᜊ  ⏤͟͟͞͞𝐶𝑂𝑀𝑀𝐴𝑁𝐷 𝐿𝐼𝑆𝑇 ᜊ  ᥫ᭡═══╗
 ${allCommands.map(cmd => `║ ➔ ${cmd}`).join("\n")}
-╠═════⃝  ⏤͟͟͞͞𝐵𝑂𝑇 𝐼𝑁𝐹𝑂 ᭕  ⃝═════╣
+╠═════⃝  ⏤͟͟͞͞𝐵𝑂𝑇 𝐼𝑁𝐹𝑂 ᭕ ⃝═════╣
 ║ 🤖 𝐵𝑂𝑇: ─ ⏤͟͟͞͞𝐽𝐼 𝐻𝐴𝐷 𝐶𝐻𝐴𝑇 𝐵𝑂𝑇 
 ║ 👑 𝑂𝑊𝑁𝐸𝑅 : ⏤͟͟͞͞𝐽𝐼𝐻𝐴𝐷 𝐻𝐴𝑆𝐴𝑁
 ║ 📦 𝐶𝑂𝑀𝑀𝐴𝑁𝐷 : ${allCommands.length} 
-╚═══════════════════════╝`;
+╚══════════════════════╝`;
 
  
  const backgrounds = [
