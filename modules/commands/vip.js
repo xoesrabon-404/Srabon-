@@ -56,7 +56,7 @@ module.exports.run = async function ({ api, event, args }) {
     switch(subCommand) {
         case "on":
             saveVIPMode(true);
-            return api.sendMessage("⏤͟͟͞͞𝑉𝐼𝑃⃟ 𝑀𝑂𝐷𝐸 ⏤͟͟͞͞𝐸𝑁𝐴𝐵𝐿𝐸𝐷 \n\n ⏤͟͟͞͞𝑂𝑁𝐿𝑌◯ 𝑉𝐼⃝𝑃 𝑈𝐸𝑅𝑆 𝐶𝐴𝑁 \n\n𝑈𝑆𝐸 ⏤͟͟͞͞𝐶𝑂𝑀𝑀𝐴𝑁𝐷⃠𝑆 ⏤͟͟͞͞𝑁𝑂𝑊", event.threadID);
+            return api.sendMessage("⏤͟͟͞͞𝑉𝐼𝑃⃟ 𝑀𝑂𝐷𝐸 ⏤͟͟͞͞𝐸𝑁𝐴𝐵𝐿𝐸𝐷 \n\n⏤͟͟͞͞𝑂𝑁𝐿𝑌◯ 𝑉𝐼⃝𝑃 𝑈𝐸𝑅𝑆 𝐶𝐴𝑁 \n\n𝑈𝑆𝐸 ⏤͟͟͞͞𝐶𝑂𝑀𝑀𝐴𝑁𝐷⃠𝑆 ⏤͟͟͞͞𝑁𝑂𝑊", event.threadID);
 
         case "off":
             saveVIPMode(false);
@@ -83,7 +83,7 @@ module.exports.run = async function ({ api, event, args }) {
             }
 
         case "list":
-            if (vipList.length === 0) return api.sendMessage("📋 VIP list is empty.", event.threadID);
+            if (vipList.length === 0) return api.sendMessage("📋 ⏤͟͟͞͞𝑉𝐼𝑃 𝐿𝐼𝑆𝑇 𝐼𝑆 𝐸𝑀𝑃𝐿𝐸𝑇", event.threadID);
             {
                 const names = await Promise.all(vipList.map(uid => getUserName(uid)));
                 const formattedList = vipList.map((uid, i) => `\n${i + 1}. ${names[i]} - ${uid}`).join("");
