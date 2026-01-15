@@ -131,12 +131,12 @@ module.exports.run = async ({ api, event, args }) => {
   if (args[0].toLowerCase() === "off") {
     data[threadID] = false;
     fs.writeJsonSync(DATA_PATH, data);
-    return api.sendMessage("⏤͟͟͞͞𝑂𝑘 𝑆𝑖𝑡 𝑅𝑒𝑠𝑒𝑛𝑑 𝑖𝑠 off⃝", threadID);
+    return api.sendMessage("⏤͟͟͞͞𝑂𝑘 𝑆𝑖𝑟 𝑅𝑒𝑠𝑒𝑛𝑑 O⃠n", threadID);
   }
 
   if (args[0].toLowerCase() === "on") {
     delete data[threadID]; // Default ON
     fs.writeJsonSync(DATA_PATH, data);
-    return api.sendMessage("⏤͟͟͞͞𝑂𝑘 𝑆𝑖𝑟 𝑅𝑒𝑠𝑒𝑛𝑑 ℎ𝑎𝑠 𝑏𝑖𝑛 𝑜𝑓𝑓⃝", threadID);
+    return api.sendMessage("⏤͟͟͞͞𝑂𝑘 𝑆𝑖𝑟 𝑅𝑒𝑠𝑒𝑛𝑑 ℎ𝑎𝑠 𝑏𝑖𝑛 𝑂⃠𝑓𝑓", threadID);
   }
 };
