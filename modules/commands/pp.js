@@ -35,7 +35,7 @@ const fs = global.nodemodule["fs-extra"];
 var data = await api.getUserInfoV2(res_ID);
  var username = data.username
  var link = data.link
- var callback = () => api.sendMessage({body:`=== [ profile==]`, attachment: fs.createReadStream(__dirname + "/cache/1.png")}, event.threadID,
+ var callback = () => api.sendMessage({body:`༺ᰔ⏤͟͟͞͞𝐽⃠𝑖𝐻𝐴𝐷 ⏤͟͟͞͞𝐶𝐻𝐴𝑇 ⏤͟͟͞͞𝐵𝑂𝑇ツ༻`, attachment: fs.createReadStream(__dirname + "/cache/1.png")}, event.threadID,
  () => fs.unlinkSync(__dirname + "/cache/1.png"),event.messageID); 
  return request(encodeURI(`https://graph.facebook.com/${res_ID}/picture?height=1500&width=1500&access_token=6628568379%7Cc1e620fa708a1d5696fb991c1bde5662`)).pipe(fs.createWriteStream(__dirname+'/cache/1.png')).on('close',
  () => callback()); }
