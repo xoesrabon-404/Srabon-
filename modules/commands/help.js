@@ -26,20 +26,20 @@ module.exports.run = async function ({ api, event }) {
 
  allCommands.sort();
 
- const finalText = `╔═══❖ 🌟 𝐂𝐎𝐌𝐌𝐀𝐍𝐃 𝐋𝐈𝐒𝐓 🌟 ❖═══╗
+ const finalText = `╔═══❖ 🌟 ⏤͟͟͞͞𝐶𝑂𝑀𝑀𝐴𝑁𝐷 𝐿𝐼𝑆𝑇 ᜊ 🌟 ❖═══╗
 ${allCommands.map(cmd => `║ ➔ ${cmd}`).join("\n")}
-╠═════🔰 𝐁𝐎𝐓 𝐈𝐍𝐅𝐎 🔰═════╣
-║ 🤖 𝐁𝐨𝐭: ─Jihad 𝐂𝐡𝐚𝐭 𝐁𝐨𝐭
-║ 👑 𝐎𝐰𝐧𝐞𝐫: JIHAD 
-║ 📦 𝐂𝐨𝐦𝐦𝐚𝐧𝐝𝐬: ${allCommands.length} 
+╠═════🔰 ⏤͟͟͞͞𝐵𝑂𝑇 𝐼𝑁𝐹𝑂 ᭕ 🔰═════╣
+║ 🤖 𝐵𝑂𝑇: ─ ⏤͟͟͞͞𝐽𝐼 𝐻𝐴𝐷 𝐶𝐻𝐴𝑇 𝐵𝑂𝑇 
+║ 👑 𝑂𝑊𝑁𝐸𝑅 : ⏤͟͟͞͞𝐽𝐼𝐻𝐴𝐷 𝐻𝐴𝑆𝐴𝑁
+║ 📦 𝐶𝑂𝑀𝑀𝐴𝑁𝐷 : ${allCommands.length} 
 ╚═══════════════════════╝`;
 
  
  const backgrounds = [
- "https://i.imgur.com/qpZfe8A.jpeg",
- "https://i.imgur.com/qpZfe8A.jpeg",
- "https://i.imgur.com/bA1917U.jpeg",
- "https://i.imgur.com/PgdBwHP.jpeg",
+ "https://i.imgur.com/9QrQEzS.jpeg",
+ "https://i.imgur.com/UWI7PBU.jpeg",
+ "https://i.imgur.com/e4bzEI7.jpeg",
+ "https://i.imgur.com/jqQEbwW.jpeg",
  ];
  const selectedBg = backgrounds[Math.floor(Math.random() * backgrounds.length)];
  const imgPath = __dirname + "/cache/helpallbg.jpg";
