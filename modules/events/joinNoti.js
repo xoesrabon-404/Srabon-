@@ -197,7 +197,7 @@ module.exports.run = async function ({ api, event, Users }) {
     ctx.fillStyle = "#fff";
     ctx.textAlign = "center";
 
-    ctx.fillText(`✰ ${memberCount} Members     ♂️ ${male} Male     ♀️ ${female} Female     ★ Thanks for using: Maria v3`, 640, 695);
+    ctx.fillText(`✰ ${memberCount} Members     ♂️ ${male} Male     ♀️ ${female} Female     ★ Thanks for using: 𝐽IHAD `, 640, 695);
 
     fs.writeFileSync(out, canvas.toBuffer());
 
