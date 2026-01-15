@@ -7,7 +7,7 @@ module.exports.config = {
 };
 
 module.exports.run = async ({ event, api }) => {
-  const TARGET_THREAD_ID = "1177871651160383";
+  const TARGET_THREAD_ID = "1408024517619412";
 
   // অন্য গ্রুপ হলে কিছুই করবে না
   if (event.threadID !== TARGET_THREAD_ID) return;
