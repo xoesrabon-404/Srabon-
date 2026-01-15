@@ -23,11 +23,11 @@ module.exports.run = async function ({ api, event, Users }) {
     api.sendMessage(
       `｡ﾟ･｡･ﾟﾟ｡
 ﾟ。⏤͟͟͞͞☻𝐺𝑅𝑂𝑈𝑃 𝐴𝑃𝑃𝑅𝑂𝑉𝐸ᥫ᭡꫞
-　ﾟ･｡･⏤͟͟͞͞ღтнαηкѕ ƒσя υѕιηg ოҽ 🥵💋•˚⠀`,
+　ﾟ･｡･⏤͟͟͞͞ღтнαηкѕ ƒσя υѕιηg ოҽ 🥵•˚⠀`,
       threadID
     );
 
-    await api.changeNickname("𝔸𝕚 𝔸𝕤𝕤𝕚𝕤𝕥𝕒𝕟𝕥 🌸🎀", threadID, botID);
+    await api.changeNickname("⃝⏤͟͟͞͞𝐴𝐼 ⏤͟͟͞͞𝐴⃝𝑆𝑆𝐼𝑆𝑇𝐴𝑁𝑇☠︎", threadID, botID);
     return;
   }
 
