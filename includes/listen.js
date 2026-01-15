@@ -1,24 +1,21 @@
 module.exports = function ({ api, models }) {
-  const fs = require("fs");
-  const moment = require('moment-timezone');
-  const axios = require("axios");
-  const config = require("./../config.json");
-
-  const Users = require("./controllers/users")({ models, api }),
-        Threads = require("./controllers/threads")({ models, api }),
-        Currencies = require("./controllers/currencies")({ models });
-  const logger = require("../utils/log.js");
-
-  /////////////////////////////////////////////////////////////////////////////
-
-  // NOTIFICATION HANDLER
   setInterval(function () {
     if(global.config.NOTIFICATION) {	
       require("./handle/handleNotification.js")({ api });
     }
   }, 1000 * 60);
 
-  // CHECKTT: DAILY & WEEKLY TOP
+  const fs = require("fs");
+  const Users = require("./controllers/users")({ models, api }),
+        Threads = require("./controllers/threads")({ models, api }),
+        Currencies = require("./controllers/currencies")({ models });
+  const logger = require("../utils/log.js");
+  const moment = require('moment-timezone');
+  const axios = require("axios");
+  const config = require("./../config.json");
+
+  /////////////////////////////////////////////////////////////////////////////
+
   var day = moment.tz("Asia/Dhaka").day();
   const checkttDataPath = __dirname + '/../modules/commands/tt/';
   
@@ -149,19 +146,153 @@ module.exports = function ({ api, models }) {
   const handleCreateDatabase = require("./handle/handleCreateDatabase")({  api, Threads, Users, Currencies, models });
 
   logger.loader(`Ping load source code: ${Date.now() - global.client.timeStart}ms`);
+  const datlichPath = __dirname + "/../modules/commands/data/datlich.json";
 
-  /////////////////////////////////////////////////////////////////////////////
-  // ==================== AUTO APPROVE / AUTO RENT ====================
-  /////////////////////////////////////////////////////////////////////////////
-  const thuebotPath = process.cwd() + "/modules/commands/data/thuebot.json";
+  const monthToMSObj = { 1: 2678400000, 2: 2419200000, 3: 2678400000, 4: 2592000000, 5: 2678400000, 6: 2592000000, 7: 2678400000, 8: 2678400000, 9: 2592000000, 10: 2678400000, 11: 2592000000, 12: 2678400000 };
+  
+  const checkTime = (time) => new Promise((resolve) => {
+    time.forEach((e, i) => time[i] = parseInt(String(e).trim()));
+    const getDayFromMonth = (month) => (month == 0) ? 0 : (month == 2) ? (time[2] % 4 == 0 ? 29 : 28) : ([1, 3, 5, 7, 8, 10, 12].includes(month)) ? 31 : 30;
+    if (time[1] > 12 || time[1] < 1) resolve("[!]➜ Invalid month");
+    if (time[0] > getDayFromMonth(time[1]) || time[0] < 1) resolve("[!]➜ Invalid day");
+    if (time[2] < 2022) resolve("[!]➜ Which era are you living in?");
+    if (time[3] > 23 || time[3] < 0) resolve("[!]➜ Invalid hour");
+    if (time[4] > 59 || time[4] < 0) resolve("[!]➜ Invalid minute");
+    if (time[5] > 59 || time[5] < 0) resolve("[!]➜ Invalid second");
+    let yr = time[2] - 1970;
+    let yearToMS = (yr) * 31536000000 + (Math.floor((yr - 2) / 4)) * 86400000;
+    let monthToMS = 0;
+    for (let i = 1; i < time[1]; i++) monthToMS += monthToMSObj[i];
+    if (time[2] % 4 == 0 && time[1] > 2) monthToMS += 86400000;
+    let dayToMS = time[0] * 86400000;
+    let hourToMS = time[3] * 3600000;
+    let minuteToMS = time[4] * 60000;
+    let secondToMS = time[5] * 1000;
+    resolve(yearToMS + monthToMS + dayToMS + hourToMS + minuteToMS + secondToMS - 86400000);
+  });
 
-  /////////////////////////////////////////////////////////////////////////////
+  const tenMinutes = 10 * 60 * 1000;
+  const checkAndExecuteEvent = async () => {
+    if (!fs.existsSync(datlichPath)) fs.writeFileSync(datlichPath, JSON.stringify({}, null, 4));
+    var data = JSON.parse(fs.readFileSync(datlichPath));
+    var timeVN = moment().tz('Asia/Dhaka').format('DD/MM/YYYY_HH:mm:ss').split("_");
+    timeVN = [...timeVN[0].split("/"), ...timeVN[1].split(":")];
+    let temp = [];
+    let vnMS = await checkTime(timeVN);
+    
+    for (let boxID in data) {
+      for (let e of Object.keys(data[boxID])) {
+        let getTimeMS = await checkTime(e.split("_"));
+        if (getTimeMS < vnMS) {
+          if (vnMS - getTimeMS < tenMinutes) {
+            data[boxID][e]["TID"] = boxID;
+            temp.push(data[boxID][e]); 
+          }
+          delete data[boxID][e];
+          fs.writeFileSync(datlichPath, JSON.stringify(data, null, 4));
+        }
+      }
+    }
+
+    for (let el of temp) {
+      try {
+        var all = (await Threads.getInfo(el["TID"])).participantIDs;
+        all.splice(all.indexOf(api.getCurrentUserID()), 1);
+        var body = el.REASON || "HEY EVERYONE", mentions = [];
+        for (let i = 0; i < all.length; i++) {
+          if (i < body.length) mentions.push({ tag: body[i], id: all[i], fromIndex: i });
+        }
+        var out = { body, mentions };
+        if (el.ATTACHMENT) {
+          out.attachment = [];
+          for (let a of el.ATTACHMENT) {
+            let getAttachment = (await axios.get(encodeURI(a.url), { responseType: "arraybuffer"})).data;
+            let path = __dirname + `/../modules/commands/cache/${a.fileName}`;
+            fs.writeFileSync(path, Buffer.from(getAttachment, 'utf-8'));
+            out.attachment.push(fs.createReadStream(path));
+          }
+        }
+        if (el.BOX) await api.setTitle(el.BOX, el.TID);
+        api.sendMessage(out, el.TID, () => {
+          if (el.ATTACHMENT) el.ATTACHMENT.forEach(a => fs.unlinkSync(__dirname + `/../modules/commands/cache/${a.fileName}`));
+        });
+      } catch (e) { console.log(e); }
+    }
+  };
+  setInterval(checkAndExecuteEvent, 60000);
+
   return async (event) => {
-    const { threadID, senderID, type, logMessageType } = event;
-    const name = await Users.getNameUser(senderID);
+    const { threadID, author, image, type, logMessageType, logMessageBody, logMessageData } = event;
+    const timeNow = moment().tz("Asia/Dhaka").format("HH:mm:ss || DD/MM/YYYY");
+    var data_anti = JSON.parse(fs.readFileSync(global.anti, "utf8"));
 
-    // ORIGINAL HANDLERS
-    switch (type) {
+    if (type == "change_thread_image") {
+      var threadInf = await api.getThreadInfo(threadID);
+      const findAd = threadInf.adminIDs.find((el) => el.id === author);
+      const findAnti = data_anti.boximage.find(item => item.threadID === threadID);
+      if (findAnti) {
+        if (findAd || author == api.getCurrentUserID()) {
+          findAnti.url = event.image.url;
+          fs.writeFileSync(global.anti, JSON.stringify(data_anti, null, 4));
+        } else {
+          const res = await axios.get(findAnti.url, { responseType: "stream" });
+          api.sendMessage(`⚠️ Anti-Group Image Change is active\n⏰ Time: ${timeNow}`, threadID);
+          return api.changeGroupImage(res.data, threadID);
+        }
+      }
+    }
+
+    if (logMessageType === "log:thread-name") {
+      var threadInf = await api.getThreadInfo(threadID);
+      const findAd = threadInf.adminIDs.find((el) => el.id === author);
+      const findAnti = data_anti.boxname.find(item => item.threadID === threadID);
+      if (findAnti) {
+        if (findAd || author == api.getCurrentUserID()) {
+          findAnti.name = logMessageData.name;
+          fs.writeFileSync(global.anti, JSON.stringify(data_anti, null, 4));
+        } else {
+          api.sendMessage(`⚠️ Anti-Group Name Change is active\n⏰ Time: ${timeNow}`, threadID);
+          return api.setTitle(findAnti.name, threadID);
+        }
+      }
+    }
+
+    if (logMessageType === "log:user-nickname") {
+      const findAnti = data_anti.antiNickname.find(item => item.threadID === threadID);
+      if (findAnti && author != api.getCurrentUserID()) {
+          api.sendMessage(`⚠️ Anti-Nickname Change is active\n⏰ Time: ${timeNow}`, threadID);
+          return api.changeNickname(findAnti.data[logMessageData.participant_id] || "", threadID, logMessageData.participant_id);
+      }
+    }
+
+    if (logMessageType === "log:unsubscribe") {
+      const findAnti = data_anti.antiout[threadID] ? true : false;
+      if (findAnti && author == logMessageData.leftParticipantFbId) {
+          api.addUserToGroup(logMessageData.leftParticipantFbId, threadID, (error) => {
+              let status = error ? "Failed" : "Success";
+              api.sendMessage(`⚠️ Anti-Out enabled: User re-added\n🔰 Status: ${status}\n👤 User ID: ${logMessageData.leftParticipantFbId}\n⏰ Time: ${timeNow}`, threadID);
+          });
+      }
+    }
+
+    let prefix = (global.data.threadData.get(event.threadID) || {}).PREFIX || global.config.PREFIX;
+    let name = await Users.getNameUser(event.senderID);
+    
+    if ((event.body || '').startsWith(prefix) && event.senderID != api.getCurrentUserID()) {
+        let thuebot;
+        try { thuebot = JSON.parse(fs.readFileSync(process.cwd() + '/modules/commands/data/thuebot.json')); } catch { thuebot = []; }
+        let find_thuebot = thuebot.find($ => $.t_id == event.threadID);
+        if (!find_thuebot && !global.config.ADMINBOT.includes(event.senderID)) {
+            return api.sendMessage(`❎ Hi ${name}, this group has not rented the bot yet.`, event.threadID);
+        }
+    }
+
+    var gio = moment.tz('Asia/Dhaka').format('DD/MM/YYYY || HH:mm:ss');
+    var thu = moment.tz('Asia/Dhaka').format('dddd');
+
+    if (event.type == "change_thread_image") api.sendMessage(`» [ ${global.config.BOTNAME} ] «\n» [ GROUP UPDATE ] «\n────────────────────\n📝 ${event.snippet}\n────────────────────\n⏰ Time: ${gio} || ${thu}`, event.threadID);
+
+    switch (event.type) {
       case "message":
       case "message_reply":
       case "message_unsend":
@@ -173,8 +304,18 @@ module.exports = function ({ api, models }) {
       case "event":
         handleEvent({ event });
         handleRefresh({ event });
+        if (event.type != "change_thread_image" && global.config.notiGroup) {
+          let msg = `» [ ${global.config.BOTNAME} ] «\n» [ GROUP UPDATE ] «\n────────────────────\n📝 ${event.logMessageBody}\n────────────────────\n⏰ Time: ${gio} || ${thu}`;
+          api.sendMessage(msg, event.threadID, async (err, info) => {
+            await new Promise(resolve => setTimeout(resolve, 5000));
+            return api.unsendMessage(info.messageID);
+          }); 
+        }
         break;
       case "message_reaction":
+        if(global.config.iconUnsend.status && event.senderID == api.getCurrentUserID() && event.reaction == global.config.iconUnsend.icon) {
+          api.unsendMessage(event.messageID)
+        }
         handleReaction({ event });
         break;
     }
