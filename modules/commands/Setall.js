@@ -21,14 +21,14 @@ module.exports.run = async function ({ api, event, args }) {
       await new Promise(r => setTimeout(r, 1200));
       api.changeNickname("", event.threadID, id);
     }
-    return api.sendMessage("✅ সবার nickname ক্লিয়ার করা হয়েছে", event.threadID);
+    return api.sendMessage("⏤͟͟͞͞۝𝐸𝑣𝑒𝑟𝑦𝑜𝑛𝑒 𝑁𝑖𝑐𝑘𝑛𝑎𝑚𝑒 𝐻𝑎𝑠 𝐶𝑙𝑒𝑎𝑟 ⚉", event.threadID);
   }
 
   // 🔹 setall
-  const name = args.join(" ");
+  const name = args.join("⏤͟͟͞͞۝𝐸𝑣𝑒𝑟𝑦𝑜𝑛𝑒 𝑁𝑖𝑐𝑘𝑛𝑎𝑚𝑒 𝐻𝑎𝑠 𝐵𝑒𝑒𝑛 𝑆𝑒𝑡 ⚉");
   if (!name) {
     return api.sendMessage(
-      "😐 নাম তো দে ভাই\nUsage: setall Name",
+      "⏤͟͟͞͞۝𝑆𝑖𝑟 𝑃𝑙𝑒𝑎𝑠𝑒 𝐺𝑖𝑣𝑒 𝑀𝑒 𝑎 𝑁𝑖𝑐𝑘𝑛𝑎𝑚𝑒 ☺︎\nUsage: setall Name",
       event.threadID,
       event.messageID
     );
@@ -39,5 +39,5 @@ module.exports.run = async function ({ api, event, args }) {
     api.changeNickname(name, event.threadID, id);
   }
 
-  api.sendMessage(`✅ সবার nickname সেট করা হয়েছে:\n${name}`, event.threadID);
+  api.sendMessage(`\n${name}`, event.threadID);
 };
