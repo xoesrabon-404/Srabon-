@@ -1,70 +1,90 @@
-module.exports = {
-  config: {
-    name: "linkAutoDownload",
-    version: "1.3.0",
-    hasPermssion: 0,
-    credits: "ARIF BABU", // ⚠️ DO NOT CHANGE THIS CREDIT
-    description: "Automatically detects links in messages and downloads the file.",
-    commandCategory: "Utilities",
-    usages: "",
-    cooldowns: 5,
-  },
+const axios = require("axios");
+const fs = require("fs-extra");
+const path = require("path");
+const { alldown } = require("rx-dawonload");
 
-  // ⛔ CREDIT PROTECTION — DO NOT TOUCH
-  onLoad: function () {
-    const fs = require("fs");
-    const path = __filename;
-    const fileData = fs.readFileSync(path, "utf8");
+module.exports.config = {
+    name: "autodl",
+    version: "2.2.1",
+    credits: "Jihad",
+    hasPermission: 0,
+    description: "Public Auto Download (No Reaction Needed)",
+    usePrefix: false,
+    commandCategory: "utility",
+    cooldowns: 2
+};
 
-    if (!fileData.includes('credits: "ARIF BABU"')) {
-      console.log("\n❌ ERROR: Credits Badle Gaye Hain! File Disabled ❌\n");
-      process.exit(1);
-    }
-  },
-  // ---------------------
+module.exports.run = async function () {};
 
-  run: async function () {},
+// -------------------------
+// 🔥 Detect Link & Auto Download
+// -------------------------
+module.exports.handleEvent = async function ({ api, event }) {
 
-  handleEvent: async function ({ api, event }) {
-    const axios = require("axios");
-    const fs = require("fs-extra");
-    const { alldown } = require("arif-babu-downloader");
+    if (!event.body || !event.body.startsWith("http")) return;
 
-    const body = (event.body || "").toLowerCase();
+    // Determine platform
+    let site = "Unknown";
+    if (event.body.includes("youtube")) site = "YouTube";
+    else if (event.body.includes("tiktok")) site = "TikTok";
+    else if (event.body.includes("instagram")) site = "Instagram";
+    else if (event.body.includes("facebook")) site = "Facebook";
 
-    if (!body.startsWith("https://")) return;
+    // Send detect message
+    const detectBox =
+`╔══════════════════╗
+║ ⏤͟͟͞͞𝑃⃠𝐿𝐴𝑇𝐹𝑂𝑅𝑀 𝐷𝐸𝐹𝐸𝐶𝑇𝐸𝐷
+╠══════════════════╣
+║ 📍 𝑃𝑙𝑎𝑡𝑓𝑜𝑟𝑚𝑒𝑟 : ${site}
+║ ⬇️ 𝐷𝑜𝑤𝑛𝑙𝑜𝑎𝑑𝑖𝑛𝑔.......
+╚══════════════════╝`;
+
+    // প্রথম মেসেজ পাঠানো এবং ⬇️ রিয়েক্ট
+    api.sendMessage(detectBox, event.threadID, async (err, info) => {
+        if (!err) {
+            await api.setMessageReaction("⬇️", info.messageID, event.senderID);
+        }
+    });
 
     try {
-      api.setMessageReaction("⏳", event.messageID, () => {}, true);
+        // Get download info
+        const data = await alldown(event.body);
+        if (!data?.url) {
+            return api.sendMessage("❌ Download link পাওয়া যায়নি!", event.threadID);
+        }
 
-      const data = await alldown(event.body);
+        const title = data.title || "video";
+        const buffer = (await axios.get(data.url, { responseType: "arraybuffer" })).data;
+        const safeTitle = title.replace(/[^\w\s]/gi, "_");
+        const filePath = path.join(__dirname, "cache", `${safeTitle}.mp4`);
+        fs.writeFileSync(filePath, buffer);
 
-      if (!data || !data.data || !data.data.high) {
-        return api.sendMessage("❌ Valid download link not found.", event.threadID);
-      }
+        // Send downloaded file
+        const doneBox =
+`╔════════════════════╗
+║⏤͟͟͞͞⃠𝐷𝑂𝑊𝑁𝐿𝑂𝐴𝐷 ⏤͟͟͞͞𝐶𝑂𝑀𝑃𝐿𝐸𝑇𝐸𝐿𝑌 
+╠════════════════════╣
+║ 🅹🅸🅷🅰🅳 💮
+║ 📍 𝑃𝑙𝑎𝑡𝑓𝑜𝑟𝑚 : ${site}
+║ 🎬 𝑇𝑖𝑡𝑙𝑒 : ${title}
+╚════════════════════╝`;
 
-      const videoURL = data.data.high;
+        api.sendMessage(
+            {
+                body: doneBox,
+                attachment: fs.createReadStream(filePath)
+            },
+            event.threadID,
+            async (err, info) => {
+                fs.unlinkSync(filePath);
+                if (!err) {
+                    await api.setMessageReaction("✅", info.messageID, event.senderID);
+                }
+            }
+        );
 
-      const buffer = (
-        await axios.get(videoURL, { responseType: "arraybuffer" })
-      ).data;
-
-      const filePath = __dirname + "/cache/auto.mp4";
-      fs.writeFileSync(filePath, buffer);
-
-      api.setMessageReaction("✅", event.messageID, () => {}, true);
-
-      return api.sendMessage(
-        {
-          body: "",
-          attachment: fs.createReadStream(filePath),
-        },
-        event.threadID,
-        event.messageID
-      );
-    } catch (err) {
-      api.setMessageReaction("❌", event.messageID, () => {}, true);
-      return api.sendMessage("", event.threadID);
+    } catch (e) {
+        console.log("AutoDL error:", e);
+        api.sendMessage("", event.threadID);
     }
-  },
 };
