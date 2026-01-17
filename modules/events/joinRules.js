@@ -7,7 +7,7 @@ module.exports.config = {
 };
 
 module.exports.run = async ({ event, api }) => {
-  const TARGET_THREAD_ID = "1408024517619412";
+  const TARGET_THREAD_ID = "25524546053855406";
 
   // ❌ অন্য গ্রুপ হলে কিছুই করবে না
   if (event.threadID !== TARGET_THREAD_ID) return;
@@ -71,7 +71,7 @@ module.exports.run = async ({ event, api }) => {
  ❼ ⏳ ৩ দিন এক্টিভ না থাকলে রিমুভ ⚠️ 
  ❽ 🧑‍💼 সমস্যা হলে এডমিনকে জানান ⚠️ 
  ❾ 🎉 নতুন মেম্বার এলে সবাই ওয়েলকাম জানাবেন ✅ 
-①⓪ 🛑 অন্য গ্রুপের স্ক্রিনশট নিষিদ্ধ ❗
+①⓪ 🛑 𝑇𝑒𝑥𝑡 𝑜𝑓𝑓 বলার পর কোনো টেক্সট দিলে সোজা কিক❗
 
 🙏 সবাই নিয়ম মেনে চলবেন আশা করি 🌸
 
