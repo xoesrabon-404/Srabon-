@@ -7,12 +7,7 @@ module.exports.config = {
 };
 
 module.exports.run = async ({ event, api }) => {
-  const TARGET_THREAD_ID = "1408024517619412";
-
-  // ❌ অন্য গ্রুপ হলে কিছুই করবে না
-  if (event.threadID !== TARGET_THREAD_ID) return;
-
-  // 🏷️ গ্রুপের নাম
+   // 🏷️ গ্রুপের নাম
   let groupName = "এই গ্রুপ";
   try {
     const threadInfo = await api.getThreadInfo(event.threadID);
