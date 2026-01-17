@@ -1,13 +1,16 @@
+const axios = require("axios");
+
 module.exports.config = {
   name: "joinRulesEvent",
   eventType: ["log:subscribe"],
-  version: "1.0.4",
+  version: "1.0.5",
   credits: "Jihad",
-  description: "Welcome rules event only for one specific group with mention"
+  description: "Welcome rules event for all groups with image & mention"
 };
 
 module.exports.run = async ({ event, api }) => {
-   // 🏷️ গ্রুপের নাম
+
+  // 🏷️ গ্রুপের নাম
   let groupName = "এই গ্রুপ";
   try {
     const threadInfo = await api.getThreadInfo(event.threadID);
@@ -35,6 +38,15 @@ module.exports.run = async ({ event, api }) => {
     adminName = adminInfo[event.author]?.name || adminName;
   } catch (e) {}
 
+  // 🖼️ Welcome Image
+  const imageURL = "https://i.imgur.com/z9up0OT.jpeg";
+  let imgStream;
+  try {
+    imgStream = (await axios.get(imageURL, { responseType: "stream" })).data;
+  } catch (e) {
+    imgStream = null;
+  }
+
   const message =
 `🎉💜✨ 𝑊𝑒𝑙𝑐𝑜𝑚𝑒 𝑇ℎ𝑒 𝐹𝑎𝑚𝑖𝑙𝑦 ✨💜🎉
 
@@ -55,7 +67,7 @@ module.exports.run = async ({ event, api }) => {
 
 🏷️ ⏤͟͟͞͞𝐺𝑟𝑜𝑢𝑝 𝑁𝑎𝑚𝑒 ${groupName}
 
-🤍✨ ⏤͟͟͞͞𝑁𝑒𝑤 ⏤͟͟͞͞𝑀𝑒𝑚𝑏𝑒𝑟
+🤍✨ ⏤͟͟͞͞𝑁𝑒𝑤 ⏤͟͟͞͞𝐌𝐞𝐦𝐛𝐞𝐫
 ➤ ${memberNames} 🎉🥰
 
 📜✨ 𝐺𝑟𝑜𝑢𝑝 𝑅𝑢𝑙𝑒 💜🎀
@@ -73,7 +85,7 @@ module.exports.run = async ({ event, api }) => {
 
 🙏 সবাই নিয়ম মেনে চলবেন আশা করি 🌸
 
-👑 ⏤͟͟͞͞𝐶𝐸𝑂 ${adminName} 💼✨  
+👑 ⏤͟͟͞͞𝐂𝐄𝐎 ${adminName} 💼✨  
 ~ভালোবাসা✨অবিরাম 🫶💞
 
 ⚠️ শেষ কথা:
@@ -81,10 +93,14 @@ module.exports.run = async ({ event, api }) => {
 ⛔ বিনা নোটিশে রিমুভ করা হবে 🚫
 
 
-𝑇ℎ𝑎𝑛𝑘 𝐹𝑜𝑟 𝑈𝑠𝑖𝑛𝑔 ⏤͟͟͞͞𝐽𝑖ℎ𝑎𝑑 ⏤͟͟͞͞𝐶ℎ𝑎𝑡 ⏤͟͟͞͞𝐵𝑜𝑡 `;
+𝑻𝒉𝒂𝒏𝒌 𝑭𝒐𝒓 𝑼𝒔𝒊𝒏𝒈 ⏤͟͟͞͞𝐉𝐢𝐡𝐚𝐝 ⏤͟͟͞͞𝐂𝐡𝐚𝐭 ⏤͟͟͞͞𝐁𝐨𝐭 `;
 
   return api.sendMessage(
-    { body: message, mentions },
+    {
+      body: message,
+      mentions,
+      attachment: imgStream ? imgStream : []
+    },
     event.threadID
   );
 };
