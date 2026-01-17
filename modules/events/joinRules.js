@@ -1,69 +1,91 @@
 module.exports.config = {
   name: "joinRulesEvent",
   eventType: ["log:subscribe"],
-  version: "1.0.0",
+  version: "1.0.4",
   credits: "Jihad",
-  description: "Welcome rules event only for one specific group"
+  description: "Welcome rules event only for one specific group with mention"
 };
 
 module.exports.run = async ({ event, api }) => {
   const TARGET_THREAD_ID = "1408024517619412";
 
-  // অন্য গ্রুপ হলে কিছুই করবে না
+  // ❌ অন্য গ্রুপ হলে কিছুই করবে না
   if (event.threadID !== TARGET_THREAD_ID) return;
 
-  // গ্রুপের নাম
+  // 🏷️ গ্রুপের নাম
   let groupName = "এই গ্রুপ";
   try {
     const threadInfo = await api.getThreadInfo(event.threadID);
     groupName = threadInfo.threadName || groupName;
   } catch (e) {}
 
-  // নতুন মেম্বারদের নাম
+  // 👥 নতুন মেম্বার
   const added = event.logMessageData?.addedParticipants || [];
   if (added.length === 0) return;
 
-  const memberNames = added.map(u => u.fullName).join(", ");
+  // 🏷️ Mention data
+  const mentions = [];
+  const memberNames = added.map(u => {
+    mentions.push({
+      tag: `@${u.fullName}`,
+      id: u.userFbId
+    });
+    return `@${u.fullName}`;
+  }).join(", ");
+
+  // 👑 যে এডমিন এড করেছে
+  let adminName = "Admin";
+  try {
+    const adminInfo = await api.getUserInfo(event.author);
+    adminName = adminInfo[event.author]?.name || adminName;
+  } catch (e) {}
 
   const message =
-`��Assalamu Alaikum��
+`🎉💜✨ 𝑊𝑒𝑙𝑐𝑜𝑚𝑒 𝑇ℎ𝑒 𝐹𝑎𝑚𝑖𝑙𝑦 ✨💜🎉
 
-🌸 গ্রুপের নাম: ${groupName}
+💌💜 হ্যালো সবাই 💜😊  
+আমাদের নতুন মেসেঞ্জার গ্রুপে তোমাদের স্বাগতম! 🥰💫  
+এখানেই হবে হাসি-খুশি 😄🎈, গল্পগুজব 💬🌀  
+আর একে অপরের সঙ্গে ভাগাভাগি করার অসীম আনন্দ! 🌈💖
 
-🤍 নতুন মেম্বার:
-➤ ${memberNames}
+🎊 আসো বন্ধু হও 💞✿  
+🎊 মজা করো 😜, গল্প শোনাও 🗣️✨  
+🎊 একে অপরকে পরিবারের মত মনে রাখো 🤍💜
 
-আমাদের friend adda group a সবাই কে স্বাগতম~~😊✨
+━━━━━━━━━━━━━━━━━━━
 
-»গ্রুপের কিছু নিয়ম কানুন আছে যেটা মানা আমাদের অতি জরুরী?? 
+🌸🤲 𝐴𝑠𝑠𝑎𝑙𝑎𝑚𝑢 𝐴𝑙𝑎𝑖𝑘𝑢𝑚 🤲🌸
 
-(1) এই নিয়ম মানা সবার জন্য বাধ্যতামূলক  
-(2) গ্রুপের name & profile কেউ চেঞ্জ করতে পারবে না  
-(3) সবাই মিলেমিশে থাকবো, ঝগড়া করবো না  
-(4) ১৮+ ছবি বা ভিডিও দেওয়া যাবে না  
-(5) কাউকে ইনবক্সে বিরক্ত করা যাবে না  
-(6) রিলেশন জনিত সমস্যা করলে ২ জনকেই রিমুভ  
-(7) ৩ দিনের বেশি এক্টিভ না থাকলে রিমুভ  
-(8) সমস্যা হলে এডমিনকে জানাবেন  
-(9) নতুন মেম্বার এলে সবাই ওয়েলকাম জানাবেন  
-(10) ঝামেলা হলে নিজ দায়িত্বে এডমিনকে জানাবেন  
-(11) জন্মদিনে সবাই উইশ করবেন  
-(12) ইনবক্সে বিরক্ত করলে Admin কে জানাবেন  
-(13) অন্য গ্রুপের স্ক্রিনশট / ভিডিও দেওয়া যাবে না  
-(14) ২ বারের বেশি লিভ নিলে পুনরায় এড হবে না  
-(15) বাজে কথা বললে রিমুভ  
-(16) ভিডিও সময় উপস্থিত থাকতে হবে  
-(17) গ্রুপে গেমের কথা বলা যাবে না  
-(18) Text off❌ হলে কেউ মেসেজ দিবেন না  
-(19) ৩ বারের বেশি লিভ নিলে এড করা যাবে না  
+🏷️ ⏤͟͟͞͞𝐺𝑟𝑜𝑢𝑝 𝑁𝑎𝑚𝑒 ${groupName}
 
-সবাই নিয়ম মেনে চলবেন আশা করি 🌸
+🤍✨ ⏤͟͟͞͞𝑁𝑒𝑤 ⏤͟͟͞͞𝑀𝑒𝑚𝑏𝑒𝑟
+➤ ${memberNames} 🎉🥰
 
-👑 CEO: Mir Ronok  
-~ভালোবাসা✨অবিরাম 🫶  
-~ধন্যবাদ~
+📜✨ 𝐺𝑟𝑜𝑢𝑝 𝑅𝑢𝑙𝑒 💜🎀
+ ① সবর সাথে ভালো ব্যবহার করবেন 💜
+ ② গ্রুপের নাম ও প্রোফাইল চেঞ্জ করা যাবে না 🚫 
+ ③ ঝগড়া করা যাবে না 🚫
+ ④ 🔞 ১৮+ কনটেন্ট নিষিদ্ধ  🚫 
+ ⑤ 📵 ইনবক্সে নক দেওয়া যাবে না 🚫 
+ ⑥ 💔 রিলেশন সমস্যা করলে দুজনকেই রিমুভ ⚠️ 
+ ❼ ⏳ ৩ দিন এক্টিভ না থাকলে রিমুভ ⚠️ 
+ ❽ 🧑‍💼 সমস্যা হলে এডমিনকে জানান ⚠️ 
+ ❾ 🎉 নতুন মেম্বার এলে সবাই ওয়েলকাম জানাবেন ✅ 
+①⓪ 🛑 অন্য গ্রুপের স্ক্রিনশট নিষিদ্ধ ❗
 
-শেষ কথা: প্রেম প্রিরিতি নিয়ে সমস্যা করলে বিনা নোটিশে রিমুভ করা হবে।`;
+🙏 সবাই নিয়ম মেনে চলবেন আশা করি 🌸
 
-  return api.sendMessage(message, event.threadID);
+👑 CEO: ${adminName} 💼✨  
+~ভালোবাসা✨অবিরাম 🫶💞
+
+⚠️ শেষ কথা:
+💔 প্রেম / প্রিরিতি নিয়ে সমস্যা করলে  
+⛔ বিনা নোটিশে রিমুভ করা হবে 🚫
+
+𝑇ℎ𝑎𝑛𝑘 𝐹𝑜𝑟 𝑈𝑠𝑖𝑛𝑔 ⏤͟͟͞͞𝐽𝑖ℎ𝑎𝑑 ⏤͟͟͞͞𝐶ℎ𝑎𝑡 ⏤͟͟͞͞𝐵𝑜𝑡 `;
+
+  return api.sendMessage(
+    { body: message, mentions },
+    event.threadID
+  );
 };
