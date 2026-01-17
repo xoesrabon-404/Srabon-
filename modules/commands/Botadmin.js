@@ -10,7 +10,7 @@ module.exports.config = {
  credits: "JIHAD ",
  description: "Show Owner Info",
  commandCategory: "info",
- usages: "Bot Admin",
+ usages: "Jihad",
  cooldowns: 2
 };
 
