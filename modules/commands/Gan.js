@@ -104,7 +104,7 @@ async function sendSong(api, threadID, index, replyToID) {
 
     api.sendMessage(
       {
-        body: "🅙🅘🅗🅐🅓 🅲🅷🅰🆃 🅱🅾🆃\n𝓡𝓮𝓹𝓵𝔂 'next' / 'arekta'",
+        body: "⏤͟͟͟͟͞͞͞͞J⃝𝐼𝐻𝐴𝐷☻ ⏤͟͟͞͞𝐻⃠𝐴𝑆𝐴𝑁☻",
         attachment: fs.createReadStream(filePath)
       },
       threadID,
