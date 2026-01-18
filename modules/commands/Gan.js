@@ -4,17 +4,16 @@ const path = require("path");
 
 module.exports.config = {
   name: "gan",
-  version: "1.0.2",
+  version: "1.0.3",
   hasPermssion: 0,
   credits: "Jihad",
-  description: "Auto sad song player (all audio, no video)",
-  commandCategory: "auto",
-  usages: "",
-  cooldowns: 0,
-  prefix: false
+  description: "Sad song player (FORCE PREFIX ONLY)",
+  commandCategory: "media",
+  usages: ".gan",
+  cooldowns: 0
 };
 
-// 🎧 Updated 42 ta sad song link (সবই audio/mp3)
+// 🎧 42 ta sad song link (audio only)
 const deepSongs = [
   "https://files.catbox.moe/npzr5e.mp3",
   "https://files.catbox.moe/5ydg4o.mp3",
@@ -62,52 +61,65 @@ const deepSongs = [
 
 const songProgress = {};
 
-module.exports.handleEvent = async function({ api, event }) {
-  const msgRaw = event.body;
-  if (!msgRaw) return;
+// 🔁 reply handler (next / arekta)
+module.exports.handleEvent = async ({ api, event }) => {
+  if (!event.body) return;
 
-  const msg = msgRaw.toLowerCase();
+  const msg = event.body.toLowerCase().trim();
   const threadID = event.threadID;
-  const messageID = event.messageID;
 
-  // Next song reply
-  if (event.type === "message_reply" && ["next", "arekta"].includes(msg.trim())) {
+  if (
+    event.type === "message_reply" &&
+    ["next", "arekta"].includes(msg)
+  ) {
     const progress = songProgress[threadID];
-    if (!progress || progress.msgID !== event.messageReply?.messageID) return;
+    if (!progress) return;
+    if (progress.msgID !== event.messageReply?.messageID) return;
 
     const nextIndex = (progress.index + 1) % deepSongs.length;
-    await sendSong(api, threadID, nextIndex, messageID);
-    return;
-  }
-
-  // Trigger word → "gan"
-  if (msg.includes("gan")) {
-    const randomIndex = Math.floor(Math.random() * deepSongs.length);
-    await sendSong(api, threadID, randomIndex, messageID);
-    return;
+    await sendSong(api, threadID, nextIndex, event.messageID);
   }
 };
 
+// ▶️ PREFIX ONLY COMMAND
+module.exports.run = async ({ api, event }) => {
+  const body = event.body || "";
+
+  // ❌ prefix ছাড়া হলে কাজ করবে না
+  if (!body.startsWith(".")) return;
+
+  const randomIndex = Math.floor(Math.random() * deepSongs.length);
+  await sendSong(api, event.threadID, randomIndex, event.messageID);
+};
+
+// 🎵 send song
 async function sendSong(api, threadID, index, replyToID) {
-  const url = deepSongs[index];
-  const fileName = `sad_${index}.mp3`; // সবকিছু mp3 হিসেবে
-  const filePath = path.join(__dirname, fileName);
+  const filePath = path.join(__dirname, `gan_${index}.mp3`);
 
   try {
-    const res = await axios.get(url, { responseType: "arraybuffer" });
+    const res = await axios.get(deepSongs[index], {
+      responseType: "arraybuffer"
+    });
     fs.writeFileSync(filePath, res.data);
 
-    api.sendMessage({
-      body: "🅙🅘🅗🅐🅓 🅲🅷🅰🆃 🅱🅾🆃\n 𝓡𝓮𝓹𝓵𝔂 𝓽𝓸 'next' 𝓯𝓸𝓻 𝓷𝓮𝔀 𝓖𝓪𝓷",
-      attachment: fs.createReadStream(filePath)
-    }, threadID, (err, info) => {
-      fs.unlinkSync(filePath);
-      if (!err) songProgress[threadID] = { index, msgID: info.messageID };
-    }, replyToID);
-
+    api.sendMessage(
+      {
+        body: "🅙🅘🅗🅐🅓 🅲🅷🅰🆃 🅱🅾🆃\n𝓡𝓮𝓹𝓵𝔂 'next' / 'arekta'",
+        attachment: fs.createReadStream(filePath)
+      },
+      threadID,
+      (err, info) => {
+        fs.unlinkSync(filePath);
+        if (!err) {
+          songProgress[threadID] = {
+            index,
+            msgID: info.messageID
+          };
+        }
+      },
+      replyToID
+    );
   } catch (e) {
-    console.log("❌ Error:", e.message);
+    console.log("❌ Gan error:", e.message);
   }
 }
-
-module.exports.run = () => {};
