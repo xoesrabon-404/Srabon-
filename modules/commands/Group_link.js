@@ -1,38 +1,42 @@
 module.exports.config = {
   name: "grouplink",
-  version: "2.4",
+  version: "1.0.0",
   hasPermssion: 0,
   credits: "Jihad",
-  description: "Auto show group links without prefix",
+  description: "Show group links without prefix",
+  commandCategory: "noprefix",
   cooldowns: 3
 };
 
-module.exports.handleEvent = async ({ event, api }) => {
+module.exports.handleEvent = async function ({ api, event }) {
   if (!event.body) return;
 
   const text = event.body.toLowerCase().trim();
+
+  // noprefix trigger
   if (text !== "group link") return;
 
-  const message = `
-💙  ⏤͟͟͞͞𝐺𝑅𝑂𝑈𝑃𝑆 ⏤͟͟͞͞𝐿𝐼𝑁𝐾  ♥️    
+  const msg = `
+💙 ⏤͟͟͞͞𝐺⃤𝑅𝑂𝑈𝑃 ⏤͟͟͞͞𝐿𝐼𝑁𝐾 💙
 
-❶ 🌸 Group Name
+❶ 🌸 ━━━━━♡⏤͟͟͞͞𝑅⃠𝑂𝑀𝐴𝑁𝑇𝐼𝐶ܔ ⏤͟͟͞͞𝑆⃠𝑇𝑂𝑅𝑌༄ ⏤͟͟͞͞𝐴⃠𝐷𝐷𝐴༆⏤͟͟͞͞𝐵⃠𝑂𝑋☹︎ ♡━━━━━
 🔗 https://m.me/j/AbYIei7ck92AHWwW/
 
-❷ 🌸 Group Name
+❷ 🌸 ──⃜⃜͢͢🍒͟͟͞͞๛⃝𝑇𝑂𝑃 𝑂𝑁𝐿𝑌 𝐶𝐴𝑃𝑇𝐴𝐼𝑁 𝐵𝑂𝑋•─⃜⃜͢͢🍒͟͟͞͞๛⃝
 🔗 https://m.me/j/AbYRt0avuOAx9OUx/
 
-❸ 🌸 Group Name
+❸ 🌸 🐰-( 𝐒𝐭𝐨𝐫𝐲 𝐯𝐢𝐝𝐞𝐨 𝐁𝐨𝐱 ) ( 🅣︎🅔︎🅧︎🅣︎ 🅝︎🅞︎🅣︎ 🅐︎🅛︎🅛︎🅞︎🅦︎) 🦋✨
 🔗 https://m.me/j/AbbwO_j5t2yMH8s1/
 
-❹ 🌸 Group Name
+❹ 🌸 ༺༒۝⏤͟͟͞͞𝑪⃠𝑨𝑳𝐿⏤͟͟͞͞𝐵𝑂𝑋۝༒༻
 🔗 https://m.me/j/Abaxj4BxvHCHUEEn/
 
-⏤͟͟͞͞𝐴𝐷𝑀𝐼𝑁 ⏤͟͟͞͞𝐽𝐼𝐻𝐴𝐷 💮🎀
+⏤͟͟͞͞ 𝐀𝐃𝐌𝐈𝐍 : 𝐉𝐈𝐇𝐀𝐃 💮
 💞 Join Now 💞
-  `;
+`;
 
-  return api.sendMessage(message, event.threadID);
+  return api.sendMessage(msg, event.threadID);
 };
 
-module.exports.run = () => {};
+// empty run (required by Mirai)
+module.exports.run = async () => {};
