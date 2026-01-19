@@ -18,7 +18,7 @@ module.exports.handleEvent = async ({ event, api }) => {
     const message = `
 
 
- 💙  ⏤͟͟͞͞𝐺𝑅𝑂𝑈𝑃𝑆 ⏤͟͟͞͞𝐿𝐼𝑁𝐾  ♥️    
+ ,💙  ⏤͟͟͞͞𝐺𝑅𝑂𝑈𝑃𝑆 ⏤͟͟͞͞𝐿𝐼𝑁𝐾  ♥️    
 
 
 ❶ 🌸 𝐺𝑟𝑜𝑢𝑝 𝑁𝑎𝑚𝑒
@@ -43,7 +43,7 @@ https://m.me/j/Abaxj4BxvHCHUEEn/
 
 
       ⏤͟͟͞͞𝐴𝐷𝑀𝐼𝑁 ⏤͟͟͞͞𝐽𝐼𝐻𝐴𝐷 💮🎀
-       💞 𝐽𝑜𝑖𝑛 𝑁𝑜𝑤 💞
+       💞 𝐽𝑜𝑖𝑛 𝑁𝑜𝑤 💞,
 
 
     return api.sendMessage(message, event.threadID);
