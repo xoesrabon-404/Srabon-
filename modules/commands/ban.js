@@ -25,11 +25,11 @@ module.exports.run = async function ({ api, args, event }) {
   if (!info.adminIDs.some(i => i.id == api.getCurrentUserID())) {
     return api.sendMessage(
 `━━━━━━━━━━━━━━━━━━━━━━━
- 🚫🚫 ACCESS DENIED 🚫🚫
+ 🚫🚫 ⏤͟͟͞͞𝐴𝐶𝐶𝐸𝑆𝑆 ⏤͟͟͞͞𝐷𝐸𝑁𝐼𝐸𝑆 🚫🚫
 ━━━━━━━━━━━━━━━━━━━━━━━
 
-❌ BOT IS NOT ADMIN
-⚠️ PLEASE ADD BOT AS ADMIN
+❌ 𝑆𝑖𝑟 𝐴𝑚𝑖 𝐺𝑟𝑜𝑢𝑝 𝐴𝑑𝑚𝑖𝑛 𝑛𝑎 
+⚠️ 𝑃𝑙𝑒𝑎𝑠𝑒 𝐴𝑑𝑑 𝑀𝑒 𝐴𝑠 𝐴𝑑𝑚𝑖𝑛
 
 ━━━━━━━━━━━━━━━━━━━━━━━`,
       threadID,
@@ -44,12 +44,12 @@ module.exports.run = async function ({ api, args, event }) {
   ) {
     return api.sendMessage(
 `━━━━━━━━━━━━━━━━━━━━━━━
- 🚫🚫 ACCESS DENIED 🚫🚫
+ 🚫🚫 ⏤͟͟͞͞𝐴𝐶𝐶𝐸𝑆𝑆 ⏤͟͟͞͞𝐷𝐸⃢𝑁𝐼𝐸𝐷 🚫🚫
 ━━━━━━━━━━━━━━━━━━━━━━━
 
-❌ YOU ARE NOT AN ADMIN
-⚠️ YOU CANNOT REMOVE ANYONE
-FROM THIS GROUP USING THE BOT
+❌ ⏤͟͟͞͞𝑌𝑂𝑈 𝐴𝑅𝐸 𝑁𝑂𝑇 𝐴𝑁 𝐴𝐷𝑀𝐼𝑁
+⚠️ ⏤͟͟͞͞𝑌𝑂𝑈 𝐶𝐴𝑁𝑁𝑂𝑇 𝑅𝐸𝑀𝑂𝑉𝐸 𝐴𝑁𝑌𝑂𝑁𝐸
+𝐹𝑅𝑂𝑀 𝑇𝐻𝐼𝑆 𝐺𝑅𝑂𝑈𝑃 𝑈𝑆𝐼𝑁𝐺 𝑇𝐻𝐸 𝐵𝑂𝑇
 
 ━━━━━━━━━━━━━━━━━━━━━━━`,
       threadID,
@@ -71,15 +71,15 @@ FROM THIS GROUP USING THE BOT
   if (OWNER_UIDS.includes(targetID)) {
     return api.sendMessage(
 `━━━━━━━━━━━━━━━━━━━━━━━
- 🚫🚫 ACCESS DENIED 🚫🚫
+ 🚫🚫 𝐴𝐶𝐶𝐸𝑆𝑆 𝐷𝐸𝑁𝐼𝐸𝐷 🚫🚫
 ━━━━━━━━━━━━━━━━━━━━━━━
 
-👑 JIHAD IS MY OWNER
-💌 HE IS MY DEVELOPER 
-🤖 SYSTEM PROTECTION ENABLED
+👑 ⏤͟͟͞͞𝐽𝐼𝐻𝐴𝐷 𝐼𝑆 𝑀𝑌 𝑂𝑊𝑁𝐸𝑅 
+💌 ⏤͟͟͞͞𝐻𝐸 𝐼𝑆 𝑀𝑌 𝐷𝐸𝑉𝐸𝐿𝑂𝑃𝐸𝑅 
+🤖 ⏤͟͟͞͞𝑆𝑌𝑆𝑇𝐸𝑀 𝑃𝑅𝑂𝑇𝐸𝐶𝑇𝐼𝑂𝑁 𝐸𝑁𝐴𝐵𝐿𝐸𝐷
 
-❌ YOU ARE NOT ALLOWED
-TO BAN OR KICK THIS USER .
+❌ ⏤͟͟͞͞𝑌𝑂𝑈 𝐴𝑅𝐸 𝑁𝑂𝑇 𝐴𝐿𝐿𝑂𝑊𝐸𝐷
+𝑇𝑂 𝐵𝐴𝑁 𝑂𝑅 𝐾𝐼𝐶𝐾 𝑇𝐻𝐼𝑆 𝑈𝑆𝐸𝑅 .
 
 ━━━━━━━━━━━━━━━━━━━━━━━`,
       threadID,
@@ -88,7 +88,7 @@ TO BAN OR KICK THIS USER .
   }
 
   // ====== PERFECT REASON LOGIC ======
-  let reason = "No reason was given";
+  let reason = "𝑁𝑂 𝑟𝑒𝑎𝑠𝑜𝑛 𝑤𝑎𝑠 𝑔𝑖𝑣𝑒𝑛";
 
   if (args.length > 0) {
     let fullText = args.join(" ");
@@ -111,17 +111,17 @@ TO BAN OR KICK THIS USER .
   // SEND NOTICE FIRST
   await api.sendMessage(
 `━━━━━━━━━━━━━━━━━━━━━━
- 🚫🚫  PERMANENT BAN  🚫🚫
+ 🚫 ⏤͟͟͞͞𝑃𝐸𝑅𝑀𝐴𝑁𝐸𝑁𝑇 ⏤͟͟͞͞𝐵𝐴𝑁  🚫
 ━━━━━━━━━━━━━━━━━━━━━
-👤 USER : ${name}
+👤 ⏤͟͟͞͞𝑈𝑆𝐸𝑅 : ${name}
 
-🆔 UID  : ${targetID}
+🆔 ⏤͟͟͞͞𝑈𝐼𝐷  : ${targetID}
 
-📝 REASON : ${reason}
+📝 ⏤͟͟͞͞𝑅𝐸𝐴𝑆𝑂𝑁 : ${reason}
 
-👮 ACTION BY : ${isBotAdmin ? "BOT ADMIN" : "GROUP ADMIN"}
+👮 ⏤͟͟͞͞𝐴𝐶𝑇𝐼𝑂𝑁 𝐵𝑌 : ${isBotAdmin ? "𝐵𝑂𝑇 𝐴𝐷𝑀𝐼𝑁" : "𝐺𝑅𝑂𝑈𝑃 𝐴𝐷𝑀𝐼𝑁"}
 
-⚙️ STATUS : REMOVING FROM GROUP IN 2 SECONDS...
+⚙️ ⏤͟͟͞͞𝑆𝑇𝐴𝑇𝑈𝑆 : 𝑅𝐸𝑀𝑂𝑉𝐼𝑁𝐺 𝐹𝑅𝑂𝑀 𝐺𝑅𝑂𝑈𝑃 𝐼𝑁 2 𝑆𝐸𝐶𝑂𝑁𝐷...
 ━━━━━━━━━━━━━━━━━━━━━━
 ━━━━━━━━━━━━━━━━━━━━━━`,
     threadID
