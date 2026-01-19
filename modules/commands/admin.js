@@ -47,7 +47,7 @@ module.exports.onLoad = function() {
 }
 module.exports.run = async function ({ api, event, args, Users, permssion, getText }) {  
     const content = args.slice(1, args.length);
-    if (args.length == 0) return api.sendMessage({body:`==== [ 𝗔𝗗𝗠𝗜𝗡 𝗦𝗘𝗧𝗧𝗜𝗡𝗚 ] ====\n━━━━━━━━━━━━━━━\n𝗠𝗢𝗗𝗘 - 𝗮𝗱𝗺𝗶𝗻 𝗹𝗶𝘀𝘁 => 𝗩𝗶𝗲𝘄 𝗹𝗶𝘀𝘁 𝗼𝗳 𝗔𝗱𝗺𝗶𝗻 𝗮𝗻𝗱 𝗦𝘂𝗽𝗽𝗼𝗿𝘁\n𝗠𝗢𝗗𝗘 -𝗮𝗱𝗺𝗶𝗻 𝗮𝗱𝗱 => 𝗔𝗱𝗱 𝘂𝘀𝗲𝗿 𝗮𝘀 𝗔𝗱𝗺𝗶𝗻\n𝗠𝗢𝗗𝗘 -𝗮𝗱𝗺𝗶𝗻 𝗿𝗲𝗺𝗼𝘃𝗲=> 𝗥𝗲𝗺𝗼𝘃𝗲 𝗿𝗼𝗹𝗲 𝗔𝗱𝗺𝗶𝗻\n𝗠𝗢𝗗𝗘 -𝗮𝗱𝗺𝗶𝗻 𝗮𝗱𝗱𝗻𝗱𝗵 => 𝗔𝗱𝗱 𝘂𝘀𝗲𝗿 𝗮𝘀 𝗦𝘂𝗽𝗽𝗼𝗿𝘁\n𝗠𝗢𝗗𝗘 -𝗮𝗱𝗺𝗶𝗻 𝗿𝗲𝗺𝗼𝘃𝗲𝗻𝗱𝗵=> 𝗥𝗲𝗺𝗼𝘃𝗲 𝗿𝗼𝗹𝗲 𝗦𝘂𝗽𝗽𝗼𝗿𝘁\n𝗠𝗢𝗗𝗘 -𝗮𝗱𝗺𝗶𝗻 𝗾𝘁𝘃𝗼𝗻𝗹𝘆=> 𝘁𝗼𝗴𝗴𝗹𝗲  𝗺𝗼𝗱𝗲 𝗼𝗻𝗹𝘆 𝗮𝗱𝗺𝗶𝗻𝘀 𝘂𝘀𝗲 𝗯𝗼𝘁\n𝗠𝗢𝗗𝗘 - 𝗮𝗱𝗺𝗶𝗻 𝗻𝗱𝗵𝗼𝗻𝗹𝘆=> 𝘁𝗼𝗴𝗴𝗹𝗲 𝗺𝗼𝗱𝗲 𝗼𝗻𝗹𝘆 𝘀𝘂𝗽𝗽𝗼𝗿𝘁 𝗯𝗼𝘁 𝘂𝘀𝗶𝗻𝗴 𝗯𝗼𝘁\n𝗠𝗢𝗗𝗘 - 𝗮𝗱𝗺𝗶𝗻 𝗼𝗻𝗹𝘆 => 𝘁𝗼𝗴𝗴𝗹𝗲 𝗺𝗼𝗱𝗲 𝗼𝗻𝗹𝘆 𝗮𝗱𝗺𝗶𝗻𝘀 𝗰𝗮𝗻 𝘂𝘀𝗲 𝗯𝗼𝘁\n𝗠𝗢𝗗𝗘 - 𝗮𝗱𝗺𝗶𝗻 𝗶𝗯𝗼𝗻𝗹𝘆 => 𝘁𝗼𝗴𝗴𝗹𝗲 𝗺𝗼𝗱 𝗼𝗻𝗹𝘆 𝗮𝗱𝗺𝗶𝗻𝘀 𝗰𝗮𝗻 𝘂𝘀𝗲 𝗯𝗼𝘁𝘀 𝗶𝗻 𝗶𝗯 𝘀𝗲𝗽𝗮𝗿𝗮𝘁𝗲𝗹𝘆 𝗳𝗿𝗼𝗺 𝗯𝗼𝘁𝘀\n━━━━━━━━━━━━━━━\n𝗛𝗗𝗦𝗗 => ${global.config.PREFIX}𝗮𝗱𝗺𝗶𝗻 𝗰𝗼𝗺𝗺𝗮𝗻𝗱𝘀 𝘁𝗼 𝘂𝘀𝗲`}, event.threadID, event.messageID); 
+    if (args.length == 0) return api.sendMessage({body:``}, event.threadID, event.messageID); 
     const { threadID, messageID, mentions } = event;
     const { configPath } = global.client;
     const { ADMINBOT } = global.config;
