@@ -1,52 +1,38 @@
 module.exports.config = {
-    name: "grouplink",
-    version: "2.4",
-    hasPermssion: 0,
-    credits: "Jihad",
-    description: "Auto show group links without prefix",
-    commandCategory: "noprefix",
-    usages: "group link",
-    cooldowns: 3
+  name: "grouplink",
+  version: "2.4",
+  hasPermssion: 0,
+  credits: "Jihad",
+  description: "Auto show group links without prefix",
+  cooldowns: 3
 };
 
 module.exports.handleEvent = async ({ event, api }) => {
-    if (!event.body) return;
+  if (!event.body) return;
 
-    const text = event.body.toLowerCase();
-    if (text !== "group link") return;
+  const text = event.body.toLowerCase().trim();
+  if (text !== "group link") return;
 
-    const message = `
+  const message = `
+💙  ⏤͟͟͞͞𝐺𝑅𝑂𝑈𝑃𝑆 ⏤͟͟͞͞𝐿𝐼𝑁𝐾  ♥️    
 
+❶ 🌸 Group Name
+🔗 https://m.me/j/AbYIei7ck92AHWwW/
 
- 💙  ⏤͟͟͞͞𝐺𝑅𝑂𝑈𝑃𝑆 ⏤͟͟͞͞𝐿𝐼𝑁𝐾  ♥️    
+❷ 🌸 Group Name
+🔗 https://m.me/j/AbYRt0avuOAx9OUx/
 
+❸ 🌸 Group Name
+🔗 https://m.me/j/AbbwO_j5t2yMH8s1/
 
-❶ 🌸 𝐺𝑟𝑜𝑢𝑝 𝑁𝑎𝑚𝑒
-━━━━━♡⏤͟͟͞͞𝑅⃠𝑂𝑀𝐴𝑁𝑇𝐼𝐶ܔ ⏤͟͟͞͞𝑆⃠𝑇𝑂𝑅𝑌༄ ⏤͟͟͞͞𝐴⃠𝐷𝐷𝐴༆⏤͟͟͞͞𝐵⃠𝑂𝑋☹︎ ♡━━━━━
-🔗 𝐿𝑖𝑛𝑘:
-https://m.me/j/AbYIei7ck92AHWwW/
+❹ 🌸 Group Name
+🔗 https://m.me/j/Abaxj4BxvHCHUEEn/
 
-❷ 🌸 𝐺𝑟𝑜𝑢𝑝 𝑁𝑎𝑚𝑒
-──⃜⃜͢͢🍒͟͟͞͞๛⃝𝑇𝑂𝑃 𝑂𝑁𝐿𝑌 𝐶𝐴𝑃𝑇𝐴𝐼𝑁 𝐵𝑂𝑋•─⃜⃜͢͢🍒͟͟͞͞๛⃝
-🔗 𝐿𝑖𝑛𝑘:
-https://m.me/j/AbYRt0avuOAx9OUx/
+⏤͟͟͞͞𝐴𝐷𝑀𝐼𝑁 ⏤͟͟͞͞𝐽𝐼𝐻𝐴𝐷 💮🎀
+💞 Join Now 💞
+  `;
 
-❸ 🌸 𝐺𝑟𝑜𝑢𝑝 𝑁𝑎𝑚𝑒
-🐰-( 𝐒𝐭𝐨𝐫𝐲 𝐯𝐢𝐝𝐞𝐨 𝐁𝐨𝐱) (🅣︎🅔︎🅧︎🅣︎ 🅝︎🅞︎🅣︎ 🅐︎🅛︎🅛︎🅞︎🅦︎) 🦋✨
-🔗 𝐿𝑖𝑛𝑘:
-https://m.me/j/AbbwO_j5t2yMH8s1/
-
-❹ 🌸 𝐺𝑟𝑜𝑢𝑝 𝑁𝑎𝑚𝑒:
-༺༒۝⏤͟͟͞͞𝑪⃠𝑨𝑳𝐿⏤͟͟͞͞𝐵𝑂𝑋۝༒༻
-🔗 Link:
-https://m.me/j/Abaxj4BxvHCHUEEn/
-
-
-      ⏤͟͟͞͞𝐴𝐷𝑀𝐼𝑁 ⏤͟͟͞͞𝐽𝐼𝐻𝐴𝐷 💮🎀
-       💞 𝐽𝑜𝑖𝑛 𝑁𝑜𝑤 💞 `
-
-
-    return api.sendMessage(message, event.threadID);
+  return api.sendMessage(message, event.threadID);
 };
 
 module.exports.run = () => {};
