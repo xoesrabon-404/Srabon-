@@ -88,7 +88,7 @@ module.exports.run = async function ({ api, args, event }) {
   }
 
   // ====== PERFECT REASON LOGIC ======
-  let reason = "𝑁𝑂 𝑟𝑒𝑎𝑠𝑜𝑛 𝑤𝑎𝑠 𝑔𝑖𝑣𝑒𝑛";
+  let reason = "𝑁𝑜 𝑟𝑒𝑎𝑠𝑜𝑛 𝑤𝑎𝑠 𝑔𝑖𝑣𝑒𝑛";
 
   if (args.length > 0) {
     let fullText = args.join(" ");
