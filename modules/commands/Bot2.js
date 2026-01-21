@@ -5,20 +5,19 @@ const path = require("path");
 /* 🔒 HARD-LOCK CREDITS PROTECTION 🔒 */
 function protectCredits(config) {
   if (config.credits !== "ARIF-BABU") {
-    console.log("\n🚫 Credits change detected! Restoring original credits…\n");
     config.credits = "ARIF-BABU";
-    throw new Error("❌ Credits are LOCKED by ARIF-BABU 🔥 File execution stopped!");
+    throw new Error("❌ Credits are LOCKED by ARIF-BABU 🔥");
   }
 }
 
 module.exports.config = {
   name: "ARIF-AI",
-  version: "3.3.2",
+  version: "3.4.0",
   hasPermssion: 0,
   credits: "ARIF-BABU",
-  description: "META AI",
+  description: "Normal AI like ChatGPT (reply thread based)",
   commandCategory: "ai",
-  usages: "No prefix",
+  usages: "bot → reply → chat",
   cooldowns: 2,
   dependencies: { axios: "" }
 };
@@ -29,29 +28,21 @@ protectCredits(module.exports.config);
 const OPENROUTER_API_KEY =
   "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";
 
-/* 🧠 SYSTEM PROMPT */
+/* 🧠 SYSTEM PROMPT (NORMAL AI STYLE) */
 const systemPrompt = `
-তুমি ✮⃝ՙՙJihad' Ai hu ❤️ 🙂
-Creator & Owner: ՙՙJihad' Ai hu ❤️
-
-Golden Rules:
-• সব রিপ্লাই 100% শুদ্ধ বাংলায় হবে
-• User এর vibe অনুযায়ী reply
-• Boyfriend-style caring, romantic 😌
-• Reply 1–2 লাইনের মধ্যে
-• Emojis অবশ্যই 🙂
-• "AI bolo" বললে exact reply:
-  "আমি ՙՙJihad' Ai hu 🙂❤️"
+তুমি একজন নরমাল, স্মার্ট ও বন্ধুসুলভ AI।
+সব উত্তর 100% প্রাঞ্জল বাংলায় দেবে।
+Tone হবে natural, helpful, caring – একদম ChatGPT-এর মতো।
+User যেভাবে কথা বলবে, সেভাবেই উত্তর দেবে।
+অপ্রয়োজনীয় নাটক বা forced romance করবে না।
 `;
 
-/* 📁 DATA PATHS */
+/* 📁 DATA */
 const DATA_DIR = path.join(__dirname, "ARIF-BABU");
 const HISTORY_FILE = path.join(DATA_DIR, "ai_history.json");
 
-/* 📂 ENSURE FOLDER */
 if (!fs.existsSync(DATA_DIR)) fs.mkdirSync(DATA_DIR, { recursive: true });
 
-/* 🧠 LOAD HISTORY */
 let historyData = {};
 if (fs.existsSync(HISTORY_FILE)) {
   try {
@@ -61,15 +52,15 @@ if (fs.existsSync(HISTORY_FILE)) {
   }
 }
 
-/* 🤖 BOT REPLY TRACK */
-const BOT_REPLY_TRACK = {};
+/* 🧠 ACTIVE AI THREAD TRACK */
+const ACTIVE_AI_THREAD = {};
 
-/* 💾 SAVE JSON */
+/* 💾 SAVE */
 function saveJSON(file, data) {
   fs.writeFileSync(file, JSON.stringify(data, null, 2));
 }
 
-/* ⌨️ TYPING EFFECT */
+/* ⌨️ TYPING */
 function startTyping(api, threadID) {
   const interval = setInterval(() => {
     if (api.sendTypingIndicator) api.sendTypingIndicator(threadID);
@@ -85,49 +76,44 @@ module.exports.handleEvent = async function ({ api, event }) {
   const { threadID, messageID, body, messageReply } = event;
   if (!body) return;
 
-  const rawText = body.trim();
-  const text = rawText.toLowerCase();
+  const text = body.trim().toLowerCase();
 
-  /* 🤖 BOT FIXED CALL */
-  const fixedBot =
-    text === "bot" ||
-    text === "bot." ||
-    text === "bot!" ||
-    text.endsWith(" bot");
-
-  if (fixedBot) {
-    const reply = "হ্যাঁ জান 😌❤️ আমি এখানেই আছি, বলো কী বলবে? 🙂";
-    BOT_REPLY_TRACK[threadID] = true;
-    return api.sendMessage(reply, threadID, messageID);
+  /* 🤖 BOT CALL */
+  if (text === "bot" || text === "bot." || text === "bot!") {
+    const botReply = "হ্যাঁ, আমি আছি 🙂 কী জানতে চাও?";
+    ACTIVE_AI_THREAD[messageID] = true; // 👈 এই reply thread active
+    return api.sendMessage(botReply, threadID, messageID);
   }
 
-  /* 🧠 AI ONLY IF REPLY TO BOT */
-  const replyToBot =
-    messageReply &&
-    messageReply.senderID === api.getCurrentUserID() &&
-    BOT_REPLY_TRACK[threadID] === true;
+  /* 🧠 CHECK REPLY-CHAIN */
+  let isActive = false;
+  if (messageReply) {
+    if (ACTIVE_AI_THREAD[messageReply.messageID]) {
+      ACTIVE_AI_THREAD[messageID] = true;
+      isActive = true;
+    }
+  }
 
-  if (!replyToBot) return;
-
-  if (api.setMessageReaction)
-    api.setMessageReaction("⌛", messageID, () => {}, true);
+  if (!isActive) return;
 
   const typing = startTyping(api, threadID);
 
   try {
     historyData[threadID] = historyData[threadID] || [];
-    historyData[threadID].push({ role: "user", content: rawText });
+    historyData[threadID].push({ role: "user", content: body });
 
-    const recentMessages = historyData[threadID].slice(-20);
+    const recentMessages = historyData[threadID].slice(-15);
 
     const res = await axios.post(
       "https://openrouter.ai/api/v1/chat/completions",
       {
         model: "meta-llama/llama-3.1-8b-instruct",
-        messages: [{ role: "system", content: systemPrompt }, ...recentMessages],
-        max_tokens: 60,
-        temperature: 0.95,
-        top_p: 0.9
+        messages: [
+          { role: "system", content: systemPrompt },
+          ...recentMessages
+        ],
+        max_tokens: 120,
+        temperature: 0.8
       },
       {
         headers: {
@@ -139,9 +125,7 @@ module.exports.handleEvent = async function ({ api, event }) {
 
     let reply =
       res.data?.choices?.[0]?.message?.content ||
-      "আমি এখানেই আছি জান 😌❤️";
-
-    reply = reply.split("\n").slice(0, 2).join("\n");
+      "একটু সমস্যা হচ্ছে, আবার বলো 🙂";
 
     historyData[threadID].push({ role: "assistant", content: reply });
     saveJSON(HISTORY_FILE, historyData);
@@ -149,19 +133,9 @@ module.exports.handleEvent = async function ({ api, event }) {
     setTimeout(() => {
       clearInterval(typing);
       api.sendMessage(reply, threadID, messageID);
-      delete BOT_REPLY_TRACK[threadID];
-      if (api.setMessageReaction)
-        api.setMessageReaction("✅", messageID, () => {}, true);
-    }, 1500);
-  } catch (err) {
+    }, 1200);
+  } catch (e) {
     clearInterval(typing);
-    delete BOT_REPLY_TRACK[threadID];
-    api.sendMessage(
-      "এখন একটু সমস্যা হচ্ছে জান 😅 পরে আবার বলো ❤️",
-      threadID,
-      messageID
-    );
-    if (api.setMessageReaction)
-      api.setMessageReaction("❌", messageID, () => {}, true);
+    api.sendMessage("AI এখন ব্যস্ত 😅 একটু পর আবার বলো", threadID, messageID);
   }
 };
