@@ -35,7 +35,7 @@ async function getBaseApiUrl() {
   if (BASE_API_URL) return BASE_API_URL;
 
   const res = await axios.get(
-    "https://raw.githubusercontent.com/rummmmna21/rx-api/refs/heads/main/baseApiUrl.json"
+    "https://maria-languages-model.onrender.com/api/chat"
   );
 
   BASE_API_URL = res.data.gpt.trim().replace(/\/+$/, "");
