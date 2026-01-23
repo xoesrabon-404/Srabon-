@@ -95,7 +95,7 @@ module.exports.run = async function ({ api, event, args, Users }) {
     }
 
     if (!query) {
-      const texts = ["", ", "];
+      const texts = [];
       const reply = texts[Math.floor(Math.random() * texts.length)];
       return api.sendMessage(reply, event.threadID);
     }
