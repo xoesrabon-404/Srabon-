@@ -169,7 +169,8 @@ module.exports.handleEvent = async function ({ api, event, Users }) {
       "আম গাছে আম নাই ঢিল কেন মারো, তোমার সাথে প্রেম নাই বেবি কেন ডাকো 😒",
       "কি হলো, মিস টিস করচ্ছো নাকি 🤣",
       "𝑇𝑟𝑢𝑠𝑡 𝑀𝑒 𝐼 𝑎𝑚 𝐵𝑎𝑏𝑦 🧃",
-      "baby baby করলে মেরে তোর মাথা ফাটাই দিবো 😒🔪];
+      "baby baby করলে মেরে তোর মাথা ফাটাই দিবো 😒🔪"
+    ];
     const reply = replies[Math.floor(Math.random() * replies.length)];
 
     try {
