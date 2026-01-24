@@ -31,7 +31,7 @@ const customReplies = [
   "জিহাদ কে দেখছো...?খুজে পাচ্ছি না",
   "এতো ডেকো না, প্রেমে পরে যাবো 🙈",
   "বার বার ডাকলে মাথা গরম হয়ে যায়😑",
-  "⏤͟͟͞͞𝐴𝑠𝑠𝑎𝑙𝑎𝑚𝑢𝑙𝑎𝑖𝑘𝑢𝑚 𝑆𝑖𝑟 ☻ᥫ᭡\n\n\n\n𝐽𝑖ℎ𝑎𝑑 𝑐ℎ𝑎𝑡 𝑏𝑜𝑡 𝐻𝑜𝑤 𝑐𝑎𝑛 𝐼 ℎ𝑒𝑙𝑝 𝑦𝑜𝑢 𝑇𝑜𝑑𝑎𝑦...?",
+  "⏤͟͟͞͞𝐴𝑠𝑠𝑎𝑙𝑎𝑚𝑢𝑙𝑎𝑖𝑘𝑢𝑚 𝑆𝑖𝑟 ☻ᥫ᭡\n𝐽𝑖ℎ𝑎𝑑 𝑐ℎ𝑎𝑡 𝑏𝑜𝑡 𝐻𝑜𝑤 𝑐𝑎𝑛 𝐼 ℎ𝑒𝑙𝑝 𝑦𝑜𝑢 𝑇𝑜𝑑𝑎𝑦...?",
   "এতো ডাকছিস কেন? গালি শুনবি নাকি? 🤬"
 ];
 
@@ -53,7 +53,8 @@ module.exports.handleEvent = async function({ api, event, Users }) {
 `╭─────༺♡༻─────╮
       ⏤͟͟͞͞𝐴𝑖 ⏤͟͟͞͞𝐴𝑠𝑠𝑖𝑠𝑡𝑎𝑛𝑡 ☻
 
- ☻ 𝐻𝑖 ${name}, 
+ ☻ ⏤͟͟͞͞𝐷𝑒𝑎𝑟 ⏤͟͟͞͞${name},
+ 
  💌 ${rand}
 ╰─────༺♡༻─────╯`;
 
@@ -134,7 +135,7 @@ module.exports.handleEvent = async function({ api, event, Users }) {
       api.setMessageReaction("❌", messageID, () => {}, true);
 
       console.log(err);
-      return api.sendMessage("❌ Maria API error.", threadID, messageID);
+      return api.sendMessage("❌ 𝐽𝑖ℎ𝑎𝑑 𝐴𝑝𝑖 𝐸𝑟𝑟𝑜𝑟.", threadID, messageID);
     }
   }
 };
