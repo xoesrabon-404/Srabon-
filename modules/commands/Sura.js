@@ -1,19 +1,20 @@
 const axios = require("axios");
 const fs = require("fs");
 const path = require("path");
+const { exec } = require("child_process");
 
 module.exports.config = {
   name: "Sura",
-  version: "1.0.1",
+  version: "2.0.0",
   hasPermssion: 0,
   credits: "Jihad",
-  description: "Sura MP3 Audio Player (FORCE PREFIX ONLY)",
+  description: "Sura REAL MP3 Voice Player (FFMPEG)",
   commandCategory: "media",
   usages: ".Sura",
   cooldowns: 0
 };
 
-// 🎵 Sura source links (mp4 but sent as mp3)
+// 🎵 All Sura MP4 links (unique)
 const suraLinks = [
   "https://files.catbox.moe/j9oqqv.mp4",
   "https://files.catbox.moe/lrbuvt.mp4",
@@ -24,12 +25,21 @@ const suraLinks = [
   "https://files.catbox.moe/tudbja.mp4",
   "https://files.catbox.moe/diyipp.mp4",
   "https://files.catbox.moe/fbs85x.mp4",
-  "https://files.catbox.moe/nhmpcb.mp4"
+  "https://files.catbox.moe/nhmpcb.mp4",
+
+  "https://files.catbox.moe/7ashq6.mp4",
+  "https://files.catbox.moe/0lcv3y.mp4",
+  "https://files.catbox.moe/t9ux6r.mp4",
+  "https://files.catbox.moe/h57scr.mp4",
+  "https://files.catbox.moe/vjpl5z.mp4",
+  "https://files.catbox.moe/usivpm.mp4",
+  "https://files.catbox.moe/vxaq0m.mp4",
+  "https://files.catbox.moe/wqq417.mp4"
 ];
 
 const suraProgress = {};
 
-// 🔁 reply handler (next / arekta)
+// 🔁 reply handler
 module.exports.handleEvent = async ({ api, event }) => {
   if (!event.body) return;
 
@@ -45,47 +55,54 @@ module.exports.handleEvent = async ({ api, event }) => {
     if (progress.msgID !== event.messageReply?.messageID) return;
 
     const nextIndex = (progress.index + 1) % suraLinks.length;
-    await sendAudio(api, threadID, nextIndex, event.messageID);
+    await sendVoice(api, threadID, nextIndex, event.messageID);
   }
 };
 
-// ▶️ PREFIX ONLY COMMAND
+// ▶️ PREFIX COMMAND
 module.exports.run = async ({ api, event }) => {
   if (!event.body || !event.body.startsWith(".")) return;
 
   const randomIndex = Math.floor(Math.random() * suraLinks.length);
-  await sendAudio(api, event.threadID, randomIndex, event.messageID);
+  await sendVoice(api, event.threadID, randomIndex, event.messageID);
 };
 
-// 🎧 send audio (mp4 → mp3 trick)
-async function sendAudio(api, threadID, index, replyToID) {
-  const filePath = path.join(__dirname, `sura_${index}.mp3`);
+// 🎧 MP4 → REAL MP3 → SEND AS VOICE
+async function sendVoice(api, threadID, index, replyToID) {
+  const mp4Path = path.join(__dirname, `sura_${index}.mp4`);
+  const mp3Path = path.join(__dirname, `sura_${index}.mp3`);
 
   try {
+    // download mp4
     const res = await axios.get(suraLinks[index], {
       responseType: "arraybuffer"
     });
+    fs.writeFileSync(mp4Path, res.data);
 
-    fs.writeFileSync(filePath, res.data);
+    // convert to mp3
+    exec(`ffmpeg -y -i "${mp4Path}" -vn -ab 128k "${mp3Path}"`, (err) => {
+      fs.unlinkSync(mp4Path);
+      if (err) return console.log("❌ FFMPEG error:", err.message);
 
-    api.sendMessage(
-      {
-        body: "🕋 SURA MP3 | JIHAD 🕋",
-        attachment: fs.createReadStream(filePath)
-      },
-      threadID,
-      (err, info) => {
-        fs.unlinkSync(filePath);
-        if (!err) {
-          suraProgress[threadID] = {
-            index,
-            msgID: info.messageID
-          };
-        }
-      },
-      replyToID
-    );
-  } catch (err) {
-    console.log("❌ Sura MP3 Error:", err.message);
+      api.sendMessage(
+        {
+          body: "⏤͟͟͟͟͞͞͞͞𝐽𝑖 ℎ𝑎𝑑 𝐻𝑎𝑠𝑎𝑛 ☹︎ᥫ᭡",
+          attachment: fs.createReadStream(mp3Path)
+        },
+        threadID,
+        (error, info) => {
+          fs.unlinkSync(mp3Path);
+          if (!error) {
+            suraProgress[threadID] = {
+              index,
+              msgID: info.messageID
+            };
+          }
+        },
+        replyToID
+      );
+    });
+  } catch (e) {
+    console.log("❌ Sura Voice Error:", e.message);
   }
 }
