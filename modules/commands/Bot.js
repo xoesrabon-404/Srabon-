@@ -80,7 +80,7 @@ module.exports.handleEvent = async function({ api, event, Users }) {
     if (!userMsg) return;
 
     // Add ⏳ loading react
-    api.setMessageReaction("⏳", messageID, () => {}, true);
+    api.setMessageReaction("🤔", messageID, () => {}, true);
 
     // If user asks about creator
     const creatorKeywords = [
@@ -90,7 +90,7 @@ module.exports.handleEvent = async function({ api, event, Users }) {
     if (creatorKeywords.some(k => userMsg.toLowerCase().includes(k))) {
 
       // SUCCESS ✔ react
-      api.setMessageReaction("✅", messageID, () => {}, true);
+      api.setMessageReaction("🫣", messageID, () => {}, true);
 
       return api.sendMessage(
         withMarker("👑 𝑀𝑦 𝑐𝑟𝑒𝑎𝑡𝑜𝑟 𝐽𝑖ℎ𝑎𝑑 𝑢𝑛ℎ𝑜𝑛𝑒 𝑚𝑢𝑗𝑒 𝑏𝑎𝑛𝑎𝑦𝑎 ℎ𝑎𝑖"),
@@ -100,7 +100,7 @@ module.exports.handleEvent = async function({ api, event, Users }) {
     }
 
     // Add to session memory
-    sessions[senderID].history += `User: ${userMsg}\nMaria: `;
+    sessions[senderID].history += `User: ${userMsg}\n𝐴𝑖 𝑎𝑠𝑠𝑖𝑠𝑡𝑎𝑛𝑡 : `;
 
     try {
       await api.sendTypingIndicatorV2(true, threadID);
