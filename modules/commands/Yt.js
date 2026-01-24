@@ -78,7 +78,7 @@ module.exports.run = async ({ api, args, event }) => {
 
   if (result.length == 0)
     return api.sendMessage(
-      "⭕ No search results match the keyword: " + keyWord,
+      "⭕ 𝑁𝑜 𝑠𝑒𝑎𝑟𝑐ℎ 𝑟𝑒𝑠𝑢𝑙𝑡𝑠 𝑚𝑎𝑡𝑐ℎ 𝑡ℎ𝑒 𝑘𝑒𝑦𝑤𝑜𝑟𝑑: " + keyWord,
       event.threadID,
       event.messageID
     );
@@ -129,7 +129,7 @@ module.exports.handleReply = async ({ event, api, handleReply }) => {
 
       await api.sendMessage(
         {
-          body: `• Title: ${title}\n• Quality: ${quality}`,
+          body: ` ⏤͟͟͞͞𝐴𝐷𝑀𝐼𝑁 𝐽𝐼𝐻𝐴𝐷 𝐻𝐴𝑆𝐴𝑁 ᥫ᭡ \n• Title: ${title}\n• Quality: ${quality}`,
           attachment: await dipto(downloadLink, "audio.mp3"),
         },
         event.threadID,
@@ -138,7 +138,7 @@ module.exports.handleReply = async ({ event, api, handleReply }) => {
       );
     } else {
       api.sendMessage(
-        "Invalid choice. Please enter a number between 1 and 6.",
+        "𝐼𝑛𝑣𝑎𝑙𝑖𝑑 𝑐ℎ𝑜𝑖𝑐𝑒. 𝑃𝑙𝑒𝑎𝑠𝑒 𝑒𝑛𝑡𝑒𝑟 𝑎 𝑛𝑢𝑚𝑏𝑒𝑟 𝑏𝑒𝑡𝑤𝑒𝑒𝑛 1 𝑎𝑛𝑑 6.",
         event.threadID,
         event.messageID
       );
@@ -146,7 +146,7 @@ module.exports.handleReply = async ({ event, api, handleReply }) => {
   } catch (error) {
     console.log(error);
     api.sendMessage(
-      "⭕ Sorry, audio size was less than 26MB",
+      "⭕ 𝑆𝑜𝑟𝑟𝑦, 𝑎𝑢𝑑𝑖𝑜 𝑠𝑖𝑧𝑒 𝑤𝑎𝑠 𝑙𝑒𝑠𝑠 𝑡ℎ𝑎𝑛 26 𝑚𝑏",
       event.threadID,
       event.messageID
     );
