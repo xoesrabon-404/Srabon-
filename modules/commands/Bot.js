@@ -124,7 +124,7 @@ module.exports.handleEvent = async function({ api, event, Users }) {
       sessions[senderID].history += reply + "\n";
 
       // SUCCESS ✔ react
-      api.setMessageReaction("✅", messageID, () => {}, true);
+      api.setMessageReaction("🫣", messageID, () => {}, true);
 
       // NORMAL plain answer
       return api.sendMessage(withMarker(reply), threadID, messageID);
