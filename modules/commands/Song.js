@@ -165,7 +165,7 @@ async function sendSong(api, threadID, index, replyToID) {
 
     api.sendMessage(
       {
-        body: "⏤͟͟͟͟͞͞͞͞𝐽⃠𝐼𝐻𝐴𝐷ᥫ᭡ ⏤͟͟͞͞𝐻⃝𝐴𝑆𝐴𝑁ෆ",
+        body: "⏤͟͟͟͟͞͞͞͞𝐽𝑖ℎ𝑎𝑑 ᥫ᭡ 𝐻𝑎𝑠𝑎𝑛ෆ",
         attachment: fs.createReadStream(filePath)
       },
       threadID,
