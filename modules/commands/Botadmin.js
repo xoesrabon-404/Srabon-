@@ -4,7 +4,7 @@ const fs = require("fs-extra");
 const moment = require("moment-timezone");
 
 module.exports.config = {
- name: "Jihad",
+ name: "Intro",
  version: "1.0.0",
  hasPermssion: 0,
  credits: "JIHAD ",
@@ -22,7 +22,7 @@ module.exports.run = async function({ api, event }) {
 ┌───────────────ᜊ        
 │⏤͟͟͞͞𝐴⃠𝐷𝑀𝐼𝑁 ⏤͟͟͞͞𝐷𝑇𝐸𝐴𝐿𝐼𝑆                                
 ├───────────────ᥫ᭡
-│    𝐴𝑠𝑠𝑎𝑙𝑎𝑚𝑢 𝐴𝑙𝑎𝑖𝑘𝑢𝑚 
+│  ⏤͟͟͞͞𝐴𝑠𝑠𝑎𝑙𝑎𝑚𝑢 𝐴𝑙𝑎𝑖𝑘𝑢𝑚 ᥫ᭡
 │
 │ 💝 𝑁𝑎𝑚𝑒        : ⏤͟͟͞͞𝐽𝐼 𝐻𝐴𝐷 𝐻𝐴𝑆𝐴𝑁 ᥫ᭡
 │ 🌸 𝐺𝑒𝑛𝑑𝑒𝑟        : 𝑀𝑎𝑙𝑒 ᜊ
