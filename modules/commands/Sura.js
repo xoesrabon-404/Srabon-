@@ -4,17 +4,17 @@ const path = require("path");
 const { exec } = require("child_process");
 
 module.exports.config = {
-  name: "Sura",
-  version: "2.0.0",
+  name: "sura",
+  version: "2.1.1",
   hasPermssion: 0,
   credits: "Jihad",
-  description: "Sura REAL MP3 Voice Player (FFMPEG)",
+  description: "Sura REAL MP3 Voice Player (LOUD)",
   commandCategory: "media",
-  usages: ".Sura",
+  usages: ".sura",
   cooldowns: 0
 };
 
-// 🎵 All Sura MP4 links (unique)
+// 🎵 Sura links
 const suraLinks = [
   "https://files.catbox.moe/j9oqqv.mp4",
   "https://files.catbox.moe/lrbuvt.mp4",
@@ -26,7 +26,6 @@ const suraLinks = [
   "https://files.catbox.moe/diyipp.mp4",
   "https://files.catbox.moe/fbs85x.mp4",
   "https://files.catbox.moe/nhmpcb.mp4",
-
   "https://files.catbox.moe/7ashq6.mp4",
   "https://files.catbox.moe/0lcv3y.mp4",
   "https://files.catbox.moe/t9ux6r.mp4",
@@ -59,50 +58,49 @@ module.exports.handleEvent = async ({ api, event }) => {
   }
 };
 
-// ▶️ PREFIX COMMAND
+// ▶️ Command run (NO DOT CHECK ❗)
 module.exports.run = async ({ api, event }) => {
-  if (!event.body || !event.body.startsWith(".")) return;
-
   const randomIndex = Math.floor(Math.random() * suraLinks.length);
   await sendVoice(api, event.threadID, randomIndex, event.messageID);
 };
 
-// 🎧 MP4 → REAL MP3 → SEND AS VOICE
+// 🎧 Convert & send voice
 async function sendVoice(api, threadID, index, replyToID) {
   const mp4Path = path.join(__dirname, `sura_${index}.mp4`);
   const mp3Path = path.join(__dirname, `sura_${index}.mp3`);
 
   try {
-    // download mp4
     const res = await axios.get(suraLinks[index], {
       responseType: "arraybuffer"
     });
     fs.writeFileSync(mp4Path, res.data);
 
-    // convert to mp3
-    exec(`ffmpeg -y -i "${mp4Path}" -vn -ab 128k "${mp3Path}"`, (err) => {
-      fs.unlinkSync(mp4Path);
-      if (err) return console.log("❌ FFMPEG error:", err.message);
+    exec(
+      `ffmpeg -y -i "${mp4Path}" -vn -af "volume=2.8,loudnorm" -ab 128k "${mp3Path}"`,
+      (err) => {
+        fs.unlinkSync(mp4Path);
+        if (err) return console.log("FFMPEG error:", err.message);
 
-      api.sendMessage(
-        {
-          body: "⏤͟͟͟͟͞͞͞͞𝐽𝑖 ℎ𝑎𝑑 𝐻𝑎𝑠𝑎𝑛 ☹︎ᥫ᭡",
-          attachment: fs.createReadStream(mp3Path)
-        },
-        threadID,
-        (error, info) => {
-          fs.unlinkSync(mp3Path);
-          if (!error) {
-            suraProgress[threadID] = {
-              index,
-              msgID: info.messageID
-            };
-          }
-        },
-        replyToID
-      );
-    });
+        api.sendMessage(
+          {
+            body: "⏤͟͟͟͟͞͞͞͞𝐽𝑖ℎ𝑎𝑑 𝐻𝑎𝑠𝑎𝑛 ☹︎ᥫ᭡",
+            attachment: fs.createReadStream(mp3Path)
+          },
+          threadID,
+          (e, info) => {
+            fs.unlinkSync(mp3Path);
+            if (!e) {
+              suraProgress[threadID] = {
+                index,
+                msgID: info.messageID
+              };
+            }
+          },
+          replyToID
+        );
+      }
+    );
   } catch (e) {
-    console.log("❌ Sura Voice Error:", e.message);
+    console.log("Sura error:", e.message);
   }
 }
