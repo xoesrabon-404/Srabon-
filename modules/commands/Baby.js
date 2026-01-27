@@ -154,7 +154,7 @@ const text = event.body?.toLowerCase().trim();
 if (!text || !simsim) return;
 
 const senderName = await Users.getNameUser(event.senderID);
-const triggers = ["baby", "bby", "xan", "bbz", "bot", "বেবি"];
+const triggers = ["baby", "bby", "xan", "bbz", "mari", "বেবি"];
 
 if (triggers.includes(text)) {
 const replies = [
@@ -196,7 +196,7 @@ return api.sendMessage(reply, event.threadID, (err, info) => {
 
 }
 
-const matchPrefix = /^(baby|bby|xan|bbz|bot|মারিয়া)\s+/i;
+const matchPrefix = /^(baby|bby|xan|bbz|mari|মারিয়া)\s+/i;
 if (matchPrefix.test(text)) {
 const query = text.replace(matchPrefix, "").trim();
 if (!query) return;
