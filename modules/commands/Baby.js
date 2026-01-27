@@ -95,7 +95,7 @@ module.exports.run = async function ({ api, event, args, Users }) {
     }
 
     if (!query) {
-      const texts = ["Hey baby 💖", "Yes, I'm here 😘"];
+      const texts = [""];
       const reply = texts[Math.floor(Math.random() * texts.length)];
       return api.sendMessage(reply, event.threadID);
     }
@@ -152,7 +152,7 @@ module.exports.handleEvent = async function ({ api, event, Users }) {
   if (!text || !simsim) return;
 
   const senderName = await Users.getNameUser(event.senderID);
-  const triggers = ["baby", "bby", "xan", "bbz", "mari", "মারিয়া"];
+  const triggers = ["baby", "bby", "xan", "bot", "mari", "মারিয়া"];
 
   if (triggers.includes(text)) {
     const replies = [
@@ -193,7 +193,7 @@ module.exports.handleEvent = async function ({ api, event, Users }) {
     });
   }
 
-  const matchPrefix = /^(baby|bby|xan|bbz|mari|মারিয়া)\s+/i;
+  const matchPrefix = /^(baby|bby|xan|bot|mari|মারিয়া)\s+/i;
   if (matchPrefix.test(text)) {
     const query = text.replace(matchPrefix, "").trim();
     if (!query) return;
