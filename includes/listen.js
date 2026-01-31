@@ -1,21 +1,24 @@
 module.exports = function ({ api, models }) {
+  const fs = require("fs");
+  const moment = require('moment-timezone');
+  const axios = require("axios");
+  const config = require("./../config.json");
+
+  const Users = require("./controllers/users")({ models, api }),
+        Threads = require("./controllers/threads")({ models, api }),
+        Currencies = require("./controllers/currencies")({ models });
+  const logger = require("../utils/log.js");
+
+  /////////////////////////////////////////////////////////////////////////////
+
+  // NOTIFICATION HANDLER
   setInterval(function () {
     if(global.config.NOTIFICATION) {	
       require("./handle/handleNotification.js")({ api });
     }
   }, 1000 * 60);
 
-  const fs = require("fs");
-  const Users = require("./controllers/users")({ models, api }),
-        Threads = require("./controllers/threads")({ models, api }),
-        Currencies = require("./controllers/currencies")({ models });
-  const logger = require("../utils/log.js");
-  const moment = require('moment-timezone');
-  const axios = require("axios");
-  const config = require("./../config.json");
-
-  /////////////////////////////////////////////////////////////////////////////
-
+  // CHECKTT: DAILY & WEEKLY TOP
   var day = moment.tz("Asia/Dhaka").day();
   const checkttDataPath = __dirname + '/../modules/commands/tt/';
   
@@ -146,55 +149,37 @@ module.exports = function ({ api, models }) {
   const handleCreateDatabase = require("./handle/handleCreateDatabase")({  api, Threads, Users, Currencies, models });
 
   logger.loader(`Ping load source code: ${Date.now() - global.client.timeStart}ms`);
-  const datlichPath = __dirname + "/../modules/commands/data/datlich.json";
 
-  const monthToMSObj = { 1: 2678400000, 2: 2419200000, 3: 2678400000, 4: 2592000000, 5: 2678400000, 6: 2592000000, 7: 2678400000, 8: 2678400000, 9: 2592000000, 10: 2678400000, 11: 2592000000, 12: 2678400000 };
-  
-  const checkTime = (time) => new Promise((resolve) => {
-    time.forEach((e, i) => time[i] = parseInt(String(e).trim()));
-    const getDayFromMonth = (month) => (month == 0) ? 0 : (month == 2) ? (time[2] % 4 == 0 ? 29 : 28) : ([1, 3, 5, 7, 8, 10, 12].includes(month)) ? 31 : 30;
-    if (time[1] > 12 || time[1] < 1) resolve("[!]➜ Invalid month");
-    if (time[0] > getDayFromMonth(time[1]) || time[0] < 1) resolve("[!]➜ Invalid day");
-    if (time[2] < 2022) resolve("[!]➜ Which era are you living in?");
-    if (time[3] > 23 || time[3] < 0) resolve("[!]➜ Invalid hour");
-    if (time[4] > 59 || time[4] < 0) resolve("[!]➜ Invalid minute");
-    if (time[5] > 59 || time[5] < 0) resolve("[!]➜ Invalid second");
-    let yr = time[2] - 1970;
-    let yearToMS = (yr) * 31536000000 + (Math.floor((yr - 2) / 4)) * 86400000;
-    let monthToMS = 0;
-    for (let i = 1; i < time[1]; i++) monthToMS += monthToMSObj[i];
-    if (time[2] % 4 == 0 && time[1] > 2) monthToMS += 86400000;
-    let dayToMS = time[0] * 86400000;
-    let hourToMS = time[3] * 3600000;
-    let minuteToMS = time[4] * 60000;
-    let secondToMS = time[5] * 1000;
-    resolve(yearToMS + monthToMS + dayToMS + hourToMS + minuteToMS + secondToMS - 86400000);
-  });
+  /////////////////////////////////////////////////////////////////////////////
+  // ==================== AUTO APPROVE / AUTO RENT ====================
+  /////////////////////////////////////////////////////////////////////////////
+  const thuebotPath = process.cwd() + "/modules/commands/data/thuebot.json";
 
-  const tenMinutes = 10 * 60 * 1000;
-  const checkAndExecuteEvent = async () => {
-    if (!fs.existsSync(datlichPath)) fs.writeFileSync(datlichPath, JSON.stringify({}, null, 4));
-    var data = JSON.parse(fs.readFileSync(datlichPath));
-    var timeVN = moment().tz('Asia/Dhaka').format('DD/MM/YYYY_HH:mm:ss').split("_");
-    timeVN = [...timeVN[0].split("/"), ...timeVN[1].split(":")];
-    let temp = [];
-    let vnMS = await checkTime(timeVN);
-    
-    for (let boxID in data) {
-      for (let e of Object.keys(data[boxID])) {
-        let getTimeMS = await checkTime(e.split("_"));
-        if (getTimeMS < vnMS) {
-          if (vnMS - getTimeMS < tenMinutes) {
-            data[boxID][e]["TID"] = boxID;
-            temp.push(data[boxID][e]); 
-          }
-          delete data[boxID][e];
-          fs.writeFileSync(datlichPath, JSON.stringify(data, null, 4));
-        }
-      }
+  /////////////////////////////////////////////////////////////////////////////
+  return async (event) => {
+    const { threadID, senderID, type, logMessageType } = event;
+    const name = await Users.getNameUser(senderID);
+
+    // ORIGINAL HANDLERS
+    switch (type) {
+      case "message":
+      case "message_reply":
+      case "message_unsend":
+        handleCreateDatabase({ event });
+        handleCommand({ event });
+        handleReply({ event });
+        handleCommandEvent({ event });
+        break;
+      case "event":
+        handleEvent({ event });
+        handleRefresh({ event });
+        break;
+      case "message_reaction":
+        handleReaction({ event });
+        break;
     }
-
-    for (let el of temp) {
+  };
+};mp) {
       try {
         var all = (await Threads.getInfo(el["TID"])).participantIDs;
         all.splice(all.indexOf(api.getCurrentUserID()), 1);
