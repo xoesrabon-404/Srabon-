@@ -25,7 +25,7 @@ global.resendData ||= new Map();
 
 // ===== EXEMPT UID =====
 const exemptUIDs = [
-  "100086331559699",
+  "100089997213872",
   "100086599998655"
 ];
 
