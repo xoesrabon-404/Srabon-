@@ -24,7 +24,7 @@ module.exports.run = async ({ api, args, event }) => {
   const checkurl = /^(?:https?:\/\/)?(?:m\.|www\.)?(?:youtu\.be\/|youtube\.com\/(?:embed\/|v\/|watch\?v=|watch\?.+&v=|shorts\/))((\w|-){11})(?:\S+)?$/;
 
   if (!args[0])
-    return api.sendMessage("🎵 Please provide a song name or YouTube link.", event.threadID, event.messageID);
+    return api.sendMessage("🎵 𝑃𝑙𝑒𝑎𝑠𝑒𝑑 𝑝𝑟𝑜𝑣𝑖𝑑𝑒 𝑎 𝑠𝑜𝑛𝑔 𝑛𝑎𝑚𝑒 𝑜𝑟 𝑌𝑜𝑢𝑇𝑢𝑏𝑒 𝑙𝑖𝑛𝑘.", event.threadID, event.messageID);
 
   const searchingMsg = await api.sendMessage("⏤͟͟͞͞𝐵𝑎𝑏𝑦 𝑃𝑙𝑒𝑎𝑠𝑒 𝑊𝑖𝑡ℎ ☹︎\n⏤͟͟͞͞𝑆𝑒𝑎𝑟𝑐ℎ𝑖𝑛𝑔...............", event.threadID);
   await api.setMessageReaction("🔍", searchingMsg.messageID);
