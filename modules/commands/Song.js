@@ -10,7 +10,7 @@ module.exports.config = {
   credits: "Jihad",
   description: "Sad song player (FORCE PREFIX ONLY)",
   commandCategory: "media",
-  usages: ".song / .গান",
+  usages: ".Sad / .গান",
   cooldowns: 0
 };
 
