@@ -25,9 +25,9 @@ module.exports.languages = {
     },
     "en": {
         "listAdmin": '𝐋𝐈𝐒𝐓 𝐎𝐅 𝐀𝐃𝐌𝐈𝐍 ᰔ\n___________________\n𝐀𝐃𝐌𝐈𝐍 ⏤͟͟͞͞𝐽𝐼𝐻𝐴𝐷 ⏤͟͟͞͞𝐻𝐴𝑆𝐴𝑁 🌸🎀\n_____________________________\n⏤͟͟͞͞𝑂𝑃𝑂𝑅𝐸𝑇𝑂𝑅𝑆\n\n%1',
-        "notHavePermssion": 'Admin You have no permission to use "%1"',
-        "addedNewAdmin": '⏤͟͟͞͞𝐴⃠𝐷𝑀𝐼𝑁 ⏤͟͟͞͞𝐴⃝𝐷𝐷𝐸𝐷 %1 ⏤͟͟͞͞𝐴⃤𝐷𝑀𝐼𝑁 :\n\n%2 ᰔ',
-        "removedAdmin": '⏤͟͟͞͞𝐴⃠𝐷𝑀𝐼𝑁 ⏤͟͟͞͞☻𝑅𝐸𝑀𝑂𝑉𝐸 %1 ⏤͟͟͞͞𝐴𝐷𝑀𝐼𝑁:\n\n%2 ᰔ'
+        "notHavePermssion": '𝐴𝑑𝑚𝑖𝑛 𝑌𝑜𝑢 ℎ𝑎𝑣𝑒 𝑛𝑜 𝑝𝑒𝑟𝑚𝑖𝑠𝑠𝑖𝑜𝑛 𝑡𝑜 𝑢𝑠𝑒 "%1"',
+        "addedNewAdmin": '⏤͟͟͟͟͞͞͞͞𝐴𝑑𝑚𝑖𝑛 𝐴𝑑𝑑𝑒𝑑 %1 𝐴𝑑𝑚𝑖𝑛 :\n\n%2 ᰔ',
+        "removedAdmin": '⏤͟͟͟͟͞͞͞͞𝐴𝑑𝑚𝑖𝑛 ☻𝑅𝑒𝑚𝑜𝑣𝑒 %1 𝐴𝑑𝑚𝑖𝑛:\n\n%2 ᰔ'
     }
 }
 module.exports.onLoad = function() {
