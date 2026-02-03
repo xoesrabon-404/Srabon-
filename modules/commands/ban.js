@@ -12,9 +12,8 @@ module.exports.config = {
 };
 
 const OWNER_UIDS = [
-  "100086599998655",
+  "100089997213872",
   "100086331559699"
-  "100089997213872"
 ];
 
 module.exports.run = async function ({ api, args, event }) {
