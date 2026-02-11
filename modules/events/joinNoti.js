@@ -27,7 +27,7 @@ module.exports.run = async function ({ api, event, Users }) {
       threadID
     );
 
-    await api.changeNickname("⃝⏤͟͟͞͞𝐴𝐼 ⏤͟͟͞͞𝐴⃝𝑆𝑆𝐼𝑆𝑇𝐴𝑁𝑇☠︎", threadID, botID);
+    await api.changeNickname("⏤͟͟͞͞𝙅⃤𝙄𝙃𝘼𝘿 𝘾𝙃⃢𝘼𝙏 ♡", threadID, botID);
     return;
   }
 
