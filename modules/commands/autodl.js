@@ -56,13 +56,11 @@ module.exports.handleEvent = async function ({ api, event }) {
 
         // Send downloaded file
         const doneBox =
-`╔════════════════════╗
-║⏤͟͟͞͞𝐷𝑂𝑊𝑁𝐿𝑂𝐴𝐷 𝐶𝑂𝑀𝑃𝐿𝐸𝑇𝐸𝐿𝑌 
-╠════════════════════╣
-║ ⏤͟͟͞͞🅹🅸🅷🅰🅳 💮🎀 
-║ 📍 𝑃𝑙𝑎𝑡𝑓𝑜𝑟𝑚 : ${site}
-║ 🎬 𝑇𝑖𝑡𝑙𝑒 : ${title}
-╚════════════════════╝`;
+`
+⏤͟͟͞͞𝐷𝑂𝑊𝑁𝐿𝑂𝐴𝐷 𝐶𝑂𝑀𝑃𝐿𝐸𝑇𝐸𝐿𝑌 
+ ⏤͟͟͞͞🅹🅸🅷🅰🅳 💮🎀 
+ 📍 𝑃𝑙𝑎𝑡𝑓𝑜𝑟𝑚 : ${site}
+ 🎬 𝑇𝑖𝑡𝑙𝑒 : ${title}`;
 
         api.sendMessage(
             {
