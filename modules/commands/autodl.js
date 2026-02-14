@@ -58,7 +58,7 @@ module.exports.handleEvent = async function ({ api, event }) {
         const doneBox =
 `
 ⏤͟͟͞͞𝐷𝑂𝑊𝑁𝐿𝑂𝐴𝐷 𝐶𝑂𝑀𝑃𝐿𝐸𝑇𝐸𝐿𝑌 
- ⏤͟͟͞͞🅹🅸🅷🅰🅳 💮🎀 
+ ⏤͟͟͞͞𝐽⃤𝑖ℎ𝑎𝑑 𝐻⃟𝑎𝑠𝑎𝑛 
  📍 𝑃𝑙𝑎𝑡𝑓𝑜𝑟𝑚 : ${site}
  🎬 𝑇𝑖𝑡𝑙𝑒 : ${title}`;
 
