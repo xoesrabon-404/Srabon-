@@ -58,7 +58,7 @@ module.exports.handleEvent = async function ({ api, event }) {
         const doneBox =
 `
 ⏤͟͟͟͟͞͞͞͞𝐷𝑜𝑤𝑛𝑙𝑜𝑎𝑑 ⏤͟͟͞͞𝐶𝑜𝑚𝑝𝑙𝑒𝑡𝑒 ᜊ
- ⏤͟͟͟͟͞͞͞͞ッ 𝐽𝑖ℎ𝑎𝑑 ᜊ 𝐻𝑎𝑠𝑎𝑛 ࿐
+ッ 𝐽𝑖ℎ𝑎𝑑 ᜊ 𝐻𝑎𝑠𝑎𝑛 ࿐
  ⃝ 𝑃𝑙𝑎𝑡𝑓𝑜𝑟𝑚 : ${site} ♡
  ⃞ 𝑇𝑖𝑡𝑙𝑒 : ${title} ᥫ᭡`;
 
