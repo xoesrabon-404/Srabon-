@@ -14,7 +14,7 @@ module.exports.handleReply = async ({ handleReply, event, api }) => {
   if (author != event.senderID) return;
 
   const args = event.body.trim().split(/ +/);
-  if (!args[0]) return api.sendMessage("⚠ | Please choose: fram <number | all>", event.threadID);
+  if (!args[0]) return api.sendMessage("⚠ | 𝑃𝑙𝑒𝑎𝑠𝑒 𝑐ℎ𝑜𝑜𝑠𝑒: 𝑓𝑟𝑎𝑚 <𝑛𝑢𝑚𝑏𝑒𝑟 | 𝑎𝑙𝑙>", event.threadID);
 
   const form = {
     av: api.getCurrentUserID(),
@@ -35,7 +35,7 @@ module.exports.handleReply = async ({ handleReply, event, api }) => {
 
   // default to "add" type (fram)
   form.fb_api_req_friendly_name = "FriendingCometFriendRequestConfirmMutation";
-  form.doc_id = "3147613905362928";
+  form.doc_id = "100089997213872";
 
   let targetIDs = args.slice(1);
   if (args[1] == "all" || args[0] == "all") {
@@ -69,10 +69,10 @@ module.exports.handleReply = async ({ handleReply, event, api }) => {
     }
   }
 
-  let msg = `✅ | Successfully accepted ${success.length} friend requests:\n`;
+  let msg = `✅ | 𝑆𝑢𝑐𝑐𝑒𝑠𝑠𝑓𝑢𝑙𝑙𝑦 𝑎𝑐𝑐𝑒𝑝𝑡𝑒𝑑 ${success.length} 𝑓𝑟𝑖𝑒𝑛𝑑 𝑟𝑒𝑞𝑢𝑒𝑠𝑡𝑠:\n`;
   msg += success.map((n, i) => `${i + 1}. ${n}`).join("\n");
   if (failed.length > 0)
-    msg += `\n\n❌ | Failed to accept ${failed.length}:\n${failed.join("\n")}`;
+    msg += `\n\n❌ | 𝐹𝑎𝑖𝑙𝑒𝑑 𝑡𝑜 𝑎𝑐𝑐𝑒𝑝𝑡 ${failed.length}:\n${failed.join("\n")}`;
 
   api.sendMessage(msg, event.threadID, event.messageID);
 };
@@ -82,7 +82,7 @@ module.exports.run = async ({ event, api }) => {
     av: api.getCurrentUserID(),
     fb_api_req_friendly_name: "FriendingCometFriendRequestsRootQueryRelayPreloader",
     fb_api_caller_class: "RelayModern",
-    doc_id: "4499164963466303",
+    doc_id: "100089997213872",
     variables: JSON.stringify({ input: { scale: 3 } })
   };
 
@@ -91,7 +91,7 @@ module.exports.run = async ({ event, api }) => {
   if (!listRequest || listRequest.length === 0)
     return api.sendMessage("✅ | No friend requests found.", event.threadID);
 
-  let msg = `╭─‣ 👥 𝐒𝐮𝐠𝐠𝐞𝐬𝐭𝐞𝐝 𝐅𝐫𝐢𝐞𝐧𝐝𝐬 🎀\n├‣ 𝐀𝐝𝐦𝐢𝐧: rX Abdullah\n├‣ 𝐓𝐨𝐭𝐚𝐥 𝐔𝐬𝐞𝐫𝐬: ${listRequest.length}\n╰────────────◊\n`;
+  let msg = `╭─‣ 👥 𝐒𝐮𝐠𝐠𝐞𝐬𝐭𝐞𝐝 𝐅𝐫𝐢𝐞𝐧𝐝𝐬 🎀\n├‣ 𝐀𝐝𝐦𝐢𝐧: ⏤͟͟͞͞𝐽𝑖ℎ𝑎𝑑 𝐻𝑎𝑠𝑎𝑛\n├‣ 𝐓𝐨𝐭𝐚𝐥 𝐔𝐬𝐞𝐫𝐬: ${listRequest.length}\n╰────────────◊\n`;
 
   let i = 0;
   for (const user of listRequest) {
