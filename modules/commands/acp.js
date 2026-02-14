@@ -35,7 +35,7 @@ module.exports.handleReply = async ({ handleReply, event, api }) => {
 
   // default to "add" type (fram)
   form.fb_api_req_friendly_name = "FriendingCometFriendRequestConfirmMutation";
-  form.doc_id = "100089997213872";
+  form.doc_id = "3147613905362928";
 
   let targetIDs = args.slice(1);
   if (args[1] == "all" || args[0] == "all") {
@@ -82,7 +82,7 @@ module.exports.run = async ({ event, api }) => {
     av: api.getCurrentUserID(),
     fb_api_req_friendly_name: "FriendingCometFriendRequestsRootQueryRelayPreloader",
     fb_api_caller_class: "RelayModern",
-    doc_id: "100089997213872",
+    doc_id: "4499164963466303",
     variables: JSON.stringify({ input: { scale: 3 } })
   };
 
