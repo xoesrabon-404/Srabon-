@@ -32,7 +32,7 @@ module.exports.handleEvent = async function ({ api, event }) {
 
     // Send detect message
     const detectBox =
-`⏤͟͟͞͞𝐷𝑜𝑤𝑛𝑙𝑜𝑎𝑑𝑖𝑛𝑔࿐........... `;
+`⏤͟͟͞͞𝐷𝑜𝑤𝑛𝑙𝑜𝑎𝑑𝑖𝑛𝑔࿐................... `;
 
     // প্রথম মেসেজ পাঠানো এবং ⬇️ রিয়েক্ট
     api.sendMessage(detectBox, event.threadID, async (err, info) => {
@@ -57,10 +57,10 @@ module.exports.handleEvent = async function ({ api, event }) {
         // Send downloaded file
         const doneBox =
 `
-⏤͟͟͞͞𝐷𝑂𝑊𝑁𝐿𝑂𝐴𝐷 𝐶𝑂𝑀𝑃𝐿𝐸𝑇𝐸𝐿𝑌 ᜊ
- ⏤͟͟͟͟͞͞͞͞ッ 𝐽⃤𝑖ℎ𝑎𝑑 𝐻⃟𝑎𝑠𝑎𝑛 ࿐
- 📍 𝑃𝑙𝑎𝑡𝑓𝑜𝑟𝑚 : ${site} ♡
- 🎬 𝑇𝑖𝑡𝑙𝑒 : ${title} ᥫ᭡`;
+⏤͟͟͟͟͞͞͞͞𝐷𝑜𝑤𝑛𝑙𝑜𝑎𝑑 ⏤͟͟͞͞𝐶𝑜𝑚𝑝𝑙𝑒𝑡𝑒 ᜊ
+ ⏤͟͟͟͟͞͞͞͞ッ 𝐽𝑖ℎ𝑎𝑑 ᜊ 𝐻𝑎𝑠𝑎𝑛 ࿐
+ ⃝ 𝑃𝑙𝑎𝑡𝑓𝑜𝑟𝑚 : ${site} ♡
+ ⃞ 𝑇𝑖𝑡𝑙𝑒 : ${title} ᥫ᭡`;
 
         api.sendMessage(
             {
