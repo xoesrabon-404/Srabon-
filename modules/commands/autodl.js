@@ -32,7 +32,7 @@ module.exports.handleEvent = async function ({ api, event }) {
 
     // Send detect message
     const detectBox =
-``;
+`𝐷𝑜𝑤𝑛𝑙𝑜𝑎𝑑𝑖𝑛𝑔........... `;
 
     // প্রথম মেসেজ পাঠানো এবং ⬇️ রিয়েক্ট
     api.sendMessage(detectBox, event.threadID, async (err, info) => {
