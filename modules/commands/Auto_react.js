@@ -1,43 +1,60 @@
 module.exports.config = {
- name: "autoreact",
- version: "1.1.1",
- hasPermission: 0,
- credits: "𝐂𝐘𝐁𝐄𝐑 ☢️_𖣘 -𝐁𝐎𝐓 ⚠️ 𝑻𝑬𝑨𝑴_ ☢️",
- description: "Bot React",
- commandCategory: "No Prefix",
- cooldowns: 0,
+  name: "autoreact",
+  version: "3.0.0",
+  hasPermission: 0,
+  credits: "Jihad",
+  description: "Auto React On/Off System",
+  commandCategory: "No Prefix",
+  cooldowns: 0
 };
 
-module.exports.handleEvent = async ({ api, event }) => {
- const threadData = global.data.threadData.get(event.threadID) || {};
- if (threadData["🥰"] === false) return; // Auto-react off
+module.exports.handleEvent = async ({ api, event, Threads }) => {
+  try {
+    if (!event.body) return;
 
- const emojis = ["🥰", "😗", "🍂", "💜", "☺️", "🖤", "🤗", "😇", "🌺", "🥹", "😻", "😘", "🫣", "😽", "😺", "👀", "❤️", "🧡", "💛", "💚", "💙", "💜", "🤎", "🤍", "💫", "💦", "🫶", "🫦", "👄", "🗣️", "💏", "👨‍👩‍👦‍👦", "👨‍👨‍👦", "😵", "🥵", "🥶", "🤨", "🤐", "🫡", "🤔"];
- const randomEmoji = emojis[Math.floor(Math.random() * emojis.length)];
+    const threadID = event.threadID;
+    const messageID = event.messageID;
 
- console.log(`Reacting with ${randomEmoji} to message ${event.messageID}`); // Debug log
+    const threadData = await Threads.getData(threadID);
+    const data = threadData.data || {};
 
- api.setMessageReaction(randomEmoji, event.messageID, (err) => {
- if (err) console.error("Error sending reaction:", err);
- }, true);
+    if (data.autoreact !== true) return;
+
+    const emojis = [
+      "🥰","😗","🍂","💜","☺️","🖤","🤗","😇","🌺","🥹",
+      "😻","😘","🫣","😽","😺","👀","❤️","🫶","🤔"
+    ];
+
+    const randomEmoji = emojis[Math.floor(Math.random() * emojis.length)];
+
+    api.setMessageReaction(randomEmoji, messageID, () => {}, true);
+
+  } catch (err) {
+    console.log("AutoReact Error:", err);
+  }
 };
 
-module.exports.run = async ({ api, event, Threads, getText }) => {
- const { threadID, messageID } = event;
- const threadData = await Threads.getData(threadID);
- 
- if (typeof threadData.data["🥰"] === "undefined") {
- threadData.data["🥰"] = true; // Default to "on"
- } else {
- threadData.data["🥰"] = !threadData.data["🥰"]; // Toggle
- }
+module.exports.run = async ({ api, event, Threads }) => {
+  const { threadID, messageID, body } = event;
 
- await Threads.setData(threadID, { data: threadData.data });
- global.data.threadData.set(threadID, threadData.data);
+  const threadData = await Threads.getData(threadID);
+  const data = threadData.data || {};
 
- api.sendMessage(
- `Auto-react is now ${threadData.data["🥰"] ? "ON 🟢" : "OFF 🔴"}`,
- threadID,
- messageID
- );
+  const command = body.toLowerCase();
+
+  if (command === ".autoreacton") {
+    data.autoreact = true;
+    await Threads.setData(threadID, { data });
+    global.data.threadData.set(threadID, data);
+
+    return api.sendMessage("🟢 Auto React Turned ON", threadID, messageID);
+  }
+
+  if (command === ".autoreactoff") {
+    data.autoreact = false;
+    await Threads.setData(threadID, { data });
+    global.data.threadData.set(threadID, data);
+
+    return api.sendMessage("🔴 Auto React Turned OFF", threadID, messageID);
+  }
 };
