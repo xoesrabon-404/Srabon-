@@ -16,7 +16,7 @@ module.exports.run = async function({ api, event, args }) {
  const apis = await axios.get('https://raw.githubusercontent.com/shaonproject/Shaon/main/api.json')
  const Shaon = apis.data.api
  
- if(keySearch.includes("-") == false) return api.sendMessage('Please enter in the format, example: pic mia khalifa-10 (it depends on you how many images you want to appear in the result) credit by rX Abdullah', event.threadID, event.messageID)
+ if(keySearch.includes("-") == false) return api.sendMessage('𝑝𝑙𝑒𝑎𝑠𝑒 𝑒𝑛𝑡𝑒𝑟 𝑖𝑛 𝑡ℎ𝑒 𝑓𝑜𝑟𝑚𝑎𝑡, 𝑒𝑥𝑎𝑚𝑝𝑙𝑒: 𝑝𝑖𝑐 𝑚𝑖𝑎 𝑘ℎ𝑎𝑙𝑖𝑓𝑎-10 (𝑖𝑡 𝑑𝑒𝑝𝑒𝑛𝑑𝑠 𝑜𝑛 𝑦𝑜𝑢 h𝑜𝑓ow 𝑚𝑎𝑛𝑦 𝑖𝑚𝑎𝑔𝑒𝑠 𝑦𝑜𝑢 𝑤𝑎𝑛𝑡 𝑡𝑜 𝑎𝑝𝑝𝑒𝑎𝑟 𝑖𝑛 𝑡ℎ𝑒 𝑟𝑒𝑠𝑢𝑙𝑡) 𝑐𝑟𝑒𝑑𝑖𝑡 𝑏𝑦 ᜊ 𝐽𝑖ℎ𝑎𝑑 ࿐', event.threadID, event.messageID)
  const keySearchs = keySearch.substr(0, keySearch.indexOf('-'))
  const numberSearch = keySearch.split("-").pop() || 6
  const res = await axios.get(`${Shaon}/pinterest?search=${encodeURIComponent(keySearchs)}`);
