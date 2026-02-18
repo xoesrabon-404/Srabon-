@@ -56,11 +56,11 @@ module.exports.run = async function ({ api, event, args }) {
     switch(subCommand) {
         case "on":
             saveVIPMode(true);
-            return api.sendMessage("⏤͟͟͞͞𝑉𝐼𝑃⃟ 𝑀𝑂𝐷𝐸 ⏤͟͟͞͞𝐸𝑁𝐴𝐵𝐿𝐸𝐷 \n\n⏤͟͟͞͞𝑂𝑁𝐿𝑌◯ 𝑉𝐼⃝𝑃 𝑈𝐸𝑅𝑆 𝐶𝐴𝑁 \n\n𝑈𝑆𝐸 ⏤͟͟͞͞𝐶𝑂𝑀𝑀𝐴𝑁𝐷⃠𝑆 ⏤͟͟͞͞𝑁𝑂𝑊", event.threadID);
+            return api.sendMessage("⏤͟͟͞͞𝑉𝑖𝑝 𝑀𝑜𝑑𝑒 𝐸𝑛𝑎𝑏𝑙𝑒 \n\n𝑂𝑛𝑙𝑦 𝑣𝑖𝑝 𝑢𝑠𝑒𝑟 𝑐𝑎𝑛 \n\n𝑈𝑠𝑒 𝐶𝑜𝑚𝑚𝑎𝑛𝑑 𝑛𝑜𝑤", event.threadID);
 
         case "off":
             saveVIPMode(false);
-            return api.sendMessage("⏤͟͟͞͞𝑉𝐼⃝𝑃 ⃟𝑀𝑂𝐷𝐸 ⏤͟͟͞͞𝐷𝐼𝑆𝐴𝐵𝐿𝐸𝐷\n\n⏤͟͟͞͞𝐴𝐿𝐿⃝ 𝑈𝑆𝐸𝑅𝑆 𝐶𝐴𝑁 \n\n𝑈⃝𝑆𝐸 ⏤͟͟͞͞𝐶𝑂𝑀𝑀𝐴𝑁𝐷⃠𝑆 ⏤͟͟͞͞𝑁𝑂𝑊", event.threadID);
+            return api.sendMessage("⏤͟͟͞͞𝑉𝑖𝑝 𝑑𝑖𝑠𝑎𝑏𝑙𝑒 \n\n𝐴𝑙𝑙 𝑢𝑠𝑒𝑟𝑠 𝑐𝑎𝑛\n\n𝑈𝑠𝑒 𝐶𝑜𝑚𝑚𝑒𝑛𝑑 𝑛𝑜𝑤", event.threadID);
 
         case "add":
             if (!targetID) return api.sendMessage("⏤͟͟͞͞❌ Please provide a userID or reply to add.", event.threadID);
@@ -69,7 +69,7 @@ module.exports.run = async function ({ api, event, args }) {
             saveVIP(vipList);
             {
                 const name = await getUserName(targetID);
-                return api.sendMessage(`⏤͟͟͞͞𝑉𝐼𝑃 𝐴𝐷𝑀𝐼𝑁 ⏤͟͟͟͟͞͞͞͞𝐴𝐷𝐷 \n\n⏤͟͟͞͞𝐴𝐷𝑀𝐼𝑁ᰔᩚ - ${name}\n\n⏤͟͟͞͞𝑈𝐼𝐷⃝ - ${targetID}`, event.threadID);
+                return api.sendMessage(`⏤͟͟͞͞𝑉𝑖𝑝 𝑎𝑑𝑚𝑖𝑛 𝑎𝑑𝑑\n\n⏤͟͟͞͞𝐴𝐷𝑀𝐼𝑁ᰔᩚ - ${name}\n\n⏤͟͟͞͞𝑈𝑖𝑑 - ${targetID}`, event.threadID);
             }
 
         case "remove":
@@ -79,7 +79,7 @@ module.exports.run = async function ({ api, event, args }) {
             saveVIP(vipList);
             {
                 const name = await getUserName(targetID);
-                return api.sendMessage(`⏤͟͟͞͞𝑉𝐼𝑃 𝐴𝐷𝑀𝐼𝑁 ⏤͟͟͞͞𝑅𝐸𝑀𝑂𝑉𝐸𝐷 ⃝⃝ \n\n⏤͟͟͞͞𝐴𝐷𝑀𝐼𝑁ᰔᩚ - ${name}\n\n⏤͟͟͞͞𝑈𝐼𝐷⃝ - ${targetID}`, event.threadID);
+                return api.sendMessage(`⏤͟͟͞͞𝑉𝑖𝑝 𝑎𝑑𝑚𝑖𝑛 ⏤͟͟͟͟͞͞͞͞𝑅𝑒𝑚𝑜𝑣𝑒𝑑 ⃝⃝ \n\n⏤͟͟͞͞𝐴𝐷𝑀𝐼𝑁ᰔᩚ - ${name}\n\n⏤͟͟͞͞𝑈𝑖𝑑 - ${targetID}`, event.threadID);
             }
 
         case "list":
