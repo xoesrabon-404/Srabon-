@@ -89,10 +89,10 @@ module.exports.run = async function ({ api, event, args }) {
 
 // Box function
 function boxText(title, body) {
-  return `════════════════════
+  return `━━━━━━♡♥♡━━━━━━
   ${title}
-═══════════════════
+━━━━━━♡♥♡━━━━━━
 ${body}
 
-═══════════════════`;
+━━━━━━♡♥♡━━━━━━`;
 }
