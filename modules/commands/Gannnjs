@@ -1,0 +1,77 @@
+const axios = require("axios");
+const fs = require("fs");
+const path = require("path");
+
+module.exports.config = {
+  name: "gan",
+  version: "1.0.8",
+  hasPermssion: 0,
+  credits: "Jihad",
+  description: "Sad song player (FORCE PREFIX ONLY)",
+  commandCategory: "media",
+  usages: ".gan",
+  cooldowns: 0
+
+
+const songProgress = {};
+
+// 🔁 reply handler (next / arekta)
+module.exports.handleEvent = async ({ api, event }) => {
+  if (!event.body) return;
+
+  const msg = event.body.toLowerCase().trim();
+  const threadID = event.threadID;
+
+  if (
+    event.type === "message_reply" &&
+    ["next", "arekta"].includes(msg)
+  ) {
+    const progress = songProgress[threadID];
+    if (!progress) return;
+    if (progress.msgID !== event.messageReply?.messageID) return;
+
+    const nextIndex = (progress.index + 1) % deepSongs.length;
+    await sendSong(api, threadID, nextIndex, event.messageID);
+  }
+};
+
+// ▶️ PREFIX ONLY COMMAND
+module.exports.run = async ({ api, event }) => {
+  const body = event.body || "";
+  if (!body.startsWith(".")) return;
+
+  const randomIndex = Math.floor(Math.random() * deepSongs.length);
+  await sendSong(api, event.threadID, randomIndex, event.messageID);
+};
+
+// 🎵 send song as mp3 voice
+async function sendSong(api, threadID, index, replyToID) {
+  const filePath = path.join(__dirname, `gan_${index}.mp3`);
+
+  try {
+    const res = await axios.get(deepSongs[index], {
+      responseType: "arraybuffer"
+    });
+    fs.writeFileSync(filePath, res.data);
+
+    api.sendMessage(
+      {
+        body: "⏤͟͟͞͞𝐽𝑖 ℎ𝑎𝑑 ᥫ᭡ ⏤͟͟͞͞𝐻𝑎𝑠𝑎𝑛 ࿐",
+        attachment: fs.createReadStream(filePath)
+      },
+      threadID,
+      (err, info) => {
+        fs.unlinkSync(filePath);
+        if (!err) {
+          songProgress[threadID] = {
+            index,
+            msgID: info.messageID
+          };
+        }
+      },
+      replyToID
+    );
+  } catch (e) {
+    console.log("❌ Gan error:", e.message);
+  }
+}
