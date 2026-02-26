@@ -56,7 +56,7 @@ module.exports = {
         const { data: { title, downloadLink, quality } } = await axios.get(`${await baseApiUrl()}/ytDl3?link=${videoID}&format=${format}&quality=3`);
 
         await api.sendMessage({
-          body: `⏤͟͟͞͞𝐴𝑑𝑚𝑖𝑛 𝐽𝑖ℎ𝑎𝑑 𝑆𝑖𝑟 ࿐ \n\n• 𝑇𝑖𝑡𝑙𝑒: ${title}\n• 𝑄𝑢𝑎𝑙𝑖𝑡𝑦: ${quality}`,
+          body: `⏤͟͟͞͞𝐴𝑑𝑚𝑖𝑛 𝐽𝑖ℎ𝑎𝑑 𝑆𝑖𝑟 ࿐ \n• 𝑇𝑖𝑡𝑙𝑒: ${title}\n• 𝑄𝑢𝑎𝑙𝑖𝑡𝑦: ${quality}`,
           attachment: await downloadFile(downloadLink, path)
         }, threadID, () => fs.unlinkSync(path), messageID);
 
@@ -129,7 +129,7 @@ module.exports = {
         const { data: { title, downloadLink, quality } } = await axios.get(`${await baseApiUrl()}/ytDl3?link=${videoID}&format=${format}&quality=3`);
 
         await api.sendMessage({
-          body: `⏤͟͟͞͞𝐴𝑑𝑚𝑖𝑛 𝐽𝑖ℎ𝑎𝑑 𝑆𝑖𝑟 ࿐\n\n• 𝑇𝑖𝑡𝑙𝑒: ${title}\n• 𝑄𝑢𝑎𝑙𝑖𝑡𝑦: ${quality}`,
+          body: `⏤͟͟͞͞𝐴𝑑𝑚𝑖𝑛 𝐽𝑖ℎ𝑎𝑑 𝑆𝑖𝑟 ࿐\n• 𝑇𝑖𝑡𝑙𝑒: ${title}\n• 𝑄𝑢𝑎𝑙𝑖𝑡𝑦: ${quality}`,
           attachment: await downloadFile(downloadLink, path)
         }, threadID, () => fs.unlinkSync(path), messageID);
       } catch (e) {
@@ -142,7 +142,7 @@ module.exports = {
       try {
         const { data } = await axios.get(`${await baseApiUrl()}/ytfullinfo?videoID=${videoID}`);
         await api.sendMessage({
-          body: `⏤͟͟͞͞𝐴𝑑𝑚𝑖𝑛 𝐽𝑖ℎ𝑎𝑑 𝑆𝑖𝑟 ࿐ \n\n✨ Title: ${data.title}\n⏳ Duration: ${(data.duration / 60).toFixed(2)} mins\n📺 Resolution: ${data.resolution}\n👀 Views: ${data.view_count}\n👍 Likes: ${data.like_count}\n💬 Comments: ${data.comment_count}\n📂 Category: ${data.categories[0]}\n📢 Channel: ${data.channel}\n🧍 Uploader ID: ${data.uploader_id}\n👥 Subscribers: ${data.channel_follower_count}\n🔗 Channel URL: ${data.channel_url}\n🔗 Video URL: ${data.webpage_url}`,
+          body: `⏤͟͟͞͞𝐴𝑑𝑚𝑖𝑛 𝐽𝑖ℎ𝑎𝑑 𝑆𝑖𝑟 ࿐ \n✨ Title: ${data.title}\n⏳ Duration: ${(data.duration / 60).toFixed(2)} mins\n📺 Resolution: ${data.resolution}\n👀 Views: ${data.view_count}\n👍 Likes: ${data.like_count}\n💬 Comments: ${data.comment_count}\n📂 Category: ${data.categories[0]}\n📢 Channel: ${data.channel}\n🧍 Uploader ID: ${data.uploader_id}\n👥 Subscribers: ${data.channel_follower_count}\n🔗 Channel URL: ${data.channel_url}\n🔗 Video URL: ${data.webpage_url}`,
           attachment: await streamImage(data.thumbnail, 'info_thumb.jpg')
         }, threadID, messageID);
       } catch (e) {
