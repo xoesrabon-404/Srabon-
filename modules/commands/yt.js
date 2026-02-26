@@ -58,7 +58,7 @@ module.exports.run = async ({ api, args, event }) => {
 
     if (!result || result.length === 0) {
       await api.unsendMessage(searchingMsg.messageID);
-      return api.sendMessage(`❌ No results found for '${keyWord}'.`, event.threadID, event.messageID);
+      return api.sendMessage(`❌ 𝑁𝑜 𝑟𝑒𝑠𝑢𝑙𝑡𝑠 𝑓𝑜𝑢𝑛𝑑 𝑓𝑜𝑟 '${keyWord}'.`, event.threadID, event.messageID);
     }
 
     const firstResult = result[0];
@@ -71,7 +71,7 @@ module.exports.run = async ({ api, args, event }) => {
     await api.unsendMessage(searchingMsg.messageID);
 
     const sentMsg = await api.sendMessage({
-      body: `⏤͟͟͞͞𝐴𝑑𝑚𝑖𝑛 𝐽𝑖ℎ𝑎𝑑 𝐻𝑎𝑠𝑎𝑛 ᜊ\n\n🎧 Title: ${title}\n📺 Channel: ${firstResult.channel.name}\n🎶 Quality: ${quality}`,
+      body: `⏤͟͟͞͞𝐴𝑑𝑚𝑖𝑛 𝐽𝑖ℎ𝑎𝑑 𝐻𝑎𝑠𝑎𝑛 ᜊ\n\n🎧 𝑇𝑖𝑡𝑙𝑒: ${title}\n📺 𝐶ℎ𝑎𝑛𝑛𝑒𝑙: ${firstResult.channel.name}\n🎶 𝑄𝑢𝑎𝑙𝑖𝑡𝑦: ${quality}`,
       attachment: await downloadAudio(downloadLink, 'audio.mp3')
     }, event.threadID, () => fs.unlinkSync('audio.mp3'), event.messageID);
 
