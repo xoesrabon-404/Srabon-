@@ -63,13 +63,13 @@ module.exports = {
         return;
       } catch (e) {
         console.error(e);
-        return api.sendMessage('❌ 𝐹𝑎𝑖𝑙𝑒𝑑 𝑡𝑜 𝑑𝑜𝑤𝑛𝑙𝑜𝑎𝑑. 𝑃𝑙𝑒𝑎𝑠𝑒 𝑡𝑟𝑦 𝑎𝑔𝑎𝑖𝑛 𝑙𝑎𝑡𝑒𝑟'., threadID, messageID);
+        return api.sendMessage('❌ 𝐹𝑎𝑖𝑙𝑒𝑑 𝑡𝑜 𝑑𝑜𝑤𝑛𝑙𝑜𝑎𝑑. 𝑃𝑙𝑒𝑎𝑠𝑒 𝑡𝑟𝑦 𝑎𝑔𝑎𝑖𝑛 𝑙𝑎𝑡𝑒𝑟 ', threadID, messageID);
       }
     }
 
     args.shift(); 
     const keyWord = args.join(" ");
-    if (!keyWord) return api.sendMessage('❌ 𝑃𝑙𝑒𝑎𝑠𝑒 𝑝𝑟𝑜𝑣𝑖𝑑𝑒 𝑎 𝑠𝑒𝑎𝑟𝑐ℎ 𝑘𝑒𝑦𝑤𝑜𝑟𝑑'., threadID, messageID);
+    if (!keyWord) return api.sendMessage('❌ 𝑃𝑙𝑒𝑎𝑠𝑒 𝑝𝑟𝑜𝑣𝑖𝑑𝑒 𝑎 𝑠𝑒𝑎𝑟𝑐ℎ 𝑘𝑒𝑦𝑤𝑜𝑟𝑑', threadID, messageID);
 
     try {
       const searchResult = (await axios.get(`${await baseApiUrl()}/ytFullSearch?songName=${encodeURIComponent(keyWord)}`)).data.slice(0, 6);
@@ -99,7 +99,7 @@ module.exports = {
       }, messageID);
     } catch (err) {
       console.error(err);
-      return api.sendMessage("❌ 𝐴𝑛 𝑒𝑟𝑟𝑜𝑟 𝑜𝑐𝑐𝑢𝑟𝑟𝑒𝑑 𝑤ℎ𝑖𝑙𝑒 𝑠𝑒𝑎𝑟𝑐ℎ𝑖𝑛𝑔: " + err.message, threadID, messageID);
+      return api.sendMessage("❌ An error occurred while searching: " + err.message, threadID, messageID);
     }
   },
 
@@ -111,7 +111,7 @@ module.exports = {
     const choice = parseInt(body);
 
     if (isNaN(choice) || choice <= 0 || choice > result.length)
-      return api.sendMessage("❌ 𝐼𝑛𝑣𝑎𝑙𝑖𝑑 𝑛𝑢𝑚𝑏𝑒𝑟. 𝑃𝑙𝑒𝑎𝑠𝑒 𝑟𝑒𝑝𝑙𝑦 𝑤𝑖𝑡ℎ 𝑎 𝑣𝑎𝑙𝑖𝑑 𝑛𝑢𝑚𝑏𝑒𝑟.", threadID, messageID);
+      return api.sendMessage("❌ Invalid number. Please reply with a valid number.", threadID, messageID);
 
     const selectedVideo = result[choice - 1];
     const videoID = selectedVideo.id;
@@ -142,7 +142,7 @@ module.exports = {
       try {
         const { data } = await axios.get(`${await baseApiUrl()}/ytfullinfo?videoID=${videoID}`);
         await api.sendMessage({
-          body: `⏤͟͟͞͞𝐴𝑑𝑚𝑖𝑛 𝐽𝑖ℎ𝑎𝑑 𝑆𝑖𝑟 ࿐ \n\n✨ 𝑇𝑖𝑡𝑙𝑒: ${data.title}\n⏳ 𝐷𝑢𝑟𝑎𝑡𝑖𝑜𝑛: ${(data.duration / 60).toFixed(2)} mins\n📺 Resolution: ${data.resolution}\n👀 𝑉𝑖𝑒𝑤𝑠: ${data.view_count}\n👍 𝐿𝑖𝑘𝑒𝑠: ${data.like_count}\n💬 𝐶𝑜𝑚𝑚𝑒𝑛𝑡𝑠: ${data.comment_count}\n📂 Category: ${data.categories[0]}\n📢 Channel: ${data.channel}\n🧍 Uploader ID: ${data.uploader_id}\n👥 Subscribers: ${data.channel_follower_count}\n🔗 Channel URL: ${data.channel_url}\n🔗 Video URL: ${data.webpage_url}`,
+          body: `⏤͟͟͞͞𝐴𝑑𝑚𝑖𝑛 𝐽𝑖ℎ𝑎𝑑 𝑆𝑖𝑟 ࿐ \n\n✨ Title: ${data.title}\n⏳ Duration: ${(data.duration / 60).toFixed(2)} mins\n📺 Resolution: ${data.resolution}\n👀 Views: ${data.view_count}\n👍 Likes: ${data.like_count}\n💬 Comments: ${data.comment_count}\n📂 Category: ${data.categories[0]}\n📢 Channel: ${data.channel}\n🧍 Uploader ID: ${data.uploader_id}\n👥 Subscribers: ${data.channel_follower_count}\n🔗 Channel URL: ${data.channel_url}\n🔗 Video URL: ${data.webpage_url}`,
           attachment: await streamImage(data.thumbnail, 'info_thumb.jpg')
         }, threadID, messageID);
       } catch (e) {
