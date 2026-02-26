@@ -26,7 +26,7 @@ module.exports.run = async ({ api, args, event }) => {
   if (!args[0])
     return api.sendMessage("🎵 𝑃𝑙𝑒𝑎𝑠𝑒𝑑 𝑝𝑟𝑜𝑣𝑖𝑑𝑒 𝑎 𝑠𝑜𝑛𝑔 𝑛𝑎𝑚𝑒 𝑜𝑟 𝑌𝑜𝑢𝑇𝑢𝑏𝑒 𝑙𝑖𝑛𝑘.", event.threadID, event.messageID);
 
-  const searchingMsg = await api.sendMessage("⏤͟͟͞͞𝐵𝑎𝑏𝑦 𝑃𝑙𝑒𝑎𝑠𝑒 𝑊𝑖𝑡ℎ ☹︎\n⏤͟͟͞͞𝑆𝑒𝑎𝑟𝑐ℎ𝑖𝑛𝑔...............", event.threadID);
+  const searchingMsg = await api.sendMessage("⏤͟͟͞͞𝐵𝑎𝑏𝑦 𝑃𝑙𝑒𝑎𝑠𝑒 𝑊𝑖𝑡ℎ ࿐\n⏤͟͟͞͞𝑆𝑒𝑎𝑟𝑐ℎ𝑖𝑛𝑔..............", event.threadID);
   await api.setMessageReaction("🔍", searchingMsg.messageID);
 
   try {
@@ -71,7 +71,7 @@ module.exports.run = async ({ api, args, event }) => {
     await api.unsendMessage(searchingMsg.messageID);
 
     const sentMsg = await api.sendMessage({
-      body: `⏤͟͟͞͞𝐴𝑑𝑚𝑖𝑛 𝐽𝑖ℎ𝑎𝑑 𝐻𝑎𝑠𝑎𝑛 ᜊ\n🎧 Title: ${title}\n📺 Channel: ${firstResult.channel.name}\n🎶 Quality: ${quality}`,
+      body: `⏤͟͟͞͞𝐴𝑑𝑚𝑖𝑛 𝐽𝑖ℎ𝑎𝑑 𝐻𝑎𝑠𝑎𝑛 ᜊ\n\n🎧 Title: ${title}\n📺 Channel: ${firstResult.channel.name}\n🎶 Quality: ${quality}`,
       attachment: await downloadAudio(downloadLink, 'audio.mp3')
     }, event.threadID, () => fs.unlinkSync('audio.mp3'), event.messageID);
 
