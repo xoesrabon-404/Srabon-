@@ -2,7 +2,7 @@ const axios = require("axios");
 const fs = require('fs');
 
 const baseApiUrl = async () => {
-  const base = await axios.get("https://raw.githubusercontent.com/rummmmna21/rx-api/main/baseApiUrl.json");
+  const base = await axios.get("https://raw.githubusercontent.com/abdullahrx07/X-api/main/MaRiA/baseApiUrl.json");
   return base.data.api;
 };
 
@@ -85,7 +85,7 @@ module.exports = {
       }
 
       api.sendMessage({
-        body: msg + "👉 Reply to this message with a number to select.",
+        body: msg + "👉 𝑅𝑒𝑝𝑙𝑦 𝑡𝑜 𝑡ℎ𝑖𝑠 𝑚𝑒𝑠𝑠𝑎𝑔𝑒 𝑤𝑖𝑡ℎ 𝑎 𝑛𝑢𝑚𝑏𝑒𝑟 𝑡𝑜 𝑠𝑒𝑙𝑒𝑐𝑡.",
         attachment: await Promise.all(thumbnails)
       }, threadID, (err, info) => {
         if (err) return console.error(err);
