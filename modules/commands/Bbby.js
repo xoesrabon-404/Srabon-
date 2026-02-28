@@ -179,7 +179,7 @@ module.exports.handleEvent = async function ({ api, event, Users }) {
  if (!text || !simsim) return;
 
  const senderName = await Users.getNameUser(event.senderID);
- const triggers = ["baby", "bby", "xan", "bbz", "mari", "মারিয়া"];
+ const triggers = ["baby", "bby", "xan", "bbz", "bot", "বট"];
 
  if (triggers.includes(text)) {
  const replies = [
