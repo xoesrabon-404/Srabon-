@@ -215,7 +215,7 @@ module.exports.handleEvent = async function ({ api, event, Users }) {
  });
  }
 
- const matchPrefix = /^(baby|bby|xan|bbz|mari|মারিয়া)\s+/i;
+ const matchPrefix = /^(baby|bby|xan|bbz|bot|বট)\s+/i;
  if (matchPrefix.test(text)) {
  const query = text.replace(matchPrefix, "").trim();
  if (!query) return;
