@@ -3,18 +3,19 @@ const fs = require("fs");
 const path = require("path");
 
 module.exports.config = {
-  name: "song",
+  name: "Song",
   aliases: ["গান"],
-  version: "1.0.3",
+  version: "1.0.0",
   hasPermssion: 0,
   credits: "Jihad",
-  description: "Sad song player (FORCE PREFIX ONLY)",
-  commandCategory: "media",
-  usages: ".Song / .গান",
-  cooldowns: 0
+  description: "Auto sad song player on 'Song' or 'গান'",
+  commandCategory: "auto",
+  usages: "",
+  cooldowns: 0,
+  prefix: false
 };
 
-// 💔 ALL SAD SONG LINKS (FULL)
+// 💔 102টি sad song লিংক (73+29)
 const deepSongs = [
   "https://files.catbox.moe/6uogqj.mp3",
   "https://files.catbox.moe/30mpp2.mp3",
@@ -89,8 +90,7 @@ const deepSongs = [
   "https://files.catbox.moe/n8qmij.mp3",
   "https://files.catbox.moe/0b46yc.mp3",
   "https://files.catbox.moe/ddxnpf.mp3",
-
-  // extra 29
+  // Extra 29 লিংক (original 29) 
   "https://files.catbox.moe/extra1.mp3",
   "https://files.catbox.moe/extra2.mp3",
   "https://files.catbox.moe/extra3.mp3",
@@ -124,63 +124,50 @@ const deepSongs = [
 
 const songProgress = {};
 
-// reply handler
-module.exports.handleEvent = async ({ api, event }) => {
-  if (!event.body) return;
+module.exports.handleEvent = async function({ api, event }) {
+  const msgRaw = event.body;
+  if (!msgRaw) return;
 
-  const msg = event.body.toLowerCase().trim();
+  const msg = msgRaw.toLowerCase();
   const threadID = event.threadID;
+  const messageID = event.messageID;
 
-  if (
-    event.type === "message_reply" &&
-    ["next", "arekta"].includes(msg)
-  ) {
+  // Next song reply
+  if (event.type === "message_reply" && ["next", "arekta"].includes(msg.trim())) {
     const progress = songProgress[threadID];
-    if (!progress) return;
-    if (progress.msgID !== event.messageReply?.messageID) return;
-
+    if (!progress || progress.msgID !== event.messageReply?.messageID) return;
     const nextIndex = (progress.index + 1) % deepSongs.length;
-    await sendSong(api, threadID, nextIndex, event.messageID);
+    await sendSong(api, threadID, nextIndex, messageID);
+    return;
+  }
+
+  // Song triggers
+  if (msg.includes("sad") || msg.includes("song") || msg.includes("গান")) {
+    const randomIndex = Math.floor(Math.random() * deepSongs.length);
+    await sendSong(api, threadID, randomIndex, messageID);
+    return;
   }
 };
 
-// PREFIX ONLY command
-module.exports.run = async ({ api, event }) => {
-  const body = event.body || "";
-
-  // ❌ no prefix = no work
-  if (!body.startsWith(".")) return;
-
-  const randomIndex = Math.floor(Math.random() * deepSongs.length);
-  await sendSong(api, event.threadID, randomIndex, event.messageID);
-};
-
-// send song
 async function sendSong(api, threadID, index, replyToID) {
-  const filePath = path.join(__dirname, `song_${index}.mp3`);
+  const url = deepSongs[index];
+  const fileName = `Song_${index}.mp3`;
+  const filePath = path.join(__dirname, fileName);
 
   try {
-    const res = await axios.get(deepSongs[index], { responseType: "arraybuffer" });
+    const res = await axios.get(url, { responseType: "arraybuffer" });
     fs.writeFileSync(filePath, res.data);
 
-    api.sendMessage(
-      {
-        body: "⏤͟͟͞͞🅹🅸🅷️🅰🅳 🅷️🅰🆂️🅰🅽 ࿐",
-        attachment: fs.createReadStream(filePath)
-      },
-      threadID,
-      (err, info) => {
-        fs.unlinkSync(filePath);
-        if (!err) {
-          songProgress[threadID] = {
-            index,
-            msgID: info.messageID
-          };
-        }
-      },
-      replyToID
-    );
+    api.sendMessage({
+      body: "🅙🅘🅗🅐🅓 🅲🅷🅰🆃 🅱🅾🆃 💮🥺\nℝ𝕖𝕡𝕝𝕪 𝕥𝕠 °ℕ𝕖𝕩𝕥° 𝕗𝕠𝕣 𝕟𝕖𝕨 𝕤𝕠𝕟𝕘",
+      attachment: fs.createReadStream(filePath)
+    }, threadID, (err, info) => {
+      fs.unlinkSync(filePath);
+      if (!err) songProgress[threadID] = { index, msgID: info.messageID };
+    }, replyToID);
   } catch (e) {
-    console.log("❌ Song error:", e.message);
+    console.log("❌ Error sending song:", e.message);
   }
 }
+
+module.exports.run = () => {};
