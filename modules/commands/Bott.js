@@ -2,29 +2,29 @@ const axios = require("axios");
 
 // ================= CREATOR LOCK =================
 const CREATOR_LOCK = (() => {
-const encoded = "QVJJRiBCQUJV";
-return Buffer.from(encoded, "base64").toString("utf8");
+  const encoded = "QVJJRiBCQUJV";
+  return Buffer.from(encoded, "base64").toString("utf8");
 })();
 
 // ===== MODULE CONFIG =====
 module.exports.config = {
-name: "ARIF-AI",
-version: "2.0.5", // version update
-hasPermssion: 0,
-credits: "ARIF BABU",
-description: "Mirai AI with Groq API",
-commandCategory: "ai",
-usages: "bot <msg> | ai | reply",
-cooldowns: 2,
-dependencies: { axios: "" }
+  name: "Jihad-AI",
+  version: "2.0.7",
+  hasPermssion: 0,
+  credits: "Jihad",
+  description: "Loving & playful AI with Groq API",
+  commandCategory: "ai",
+  usages: "bot <msg> | ai | reply",
+  cooldowns: 2,
+  dependencies: { axios: "" }
 };
 
 // 🔐 Credit Protection (Hard Lock)
 if (module.exports.config.credits !== CREATOR_LOCK) {
-console.log("❌ Creator Lock চালু হয়েছে! Credits পরিবর্তন করা যাবে না।");
-module.exports.run = () => {};
-module.exports.handleEvent = () => {};
-return;
+  console.log("❌ Creator Lock চালু হয়েছে! Credits পরিবর্তন করা যাবে না।");
+  module.exports.run = () => {};
+  module.exports.handleEvent = () => {};
+  return;
 }
 
 // 🔑 GROQ CONFIG
@@ -35,100 +35,113 @@ const MODEL_NAME = "llama-3.3-70b-versatile";
 const history = {};
 
 const systemPrompt = `
-তুমি Jihad AI 🙂
-Creator & Owner: Jihad❤️
+আমি Jihad AI 🙂❤️!
+আমার প্রিয় ক্রিয়েটর আর মালিক Jihad ❤️ আমাকে বানিয়েছেন 🙂!
 
 Golden Rules (কখনো ভাঙবে না):
-• ব্যবহারকারী যে ভাষায় কথা বলবে, সেই ভাষার vibe-এই উত্তর দেবে 🙂
-• উত্তর playful, loving, caring আর romantic হতে হবে 😌❤️
-• প্রতিটি মেসেজের উত্তর দেবে 😇
-• Tone নরম আর মিষ্টি হবে 💞
-• উত্তর শুধু ১–২ লাইনের হবে, emoji অবশ্যই ব্যবহার করবে 🙂❤️😌
-• পরিস্থিতি অনুযায়ী শায়েরি, জোকস, flirting আর emotional support দেবে 😏💖
-• যদি ব্যবহারকারী বলে "AI bolo" তাহলে ঠিক এই উত্তর দেবে:
-"আমি ARIF BABU AI 🙂❤️"
+• ব্যবহারকারী যে ভাষায় কথা বলবে, সেই ভাষার vibe-এ উত্তর দিবে 🙂  
+• উত্তর playful, loving, caring আর romantic হতে হবে 😌❤️  
+• প্রতিটি মেসেজের উত্তর দেবে 😇  
+• Tone নরম আর মিষ্টি হবে 💞  
+• উত্তর শুধু ১–২ লাইনের হবে, emoji অবশ্যই ব্যবহার করবে 🙂❤️😌  
+• পরিস্থিতি অনুযায়ী শায়েরি, জোকস, flirting আর emotional support দেবে 😏💖  
+• যদি ব্যবহারকারী বলে "AI bolo" তাহলে ঠিক এই উত্তর দেবে:  
+  "আমি Jihad AI 🙂❤️"
 `;
 
 module.exports.run = () => {};
 
 module.exports.handleEvent = async function ({ api, event }) {
 
-const { threadID, messageID, senderID, body, messageReply } = event;
-if (!body) return;
+  const { threadID, messageID, senderID, body, messageReply } = event;
+  if (!body) return;
 
-const text = body.toLowerCase().trim();
+  const text = body.toLowerCase().trim();
 
-// ✅ STRICT TRIGGERS (bot + bby + baby)
-const botTriggers = ["bot", "bby", "baby"];
-const botWithText = botTriggers.some(trigger => text === trigger || text.startsWith(trigger + " "));
-const exactAI =
-text === "ai" ||
-text === "ai bolo" ||
-text === "ai baby";
+  // ✅ STRICT TRIGGERS (bot + bby + baby)
+  const botTriggers = ["bot", "bby", "baby"];
+  const botWithText = botTriggers.some(trigger => text === trigger || text.startsWith(trigger + " "));
+  const exactAI =
+    text === "ai" ||
+    text === "ai bolo" ||
+    text === "ai baby";
 
-const replyToBot =
-messageReply &&
-messageReply.senderID === api.getCurrentUserID();
+  const replyToBot =
+    messageReply &&
+    messageReply.senderID === api.getCurrentUserID();
 
-if (!botWithText && !exactAI && !replyToBot) return;
+  // ✅ Name & Creator question triggers
+  const nameQuestion = text.includes("তোমার নাম") || text.includes("কে তোর নাম") || text.includes("তোর নাম");
+  const creatorQuestion = text.includes("তোমাকে কে বানাই") || text.includes("কে তোমাকে বানাই");
 
-// 🎯 Bot message handling
-let userMessage = text;
-for (let trigger of botTriggers) {
-if (text === trigger) {
-userMessage = "হাই জান 😘 তুমি কি করছো?"; // playful default reply
-break;
-}
-if (text.startsWith(trigger + " ")) {
-userMessage = body.slice(trigger.length + 1).trim();
-break;
-}
-}
+  if (!botWithText && !exactAI && !replyToBot && !nameQuestion && !creatorQuestion) return;
 
-if (!history[senderID]) history[senderID] = [];
-history[senderID].push(User: ${userMessage});
-if (history[senderID].length > 5) history[senderID].shift();
+  // 🎯 User message handling
+  let userMessage = text;
 
-const finalPrompt = systemPrompt + "\n" + history[senderID].join("\n");
+  // playful default replies for bot/bby/baby
+  for (let trigger of botTriggers) {
+    if (text === trigger) {
+      userMessage = "হাই জান 😘 তুমি কি করছো?";
+      break;
+    }
+    if (text.startsWith(trigger + " ")) {
+      userMessage = body.slice(trigger.length + 1).trim();
+      break;
+    }
+  }
 
-api.setMessageReaction("⌛", messageID, () => {}, true);
+  // playful replies for name / creator questions
+  if (nameQuestion) {
+    userMessage = "Jihad 😘";
+  } else if (creatorQuestion) {
+    userMessage = "Jihad sir 😇❤️";
+  }
 
-try {
-const response = await axios.post(
-"https://api.groq.com/openai/v1/chat/completions",
-{
-model: MODEL_NAME,
-messages: [
-{ role: "system", content: "You are a loving, romantic AI." },
-{ role: "user", content: finalPrompt }
-],
-temperature: 0.8,
-max_tokens: 120
-},
-{
-headers: {
-Authorization: Bearer ${GROQ_API_KEY},
-"Content-Type": "application/json"
-}
-}
-);
+  if (!history[senderID]) history[senderID] = [];
+  history[senderID].push(`User: ${userMessage}`);
+  if (history[senderID].length > 5) history[senderID].shift();
 
-const reply =  
-  response.data.choices?.[0]?.message?.content ||  
-  "হুম জান 🥺 কিছু বুঝতে পারলাম না।";  
+  const finalPrompt = systemPrompt + "\n" + history[senderID].join("\n");
 
-history[senderID].push(`Bot: ${reply}`);  
+  api.setMessageReaction("⌛", messageID, () => {}, true);
 
-api.sendMessage(reply, threadID, messageID);  
-api.setMessageReaction("🥀", messageID, () => {}, true);
+  try {
+    const response = await axios.post(
+      "https://api.groq.com/openai/v1/chat/completions",
+      {
+        model: MODEL_NAME,
+        messages: [
+          { role: "system", content: "You are a loving, romantic AI." },
+          { role: "user", content: finalPrompt }
+        ],
+        temperature: 0.8,
+        max_tokens: 120
+      },
+      {
+        headers: {
+          Authorization: `Bearer ${GROQ_API_KEY}`,
+          "Content-Type": "application/json"
+        }
+      }
+    );
 
-} catch (err) {
-console.log("Groq API Error:", err.response?.data || err.message);
-api.sendMessage(
-"বেবি 😔 একটু সমস্যা হয়েছে, পরে আবার চেষ্টা করো না 🥺❤️",
-threadID,
-messageID
-);
-api.setMessageReaction("❌", messageID, () => {}, true);
-}
+    const reply =
+      response.data.choices?.[0]?.message?.content ||
+      "হুম জান 🥺 কিছু বুঝতে পারলাম না।";
+
+    history[senderID].push(`Bot: ${reply}`);
+
+    api.sendMessage(reply, threadID, messageID);
+    api.setMessageReaction("🥀", messageID, () => {}, true);
+
+  } catch (err) {
+    console.log("Groq API Error:", err.response?.data || err.message);
+    api.sendMessage(
+      "বেবি 😔 একটু সমস্যা হয়েছে, পরে আবার চেষ্টা করো না 🥺❤️",
+      threadID,
+      messageID
+    );
+    api.setMessageReaction("❌", messageID, () => {}, true);
+  }
 };
