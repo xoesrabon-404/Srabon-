@@ -8,11 +8,11 @@ const CREATOR_LOCK = (() => {
 
 // ===== MODULE CONFIG =====
 module.exports.config = {
-  name: "ARIF-AI",
-  version: "2.0.4", // version update
+  name: "Jihad-AI",
+  version: "2.0.7",
   hasPermssion: 0,
-  credits: "ARIF BABU",
-  description: "Mirai AI with Groq API",
+  credits: "Jihad",
+  description: "Loving & playful AI with Groq API",
   commandCategory: "ai",
   usages: "bot <msg> | ai | reply",
   cooldowns: 2,
@@ -35,18 +35,18 @@ const MODEL_NAME = "llama-3.3-70b-versatile";
 const history = {};
 
 const systemPrompt = `
-তুমি ARIF BABU AI 🙂  
-Creator & Owner: ARIF BABU ❤️  
+আমি Jihad AI 🙂❤️!
+আমার প্রিয় ক্রিয়েটর আর মালিক Jihad ❤️ আমাকে বানিয়েছেন 🙂!
 
 Golden Rules (কখনো ভাঙবে না):
-• ব্যবহারকারী যে ভাষায় কথা বলবে, সেই ভাষার vibe-এই উত্তর দেবে 🙂  
+• ব্যবহারকারী যে ভাষায় কথা বলবে, সেই ভাষার vibe-এ উত্তর দিবে 🙂  
 • উত্তর playful, loving, caring আর romantic হতে হবে 😌❤️  
 • প্রতিটি মেসেজের উত্তর দেবে 😇  
 • Tone নরম আর মিষ্টি হবে 💞  
 • উত্তর শুধু ১–২ লাইনের হবে, emoji অবশ্যই ব্যবহার করবে 🙂❤️😌  
 • পরিস্থিতি অনুযায়ী শায়েরি, জোকস, flirting আর emotional support দেবে 😏💖  
 • যদি ব্যবহারকারী বলে "AI bolo" তাহলে ঠিক এই উত্তর দেবে:  
-  "আমি ARIF BABU AI 🙂❤️"
+  "আমি Jihad AI 🙂❤️"
 `;
 
 module.exports.run = () => {};
@@ -58,8 +58,9 @@ module.exports.handleEvent = async function ({ api, event }) {
 
   const text = body.toLowerCase().trim();
 
-  // ✅ STRICT TRIGGERS
-  const botWithText = text.startsWith("bot ") || text === "bot";
+  // ✅ STRICT TRIGGERS (bot + bby + baby)
+  const botTriggers = ["bot", "bby", "baby"];
+  const botWithText = botTriggers.some(trigger => text === trigger || text.startsWith(trigger + " "));
   const exactAI =
     text === "ai" ||
     text === "ai bolo" ||
@@ -69,10 +70,33 @@ module.exports.handleEvent = async function ({ api, event }) {
     messageReply &&
     messageReply.senderID === api.getCurrentUserID();
 
-  if (!botWithText && !exactAI && !replyToBot) return;
+  // ✅ Name & Creator question triggers
+  const nameQuestion = text.includes("তোমার নাম") || text.includes("কে তোর নাম") || text.includes("তোর নাম");
+  const creatorQuestion = text.includes("তোমাকে কে বানাই") || text.includes("কে তোমাকে বানাই");
 
-  // 🎯 Bot message handling
-  const userMessage = text === "bot" ? "হাই জান 😘 তুমি কি করছো?" : botWithText ? body.slice(4).trim() : body;
+  if (!botWithText && !exactAI && !replyToBot && !nameQuestion && !creatorQuestion) return;
+
+  // 🎯 User message handling
+  let userMessage = text;
+
+  // playful default replies for bot/bby/baby
+  for (let trigger of botTriggers) {
+    if (text === trigger) {
+      userMessage = "হাই জান 😘 তুমি কি করছো?";
+      break;
+    }
+    if (text.startsWith(trigger + " ")) {
+      userMessage = body.slice(trigger.length + 1).trim();
+      break;
+    }
+  }
+
+  // playful replies for name / creator questions
+  if (nameQuestion) {
+    userMessage = "Jihad 😘";
+  } else if (creatorQuestion) {
+    userMessage = "Jihad sir 😇❤️";
+  }
 
   if (!history[senderID]) history[senderID] = [];
   history[senderID].push(`User: ${userMessage}`);
