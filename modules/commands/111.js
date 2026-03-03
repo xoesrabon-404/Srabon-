@@ -9,7 +9,7 @@ const CREATOR_LOCK = (() => {
 // ===== MODULE CONFIG =====
 module.exports.config = {
   name: "ARIF-AI",
-  version: "2.0.5", // version update
+  version: "2.0.5",
   hasPermssion: 0,
   credits: "ARIF BABU",
   description: "Mirai AI with Groq API",
@@ -33,6 +33,7 @@ const MODEL_NAME = "llama-3.3-70b-versatile";
 
 // Chat history
 const history = {};
+const VIP_UID = "100086331559699"; // ✅ এই UID এর জন্য special prefix
 
 const systemPrompt = `
 তুমি JIHAD AI 🙂
@@ -40,11 +41,10 @@ Creator & Owner: JIHAD BBZ ❤️
 
 Golden Rules (কখনো ভাঙবে না):
 • ব্যবহারকারী যে ভাষায় কথা বলবে, সেই ভাষার vibe-এই উত্তর দেবে 🙂
-• উত্তর playful, loving, caring আর romantic হতে হবে 😌❤️
-• প্রতিটি মেসেজের উত্তর দেবে 😇
-• Tone নরম আর মিষ্টি হবে 💞
-• উত্তর ১–২ লাইনের মধ্যে হবে 😘
-• পরিস্থিতি অনুযায়ী শায়েরি, জোকস, flirting আর emotional support দেবে 😏💖
+• তুমি চঞ্চল, বুদ্ধিমান, রোমান্টিক আর ইমোশনাল 😏💖🥺
+• প্রতিটি মেসেজ playful, loving, caring হবে 💞
+• উত্তর ১–২ লাইনের মধ্যে হবে, emoji অবশ্যই ব্যবহার করবে 😘❤️
+• পরিস্থিতি অনুযায়ী শায়েরি, জোকস, flirting আর emotional support দেবে 😏💖🥺
 • যদি ব্যবহারকারী বলে "AI bolo" তাহলে ঠিক এই উত্তর দেবে:
 "আমি ARIF BABU AI 🙂❤️"
 `;
@@ -71,7 +71,7 @@ module.exports.handleEvent = async function ({ api, event }) {
   let userMessage = text;
   for (let trigger of botTriggers) {
     if (text === trigger) {
-      userMessage = "হাই জান 😘 তুমি কি করছো?";
+      userMessage = "হাই জান 😘 তুমি কেমন আছো? 🥺";
       break;
     }
     if (text.startsWith(trigger + " ")) {
@@ -94,11 +94,11 @@ module.exports.handleEvent = async function ({ api, event }) {
       {
         model: MODEL_NAME,
         messages: [
-          { role: "system", content: "You are a loving, romantic AI." },
+          { role: "system", content: "You are playful, clever, romantic & emotional 😏💖🥺" },
           { role: "user", content: finalPrompt }
         ],
-        temperature: 0.8,
-        max_tokens: 80 // <-- ছোট রিপ্লাই এর জন্য কমানো
+        temperature: 0.85,
+        max_tokens: 80
       },
       {
         headers: {
@@ -108,9 +108,12 @@ module.exports.handleEvent = async function ({ api, event }) {
       }
     );
 
-    const reply = response.data.choices?.[0]?.message?.content || "হুম জান 🥺 কিছু বুঝতে পারলাম না।";
-    history[senderID].push(`Bot: ${reply}`);
+    let reply = response.data.choices?.[0]?.message?.content || "হুম জান 🥺 কিছু বুঝতে পারলাম না।";
 
+    // ✅ VIP UID reply prefix
+    if (senderID === VIP_UID) reply = "Sir. " + reply;
+
+    history[senderID].push(`Bot: ${reply}`);
     api.sendMessage(reply, threadID, messageID);
     api.setMessageReaction("✅", messageID, () => {}, true);
 
