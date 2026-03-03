@@ -28,7 +28,7 @@ if (module.exports.config.credits !== CREATOR_LOCK) {
 }
 
 // 🔑 GROQ CONFIG
-const GROQ_API_KEY = "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";
+const GROQ_API_KEY = "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"; // নতুন API key
 const MODEL_NAME = "llama-3.3-70b-versatile";
 
 // Chat history
