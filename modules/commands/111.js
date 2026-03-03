@@ -35,8 +35,8 @@ const MODEL_NAME = "llama-3.3-70b-versatile";
 const history = {};
 
 const systemPrompt = `
-তুমি ARIF BABU AI 🙂  
-Creator & Owner: ARIF BABU ❤️  
+তুমি JIHAD AI 🙂  
+Creator & Owner: JIHAD BBZ ❤️  
 
 Golden Rules (কখনো ভাঙবে না):
 • ব্যবহারকারী যে ভাষায় কথা বলবে, সেই ভাষার vibe-এই উত্তর দেবে 🙂  
