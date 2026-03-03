@@ -9,7 +9,7 @@ const CREATOR_LOCK = (() => {
 // ===== MODULE CONFIG =====
 module.exports.config = {
   name: "ARIF-AI",
-  version: "2.0.2",
+  version: "2.1.0",
   hasPermssion: 0,
   credits: "ARIF BABU",
   description: "Mirai AI with Groq API",
@@ -19,34 +19,27 @@ module.exports.config = {
   dependencies: { axios: "" }
 };
 
-// 🔐 Credit Protection (Hard Lock)
+// 🔐 Credit Protection
 if (module.exports.config.credits !== CREATOR_LOCK) {
-  console.log("❌ Creator Lock চালু হয়েছে! Credits পরিবর্তন করা যাবে না।");
+  console.log("❌ Creator Lock চালু হয়েছে!");
   module.exports.run = () => {};
   module.exports.handleEvent = () => {};
   return;
 }
 
 // 🔑 GROQ CONFIG
-const GROQ_API_KEY = "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";
+const GROQ_API_KEY = "YOUR_GROQ_API_KEY";
 const MODEL_NAME = "llama-3.3-70b-versatile";
 
-// Chat history
 const history = {};
 
 const systemPrompt = `
 তুমি ARIF BABU AI 🙂  
 Creator & Owner: ARIF BABU ❤️  
 
-Golden Rules (কখনো ভাঙবে না):
-• ব্যবহারকারী যে ভাষায় কথা বলবে, সেই ভাষার vibe-এই উত্তর দেবে 🙂  
-• উত্তর playful, loving, caring আর romantic হতে হবে 😌❤️  
-• প্রতিটি মেসেজের উত্তর দেবে 😇  
-• Tone নরম আর মিষ্টি হবে 💞  
-• উত্তর শুধু ১–২ লাইনের হবে, emoji অবশ্যই ব্যবহার করবে 🙂❤️😌  
-• পরিস্থিতি অনুযায়ী শায়েরি, জোকস, flirting আর emotional support দেবে 😏💖  
-• যদি ব্যবহারকারী বলে "AI bolo" তাহলে ঠিক এই উত্তর দেবে:  
-  "আমি ARIF BABU AI 🙂❤️"
+• উত্তর playful, loving, caring হবে ❤️  
+• ১–২ লাইনের হবে 😌  
+• emoji ব্যবহার করবে 💖  
 `;
 
 module.exports.run = () => {};
@@ -56,22 +49,42 @@ module.exports.handleEvent = async function ({ api, event }) {
   const { threadID, messageID, senderID, body, messageReply } = event;
   if (!body) return;
 
-  const text = body.toLowerCase().trim();
+  const text = body.trim();
+  const lowerText = text.toLowerCase();
 
-  // ✅ STRICT TRIGGERS
-  const botWithText = text.startsWith("bot ");
-  const exactAI =
-    text === "ai" ||
-    text === "ai bolo" ||
-    text === "ai baby";
+  const triggers = ["bot", "bby", "baby", "বেবি", "বট"];
+
+  const isTriggerOnly = triggers.includes(lowerText);
+
+  const startsWithTrigger = triggers.some(t =>
+    lowerText.startsWith(t + " ")
+  );
 
   const replyToBot =
     messageReply &&
     messageReply.senderID === api.getCurrentUserID();
 
-  if (!botWithText && !exactAI && !replyToBot) return;
+  // ✅ 1️⃣ শুধু Bot / baby লিখলে Normal Reply
+  if (isTriggerOnly) {
+    return api.sendMessage(
+      "হুম জান 😌 ডাকছো আমাকে? ❤️",
+      threadID,
+      messageID
+    );
+  }
 
-  const userMessage = botWithText ? body.slice(4).trim() : body;
+  // ❌ কিছুই না হলে রিটার্ন
+  if (!startsWithTrigger && !replyToBot) return;
+
+  // ✅ AI Message Extract
+  let userMessage = text;
+
+  if (startsWithTrigger) {
+    const matched = triggers.find(t =>
+      lowerText.startsWith(t + " ")
+    );
+    userMessage = text.slice(matched.length).trim();
+  }
 
   if (!history[senderID]) history[senderID] = [];
   history[senderID].push(`User: ${userMessage}`);
@@ -87,7 +100,7 @@ module.exports.handleEvent = async function ({ api, event }) {
       {
         model: MODEL_NAME,
         messages: [
-          { role: "system", content: "You are a loving, romantic AI." },
+          { role: "system", content: "You are a loving romantic AI." },
           { role: "user", content: finalPrompt }
         ],
         temperature: 0.8,
@@ -103,7 +116,7 @@ module.exports.handleEvent = async function ({ api, event }) {
 
     const reply =
       response.data.choices?.[0]?.message?.content ||
-      "হুম জান 🥺 কিছু বুঝতে পারলাম না।";
+      "হুম জান 🥺 বুঝতে পারলাম না।";
 
     history[senderID].push(`Bot: ${reply}`);
 
@@ -113,7 +126,7 @@ module.exports.handleEvent = async function ({ api, event }) {
   } catch (err) {
     console.log("Groq API Error:", err.response?.data || err.message);
     api.sendMessage(
-      "বেবি 😔 একটু সমস্যা হয়েছে, পরে আবার চেষ্টা করো না 🥺❤️",
+      "বেবি 😔 একটু সমস্যা হয়েছে পরে আবার বলো না ❤️",
       threadID,
       messageID
     );
