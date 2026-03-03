@@ -9,10 +9,10 @@ const CREATOR_LOCK = (() => {
 // ===== MODULE CONFIG =====
 module.exports.config = {
   name: "ARIF-AI",
-  version: "2.0.5", // version update
+  version: "2.0.6", // final fun version
   hasPermssion: 0,
-  credits: "ARIF BABU",
-  description: "Mirai AI with Groq API",
+  credits: "Jihad", // ✅ Creator Credit
+  description: "Mirai AI with Groq API, playful & loving",
   commandCategory: "ai",
   usages: "bot <msg> | ai | reply",
   cooldowns: 2,
@@ -76,15 +76,16 @@ module.exports.handleEvent = async function ({ api, event }) {
   let userMessage = text;
   for (let trigger of botTriggers) {
     if (text === trigger) {
-      userMessage = "হাই জান 😘 তুমি কি করছো?"; // playful default reply
+      userMessage = "হাই জান 😘 তুমি কি করছো?" // playful default reply
       break;
     }
     if (text.startsWith(trigger + " ")) {
-      userMessage = body.slice(trigger.length + 1).trim();
+      userMessage = body.slice(trigger.length + 1).trim()
       break;
     }
   }
 
+  // history সংরক্ষণ
   if (!history[senderID]) history[senderID] = [];
   history[senderID].push(`User: ${userMessage}`);
   if (history[senderID].length > 5) history[senderID].shift();
@@ -99,7 +100,7 @@ module.exports.handleEvent = async function ({ api, event }) {
       {
         model: MODEL_NAME,
         messages: [
-          { role: "system", content: "You are a loving, romantic AI." },
+          { role: "system", content: "You are a playful, clever, funny, loving AI who uses emojis beautifully and flirts cutely" },
           { role: "user", content: finalPrompt }
         ],
         temperature: 0.8,
@@ -113,9 +114,12 @@ module.exports.handleEvent = async function ({ api, event }) {
       }
     );
 
-    const reply =
+    let reply =
       response.data.choices?.[0]?.message?.content ||
-      "হুম জান 🥺 কিছু বুঝতে পারলাম না।";
+      "হুম জান 🥺 কিছু বুঝতে পারলাম না 😅💖";
+
+    // শেষের পিরিয়ড সরানো
+    if (reply.endsWith(".")) reply = reply.slice(0, -1);
 
     history[senderID].push(`Bot: ${reply}`);
 
