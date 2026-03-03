@@ -120,7 +120,7 @@ module.exports.handleEvent = async function ({ api, event }) {
     history[senderID].push(`Bot: ${reply}`);
 
     api.sendMessage(reply, threadID, messageID);
-    api.setMessageReaction("🥀", messageID, () => {}, true);
+    api.setMessageReaction("✅", messageID, () => {}, true);
 
   } catch (err) {
     console.log("Groq API Error:", err.response?.data || err.message);
