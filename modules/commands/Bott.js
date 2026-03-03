@@ -9,10 +9,10 @@ const CREATOR_LOCK = (() => {
 // ===== MODULE CONFIG =====
 module.exports.config = {
   name: "ARIF-AI",
-  version: "2.0.7", // final romantic fun version
+  version: "2.0.6", // final fun version
   hasPermssion: 0,
   credits: "Jihad", // ✅ Creator Credit
-  description: "Mirai AI with Groq API, playful, clever & romantic",
+  description: "Mirai AI with Groq API, playful & loving",
   commandCategory: "ai",
   usages: "bot <msg> | ai | reply",
   cooldowns: 2,
@@ -38,12 +38,15 @@ const systemPrompt = `
 তুমি Jihad AI 🙂  
 Creator & Owner: Jihad❤️  
 
-Golden Rules:
-• ব্যবহারকারী যে ভাষায় কথা বলবে, সেই ভাষার vibe-এ playful, clever, romantic reply দেবে 😏💖  
-• উত্তর ১–২ লাইনের হবে, emojis ব্যবহার করে 😌💞  
-• শেষের দাড়ি (।) থাকবে না  
-• romantic, loving, mischievous এবং charming tone রাখতে হবে  
-• যদি ব্যবহারকারী বলে "AI bolo" তাহলে reply হবে: "আমি ARIF BABU AI 🙂❤️"
+Golden Rules (কখনো ভাঙবে না):
+• ব্যবহারকারী যে ভাষায় কথা বলবে, সেই ভাষার vibe-এই উত্তর দেবে 🙂  
+• উত্তর playful, loving, caring আর romantic হতে হবে 😌❤️  
+• প্রতিটি মেসেজের উত্তর দেবে 😇  
+• Tone নরম আর মিষ্টি হবে 💞  
+• উত্তর শুধু ১–২ লাইনের হবে, emoji অবশ্যই ব্যবহার করবে 🙂❤️😌  
+• পরিস্থিতি অনুযায়ী শায়েরি, জোকস, flirting আর emotional support দেবে 😏💖  
+• যদি ব্যবহারকারী বলে "AI bolo" তাহলে ঠিক এই উত্তর দেবে:  
+  "আমি ARIF BABU AI 🙂❤️"
 `;
 
 module.exports.run = () => {};
@@ -97,7 +100,7 @@ module.exports.handleEvent = async function ({ api, event }) {
       {
         model: MODEL_NAME,
         messages: [
-          { role: "system", content: "You are a playful, clever, loving, romantic AI who flirts cutely and uses emojis beautifully. Never end messages with a period." },
+          { role: "system", content: "You are a playful, clever, funny, loving AI who uses emojis beautifully and flirts cutely" },
           { role: "user", content: finalPrompt }
         ],
         temperature: 0.8,
@@ -115,13 +118,13 @@ module.exports.handleEvent = async function ({ api, event }) {
       response.data.choices?.[0]?.message?.content ||
       "হুম জান 🥺 কিছু বুঝতে পারলাম না 😅💖";
 
-    // শেষের দাড়ি বা পিরিয়ড সরানো
-    reply = reply.replace(/[।.]+$/, "");
+    // শেষের পিরিয়ড সরানো
+    if (reply.endsWith(".")) reply = reply.slice(0, -1);
 
     history[senderID].push(`Bot: ${reply}`);
 
     api.sendMessage(reply, threadID, messageID);
-    api.setMessageReaction("🥀", messageID, () => {}, true);
+    api.setMessageReaction("✅", messageID, () => {}, true);
 
   } catch (err) {
     console.log("Groq API Error:", err.response?.data || err.message);
