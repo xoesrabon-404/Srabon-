@@ -2,17 +2,17 @@ const axios = require("axios");
 
 // ================= CREATOR LOCK =================
 const CREATOR_LOCK = (() => {
-  const encoded = "QVJJRiBCQUJV";
+  const encoded = "QVJJRiBCQUJV"; // Base64 of "ARIF BABU"
   return Buffer.from(encoded, "base64").toString("utf8");
 })();
 
 // ===== MODULE CONFIG =====
 module.exports.config = {
-  name: "ARIF-AI",
-  version: "2.0.5", // version update
+  name: "JIHAD-AI",
+  version: "2.0.6",
   hasPermssion: 0,
-  credits: "ARIF BABU",
-  description: "Mirai AI with Groq API",
+  credits: "JIHAD BBZ",
+  description: "JIHAD AI with Groq API",
   commandCategory: "ai",
   usages: "bot <msg> | ai | reply",
   cooldowns: 2,
@@ -39,14 +39,14 @@ const systemPrompt = `
 Creator & Owner: JIHAD BBZ ❤️  
 
 Golden Rules (কখনো ভাঙবে না):
-• ব্যবহারকারী যে ভাষায় কথা বলবে, সেই ভাষার vibe-এই উত্তর দেবে 🙂  
-• উত্তর playful, loving, caring আর romantic হতে হবে 😌❤️  
-• প্রতিটি মেসেজের উত্তর দেবে 😇  
-• Tone নরম আর মিষ্টি হবে 💞  
-• উত্তর শুধু ১–২ লাইনের হবে, emoji অবশ্যই ব্যবহার করবে 🙂❤️😌  
-• পরিস্থিতি অনুযায়ী শায়েরি, জোকস, flirting আর emotional support দেবে 😏💖  
-• যদি ব্যবহারকারী বলে "AI bolo" তাহলে ঠিক এই উত্তর দেবে:  
-  "আমি ARIF BABU AI 🙂❤️"
+• ব্যবহারকারী যে ভাষায় কথা বলবে, সেই ভাষার vibe-এ উত্তর দিবে 🙂  
+• উত্তর playful, loving, caring আর romantic হবে 😌❤️  
+• প্রতিটি মেসেজের উত্তর দিবে 😇  
+• Tone নরম, মিষ্টি, স্মার্ট হবে 💞  
+• উত্তর ১–২ লাইনের মধ্যে হবে, emoji ব্যবহার করা বাধ্যতামূলক 🙂❤️😌  
+• পরিস্থিতি অনুযায়ী শায়েরি, জোকস, flirting আর emotional support দিবে 😏💖  
+• যদি ব্যবহারকারী বলে "AI bolo" তাহলে ঠিক এই উত্তর দিবে:  
+  "আমি JIHAD AI 🙂❤️"
 `;
 
 module.exports.run = () => {};
@@ -99,11 +99,11 @@ module.exports.handleEvent = async function ({ api, event }) {
       {
         model: MODEL_NAME,
         messages: [
-          { role: "system", content: "You are a loving, romantic AI." },
+          { role: "system", content: "You are a loving, romantic AI. Keep replies short, 1-2 lines, playful and emotional with emojis." },
           { role: "user", content: finalPrompt }
         ],
         temperature: 0.8,
-        max_tokens: 120
+        max_tokens: 60 // কমিয়ে দিয়েছি reply ছোট রাখার জন্য
       },
       {
         headers: {
@@ -113,9 +113,12 @@ module.exports.handleEvent = async function ({ api, event }) {
       }
     );
 
-    const reply =
+    let reply =
       response.data.choices?.[0]?.message?.content ||
-      "হুম জান 🥺 কিছু বুঝতে পারলাম না।";
+      "হাই জান 😘 তুমি কি করছো? 😌❤️";
+
+    // অতিরিক্ত বড় হলে truncate করে ১ লাইনে সীমিত করা
+    if (reply.length > 150) reply = reply.slice(0, 150) + "… 😇💖";
 
     history[senderID].push(`Bot: ${reply}`);
 
