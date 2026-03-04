@@ -4,16 +4,14 @@ const VIP_UID = "100086331559699";
 
 module.exports.config = {
   name: "baby",
-  version: "5.0.0",
+  version: "4.1.0",
   hasPermssion: 0,
   credits: "Jihad",
-  description: "Smart Romantic AI with Jihad Search Mode",
+  description: "Chonchol Smart Romantic AI",
   commandCategory: "AI",
   usages: "[text]",
   cooldowns: 3,
 };
-
-let waitingReply = {};
 
 module.exports.handleEvent = async function ({ api, event }) {
   const { body, senderID, threadID, messageID } = event;
@@ -22,23 +20,36 @@ module.exports.handleEvent = async function ({ api, event }) {
   const msg = body.toLowerCase();
   let reply = "";
 
-  // ===== BOT CALL KEYWORDS =====
-  const botCall = ["bot", "baby", "bby", "বেবি", "বট"];
+  // ===== CUSTOM SMART SHORT REPLIES =====
 
-  if (botCall.includes(msg.trim())) {
-    const texts = [
-      "জিহাদ কোথায়? খুঁজে পাচ্ছিনা 🥺",
-      "কেউ জিহাদকে দেখছো? খুঁজে পাচ্ছি না 🥺"
-    ];
-
-    reply = texts[Math.floor(Math.random() * texts.length)];
-    waitingReply[threadID] = true;
+  if (msg.includes("কেমন আছো")) {
+    reply = "আলহামদুলিল্লাহ দারুণ আছি 😌 তুমি কেমন আছো বলো দেখি?";
   }
 
-  // ===== IF USER REPLIED AFTER JIHAD SEARCH =====
-  else if (waitingReply[threadID]) {
-    waitingReply[threadID] = false;
+  else if (msg.includes("কি করছো")) {
+    reply = "তোমার কথাই ভাবছিলাম 😏 তুমি কি করছো?";
+  }
 
+  else if (msg.includes("আমি তোমারে ভালবাসি") || msg.includes("আমি তোমাকে ভালোবাসি")) {
+    reply = "আমি তো অনেক আগেই তোমার হয়ে গেছি 💖";
+  }
+
+  else if (msg.includes("মিস করি")) {
+    reply = "এত মিস করো নাকি? তাহলে সামনে এসে বসো 😌";
+  }
+
+  else if (msg.includes("রাগ করছো")) {
+    reply = "তোমার উপর রাগ টেকে নাকি? একটু অভিমান হতে পারে 😏";
+  }
+
+  // ===== BOT / BBY / BABY -> AI REPLY =====
+  else if (
+    msg.includes("bot") ||
+    msg.includes("bby") ||
+    msg.includes("baby") ||
+    msg.includes("বেবি") ||
+    msg.includes("বট")
+  ) {
     try {
       const res = await axios.get(`https://api.simsimi.vn/v2/simtalk`, {
         params: {
@@ -47,22 +58,13 @@ module.exports.handleEvent = async function ({ api, event }) {
         }
       });
 
-      reply = res.data.message || "তোমার কথা বেশ ইন্টারেস্টিং 😌";
+      reply = res.data.message || "ডাকলেই হাজির 😌";
     } catch (err) {
-      reply = "এই মুহূর্তে একটু লজ্জা পাচ্ছি 😅";
+      reply = "এই মুহূর্তে একটু ব্যস্ত আছি 😅";
     }
   }
 
-  // ===== NORMAL SMART REPLIES =====
-  else if (msg.includes("কেমন আছো")) {
-    reply = "আলহামদুলিল্লাহ দারুণ আছি 😌 তুমি কেমন আছো?";
-  }
-
-  else if (msg.includes("আমি তোমারে ভালবাসি") || msg.includes("আমি তোমাকে ভালোবাসি")) {
-    reply = "আমি তো অনেক আগেই তোমার হয়ে গেছি 💖";
-  }
-
-  // ===== DEFAULT AI =====
+  // ===== DEFAULT SMART AI REPLY =====
   else {
     try {
       const res = await axios.get(`https://api.simsimi.vn/v2/simtalk`, {
@@ -72,11 +74,14 @@ module.exports.handleEvent = async function ({ api, event }) {
         }
       });
 
-      reply = res.data.message || "তোমার কথা রহস্যময় লাগছে 😏";
+      reply = res.data.message || "তোমার কথা একটু রহস্যময় লাগছে 😌";
     } catch (err) {
-      reply = "এই মুহূর্তে কথা বলতে পারছি না 😅";
+      reply = "এই মুহূর্তে একটু ব্যস্ত আছি, পরে কথা বলি 😅";
     }
   }
+
+  // ===== MAKE REPLY SHORT =====
+  reply = reply.split(".")[0];
 
   // ===== VIP TAG =====
   if (senderID === VIP_UID) {
@@ -87,5 +92,5 @@ module.exports.handleEvent = async function ({ api, event }) {
 };
 
 module.exports.run = async function ({ api, event }) {
-  return api.sendMessage("আমি তো তোমার স্মার্ট বেবি 😘", event.threadID, event.messageID);
+  return api.sendMessage("আমি তো স্মার্ট বেবি 😌 ডাকলেই হাজির 💖", event.threadID, event.messageID);
 };
