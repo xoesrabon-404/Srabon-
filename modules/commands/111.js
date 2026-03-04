@@ -2,17 +2,19 @@ const axios = require("axios");
 
 const VIP_UID = "100086331559699";
 
+// ===== MODULE CONFIG =====
 module.exports.config = {
   name: "baby",
-  version: "4.0.0",
+  version: "3.0.0",
   hasPermssion: 0,
   credits: "Jihad",
-  description: "Chonchol Smart Romantic AI",
+  description: "Smart Romantic AI (Short Reply + VIP Tag)",
   commandCategory: "AI",
   usages: "[text]",
   cooldowns: 3,
 };
 
+// ===== HANDLE EVENT =====
 module.exports.handleEvent = async function ({ api, event }) {
   const { body, senderID, threadID, messageID } = event;
   if (!body) return;
@@ -20,29 +22,16 @@ module.exports.handleEvent = async function ({ api, event }) {
   const msg = body.toLowerCase();
   let reply = "";
 
-  // ===== CUSTOM SMART SHORT REPLIES =====
-
+  // ===== CUSTOM SHORT REPLIES =====
   if (msg.includes("কেমন আছো")) {
-    reply = "আলহামদুলিল্লাহ দারুণ আছি 😌 তুমি কেমন আছো বলো দেখি?";
-  }
-
-  else if (msg.includes("কি করছো")) {
-    reply = "তোমার কথাই ভাবছিলাম 😏 তুমি কি করছো?";
+    reply = "আলহামদুলিল্লাহ ভালো, আপনি কেমন আছেন?";
   }
 
   else if (msg.includes("আমি তোমারে ভালবাসি") || msg.includes("আমি তোমাকে ভালোবাসি")) {
-    reply = "আমি তো অনেক আগেই তোমার হয়ে গেছি 💖";
+    reply = "আমিও তোমারে ভীষণ ভালোবাসি ❤️";
   }
 
-  else if (msg.includes("মিস করি")) {
-    reply = "এত মিস করো নাকি? তাহলে সামনে এসে বসো 😌";
-  }
-
-  else if (msg.includes("রাগ করছো")) {
-    reply = "তোমার উপর রাগ টেকে নাকি? একটু অভিমান হতে পারে 😏";
-  }
-
-  // ===== DEFAULT SMART AI REPLY =====
+  // ===== DEFAULT AI REPLY =====
   else {
     try {
       const res = await axios.get(`https://api.simsimi.vn/v2/simtalk`, {
@@ -52,16 +41,13 @@ module.exports.handleEvent = async function ({ api, event }) {
         }
       });
 
-      reply = res.data.message || "তোমার কথা একটু রহস্যময় লাগছে 😌";
+      reply = res.data.message || "কি বলবো বুঝতে পারছি না 🙂";
     } catch (err) {
-      reply = "এই মুহূর্তে একটু ব্যস্ত আছি, পরে কথা বলি 😅";
+      reply = "এই মুহূর্তে কথা বলতে পারছি না 😅";
     }
   }
 
-  // ===== MAKE REPLY SHORT (MAX 2 LINES FEEL) =====
-  reply = reply.split(".")[0]; // remove long sentences
-
-  // ===== VIP TAG =====
+  // ===== VIP TAG ADD =====
   if (senderID === VIP_UID) {
     reply = "⏤͟͟͞͞𝗗𝗲𝘃𝗲𝗹𝗼𝗽𝗲𝗿  ꥟ " + reply;
   }
@@ -69,6 +55,7 @@ module.exports.handleEvent = async function ({ api, event }) {
   return api.sendMessage(reply, threadID, messageID);
 };
 
+// ===== COMMAND RUN =====
 module.exports.run = async function ({ api, event }) {
-  return api.sendMessage("আমি তো স্মার্ট বেবি 😌 ডাকলেই হাজির 💖", event.threadID, event.messageID);
+  return api.sendMessage("আমি সবসময় তোমার সাথে আছি জান 😘", event.threadID, event.messageID);
 };
