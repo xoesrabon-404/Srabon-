@@ -1,20 +1,20 @@
+require("dotenv").config();
 const axios = require("axios");
 
 const VIP_UID = "100086331559699";
+const API_KEY = process.env.GROQ_API_KEY;
 
-// ===== MODULE CONFIG =====
 module.exports.config = {
   name: "baby",
-  version: "3.0.0",
+  version: "5.0.0",
   hasPermssion: 0,
   credits: "Jihad",
-  description: "Smart Romantic AI (Short Reply + VIP Tag)",
+  description: "Chonchol Smart Romantic AI (Groq Powered)",
   commandCategory: "AI",
   usages: "[text]",
   cooldowns: 3,
 };
 
-// ===== HANDLE EVENT =====
 module.exports.handleEvent = async function ({ api, event }) {
   const { body, senderID, threadID, messageID } = event;
   if (!body) return;
@@ -22,32 +22,67 @@ module.exports.handleEvent = async function ({ api, event }) {
   const msg = body.toLowerCase();
   let reply = "";
 
-  // ===== CUSTOM SHORT REPLIES =====
+  // ===== SMART SHORT CUSTOM REPLIES =====
+
   if (msg.includes("কেমন আছো")) {
-    reply = "আলহামদুলিল্লাহ ভালো, আপনি কেমন আছেন?";
+    reply = "আলহামদুলিল্লাহ ভালো আছি 😌 তুমি না থাকলে একটু ফাঁকা লাগে কিন্তু";
   }
 
-  else if (msg.includes("আমি তোমারে ভালবাসি") || msg.includes("আমি তোমাকে ভালোবাসি")) {
-    reply = "আমিও তোমারে ভীষণ ভালোবাসি ❤️";
+  else if (msg.includes("কি করছো")) {
+    reply = "তোমার কথাই ভাবছিলাম 😏 এখন তুমি বলো কি করছো";
   }
 
-  // ===== DEFAULT AI REPLY =====
+  else if (msg.includes("আমি তোমাকে ভালোবাসি") || msg.includes("আমি তোমারে ভালবাসি")) {
+    reply = "আমি তো অনেক আগেই তোমার হয়ে গেছি 💖";
+  }
+
+  else if (msg.includes("মিস করি")) {
+    reply = "এত মিস করলে সামনে এসে বসো না 😌";
+  }
+
+  else if (msg.includes("রাগ করছো")) {
+    reply = "তোমার উপর রাগ টেকে নাকি 😏 একটু অভিমান থাকতে পারে";
+  }
+
+  // ===== DEFAULT GROQ AI REPLY =====
   else {
     try {
-      const res = await axios.get(`https://api.simsimi.vn/v2/simtalk`, {
-        params: {
-          text: body,
-          lc: "bn"
+      const res = await axios.post(
+        "https://api.groq.com/openai/v1/chat/completions",
+        {
+          model: "llama3-70b-8192",
+          messages: [
+            {
+              role: "system",
+              content: "তুমি চঞ্চল, বুদ্ধিমান, স্মার্ট এবং একটু রোমান্টিক বাংলা AI। উত্তর ছোট, আকর্ষণীয় এবং দুষ্টু-মিষ্টি হবে।"
+            },
+            {
+              role: "user",
+              content: body
+            }
+          ],
+          temperature: 0.9,
+          max_tokens: 150
+        },
+        {
+          headers: {
+            "Authorization": `Bearer ${API_KEY}`,
+            "Content-Type": "application/json"
+          }
         }
-      });
+      );
 
-      reply = res.data.message || "কি বলবো বুঝতে পারছি না 🙂";
+      reply = res.data.choices[0].message.content || "তোমার কথা একটু রহস্যময় লাগছে 😌";
     } catch (err) {
-      reply = "এই মুহূর্তে কথা বলতে পারছি না 😅";
+      reply = "এই মুহূর্তে একটু ব্যস্ত আছি 😅 পরে আবার ডাকো";
     }
   }
 
-  // ===== VIP TAG ADD =====
+  // ===== SHORT STYLE (no full stop end) =====
+  reply = reply.split("\n")[0];
+  reply = reply.replace(/\.$/, "");
+
+  // ===== VIP TAG =====
   if (senderID === VIP_UID) {
     reply = "⏤͟͟͞͞𝗗𝗲𝘃𝗲𝗹𝗼𝗽𝗲𝗿  ꥟ " + reply;
   }
@@ -55,7 +90,6 @@ module.exports.handleEvent = async function ({ api, event }) {
   return api.sendMessage(reply, threadID, messageID);
 };
 
-// ===== COMMAND RUN =====
 module.exports.run = async function ({ api, event }) {
-  return api.sendMessage("আমি সবসময় তোমার সাথে আছি জান 😘", event.threadID, event.messageID);
+  return api.sendMessage("আমি তো স্মার্ট বেবি 😌 ডাকলেই হাজির 💖", event.threadID, event.messageID);
 };
