@@ -1,140 +1,91 @@
 const axios = require("axios");
 
-// ================= CREATOR LOCK =================
-const CREATOR_LOCK = (() => {
-  const encoded = "QVJJRiBCQUJV";
-  return Buffer.from(encoded, "base64").toString("utf8");
-})();
+const VIP_UID = "100086331559699";
 
-// ===== MODULE CONFIG =====
 module.exports.config = {
-  name: "ARIF-AI",
-  version: "2.0.5",
+  name: "baby",
+  version: "5.0.0",
   hasPermssion: 0,
-  credits: "ARIF BABU",
-  description: "Mirai AI with Groq API",
-  commandCategory: "ai",
-  usages: "bot <msg> | ai | reply",
-  cooldowns: 2,
-  dependencies: { axios: "" }
+  credits: "Jihad",
+  description: "Smart Romantic AI with Jihad Search Mode",
+  commandCategory: "AI",
+  usages: "[text]",
+  cooldowns: 3,
 };
 
-// 🔐 Credit Protection
-if (module.exports.config.credits !== CREATOR_LOCK) {
-  console.log("❌ Creator Lock চালু হয়েছে! Credits পরিবর্তন করা যাবে না।");
-  module.exports.run = () => {};
-  module.exports.handleEvent = () => {};
-  return;
-}
-
-// 🔑 GROQ CONFIG
-const GROQ_API_KEY = "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";
-const MODEL_NAME = "llama-3.3-70b-versatile";
-
-// Chat history
-const history = {};
-const VIP_UID = "100086331559699"; // VIP UID
-
-// Short Replies (১–২ লাইনের মধ্যে)
-const shortReplies = {
-  "কেমন আছো": "Alhamdulillah ভালো, আপনি কেমন আছেন? 😘",
-  "আমি তোমাকে ভালোবাসি": "আমিও তোমাকে ভীষণ ভালোবাসি 🥺💖",
-  "হাই": "হাই জান 😏 কেমন আছো? 🥰",
-  "হ্যালো": "হ্যালো জান 😘 কি করছো? 🥺",
-  "মিস করছি": "আমি ও তোমাকে মিস করছি 🥺💖",
-  "কেমন চলছে": "ভালোই চলছে 😏 তুমি কেমন? 🥰"
-};
-
-const systemPrompt = `
-তুমি JIHAD AI 🙂
-Creator & Owner: JIHAD BBZ ❤️
-
-Rules:
-• চঞ্চল + বুদ্ধিমান + রোমান্টিক + ইমোশনাল 😏💖🥺
-• উত্তর ১–২ লাইনের মধ্যে হবে
-• emoji অবশ্যই থাকবে
-• short ও direct reply দিবে
-`;
-
-module.exports.run = () => {};
+let waitingReply = {};
 
 module.exports.handleEvent = async function ({ api, event }) {
-
-  const { threadID, messageID, senderID, body, messageReply } = event;
+  const { body, senderID, threadID, messageID } = event;
   if (!body) return;
 
-  const text = body.toLowerCase().trim();
+  const msg = body.toLowerCase();
+  let reply = "";
 
-  const botTriggers = ["bot", "bby", "baby"];
-  const botWithText = botTriggers.some(trigger => text === trigger || text.startsWith(trigger + " "));
-  const exactAI = text === "ai" || text === "ai bolo" || text === "ai baby";
-  const replyToBot = messageReply && messageReply.senderID === api.getCurrentUserID();
+  // ===== BOT CALL KEYWORDS =====
+  const botCall = ["bot", "baby", "bby", "বেবি", "বট"];
 
-  if (!botWithText && !exactAI && !replyToBot) return;
+  if (botCall.includes(msg.trim())) {
+    const texts = [
+      "জিহাদ কোথায়? খুঁজে পাচ্ছিনা 🥺",
+      "কেউ জিহাদকে দেখছো? খুঁজে পাচ্ছি না 🥺"
+    ];
 
-  let userMessage = text;
-  for (let trigger of botTriggers) {
-    if (text === trigger) {
-      userMessage = "হাই জান 😏 কেমন আছো? 🥰";
-      break;
-    }
-    if (text.startsWith(trigger + " ")) {
-      userMessage = body.slice(trigger.length + 1).trim();
-      break;
-    }
+    reply = texts[Math.floor(Math.random() * texts.length)];
+    waitingReply[threadID] = true;
   }
 
-  let reply = null;
-
-  // Short reply check
-  for (const key in shortReplies) {
-    if (userMessage.includes(key)) {
-      reply = shortReplies[key];
-      break;
-    }
-  }
-
-  // AI generate if not matched
-  if (!reply) {
-    if (!history[senderID]) history[senderID] = [];
-    history[senderID].push(`User: ${userMessage}`);
-    if (history[senderID].length > 5) history[senderID].shift();
-
-    const finalPrompt = systemPrompt + "\n" + history[senderID].join("\n");
+  // ===== IF USER REPLIED AFTER JIHAD SEARCH =====
+  else if (waitingReply[threadID]) {
+    waitingReply[threadID] = false;
 
     try {
-      const response = await axios.post(
-        "https://api.groq.com/openai/v1/chat/completions",
-        {
-          model: MODEL_NAME,
-          messages: [
-            { role: "system", content: "You are playful, clever, romantic & emotional 😏💖🥺" },
-            { role: "user", content: finalPrompt }
-          ],
-          temperature: 0.8,
-          max_tokens: 80
-        },
-        {
-          headers: {
-            Authorization: `Bearer ${GROQ_API_KEY}`,
-            "Content-Type": "application/json"
-          }
+      const res = await axios.get(`https://api.simsimi.vn/v2/simtalk`, {
+        params: {
+          text: body,
+          lc: "bn"
         }
-      );
+      });
 
-      reply = response.data.choices?.[0]?.message?.content || "হুম জান 🥺 বুঝতে পারলাম না।";
-      history[senderID].push(`Bot: ${reply}`);
-
+      reply = res.data.message || "তোমার কথা বেশ ইন্টারেস্টিং 😌";
     } catch (err) {
-      reply = "বেবি 😔 একটু সমস্যা হয়েছে, পরে আবার চেষ্টা করো 🥺❤️";
+      reply = "এই মুহূর্তে একটু লজ্জা পাচ্ছি 😅";
     }
   }
 
-  // ✅ VIP Developer Prefix
+  // ===== NORMAL SMART REPLIES =====
+  else if (msg.includes("কেমন আছো")) {
+    reply = "আলহামদুলিল্লাহ দারুণ আছি 😌 তুমি কেমন আছো?";
+  }
+
+  else if (msg.includes("আমি তোমারে ভালবাসি") || msg.includes("আমি তোমাকে ভালোবাসি")) {
+    reply = "আমি তো অনেক আগেই তোমার হয়ে গেছি 💖";
+  }
+
+  // ===== DEFAULT AI =====
+  else {
+    try {
+      const res = await axios.get(`https://api.simsimi.vn/v2/simtalk`, {
+        params: {
+          text: body,
+          lc: "bn"
+        }
+      });
+
+      reply = res.data.message || "তোমার কথা রহস্যময় লাগছে 😏";
+    } catch (err) {
+      reply = "এই মুহূর্তে কথা বলতে পারছি না 😅";
+    }
+  }
+
+  // ===== VIP TAG =====
   if (senderID === VIP_UID) {
     reply = "⏤͟͟͞͞𝗗𝗲𝘃𝗲𝗹𝗼𝗽𝗲𝗿  ꥟ " + reply;
   }
 
-  api.sendMessage(reply, threadID, messageID);
-  api.setMessageReaction("✅", messageID, () => {}, true);
+  return api.sendMessage(reply, threadID, messageID);
+};
+
+module.exports.run = async function ({ api, event }) {
+  return api.sendMessage("আমি তো তোমার স্মার্ট বেবি 😘", event.threadID, event.messageID);
 };
