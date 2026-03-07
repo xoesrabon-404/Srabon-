@@ -1,7 +1,7 @@
 const axios = require("axios");
 
-const VIP_UID = "100086331559699";
-const API_KEY = "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";
+const VIP_UID = "100086599998655"; // জিহাদের UID
+const API_KEY = "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";
 
 module.exports.config = {
   name: "baby",
@@ -25,29 +25,17 @@ module.exports.handleEvent = async function ({ api, event }) {
 
   if (msg.includes("কেমন আছো")) {
     reply = "আমি ভালো আছি 😌 কিন্তু তুমি কথা না বললে দিনটা ফাঁকা লাগে";
-  }
-
-  else if (msg.includes("কি করছো")) {
+  } else if (msg.includes("কি করছো")) {
     reply = "তোমার মেসেজের অপেক্ষা করছিলাম 😏 এখন বলো কি করছো";
-  }
-
-  else if (msg.includes("আমি তোমাকে ভালোবাসি") || msg.includes("আমি তোমারে ভালবাসি")) {
+  } else if (msg.includes("আমি তোমাকে ভালোবাসি") || msg.includes("আমি তোমারে ভালবাসি")) {
     reply = "এভাবে বললে কিন্তু আমি লজ্জা পেয়ে যাই 💖";
-  }
-
-  else if (msg.includes("মিস করি")) {
+  } else if (msg.includes("মিস করি")) {
     reply = "তাহলে সামনে এসে বসো না 😌 এত দূর থেকে মিস করলে হবে?";
-  }
-
-  else if (msg.includes("রাগ করছো")) {
+  } else if (msg.includes("রাগ করছো")) {
     reply = "তোমার উপর রাগ করতে গেলেও মন নরম হয়ে যায় 😏";
-  }
-
-  else if (msg.includes("ঘুমাবো")) {
+  } else if (msg.includes("ঘুমাবো")) {
     reply = "ঠিক আছে 😌 কিন্তু স্বপ্নে আমাকে ভুলে যেও না";
-  }
-
-  else if (msg.includes("খাইছো")) {
+  } else if (msg.includes("খাইছো")) {
     reply = "এখনো না 😅 তুমি খাইছো নাকি?";
   }
 
@@ -55,7 +43,6 @@ module.exports.handleEvent = async function ({ api, event }) {
 
   else {
     try {
-
       const res = await axios.post(
         "https://api.groq.com/openai/v1/chat/completions",
         {
@@ -104,7 +91,6 @@ module.exports.handleEvent = async function ({ api, event }) {
 };
 
 module.exports.run = async function ({ api, event }) {
-
   return api.sendMessage(
     "আমি তোমার স্মার্ট baby AI 😌 ডাকলেই হাজির 💖",
     event.threadID,
