@@ -6,14 +6,14 @@ const API_KEY = "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";
 // ===== MOOD STATE =====
 let moods = {
 fun: false,
-flirt: false,
+flirt: true,
 smart: true,
 sad: false
 };
 
 module.exports.config = {
 name: "baby",
-version: "8.0.0",
+version: "8.1.0",
 hasPermssion: 0,
 credits: "Jihad",
 description: "Smart Romantic AI with Mood System",
@@ -72,32 +72,19 @@ moods.sad = false;
 reply = "🙂 Sad mood disabled";
 }
 
-// ===== BOT CALL =====
-
-else if (
-msg.includes("baby") ||
-msg.includes("bby") ||
-msg.includes("bot") ||
-msg.includes("বেবি") ||
-msg.includes("বট")
-) {
-reply = "জিহাদ কোথায়? 🥺 খুঁজে পাচ্ছি না";
-}
-
 // ===== AI REPLY =====
-
 else {
 
-let systemPrompt = "তুমি একটি স্মার্ট এবং মিষ্টি বাংলা AI";
+let systemPrompt = "তুমি একটি স্মার্ট, কিউট এবং একটু রোমান্টিক বাংলা AI। ছোট কিন্তু আকর্ষণীয় উত্তর দাও।";
 
 // ===== MOOD LOGIC =====
 
 if (moods.fun) {
-systemPrompt = "তুমি মজার, হাস্যরসাত্মক এবং ফানি বাংলা AI";
+systemPrompt = "তুমি খুব ফানি, মজার এবং হাস্যরসাত্মক বাংলা AI";
 }
 
 if (moods.flirt) {
-systemPrompt = "তুমি রোমান্টিক, ফ্লার্টি এবং কিউট বাংলা AI";
+systemPrompt = "তুমি খুব রোমান্টিক, ফ্লার্টি এবং কিউট বাংলা AI";
 }
 
 if (moods.smart) {
