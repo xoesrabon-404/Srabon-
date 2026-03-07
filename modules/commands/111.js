@@ -3,111 +3,167 @@ const axios = require("axios");
 const VIP_UID = "100086331559699";
 const API_KEY = "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";
 
+// ===== MOOD STATE =====
+let moods = {
+fun: false,
+flirt: false,
+smart: true,
+sad: false
+};
+
 module.exports.config = {
-  name: "baby",
-  version: "6.0.0",
-  hasPermssion: 0,
-  credits: "Jihad",
-  description: "Ultra Smart Romantic AI",
-  commandCategory: "AI",
-  usages: "[text]",
-  cooldowns: 3,
+name: "baby",
+version: "8.0.0",
+hasPermssion: 0,
+credits: "Jihad",
+description: "Smart Romantic AI with Mood System",
+commandCategory: "AI",
+usages: "[text]",
+cooldowns: 2
 };
 
 module.exports.handleEvent = async function ({ api, event }) {
-  const { body, senderID, threadID, messageID } = event;
-  if (!body) return;
 
-  const msg = body.toLowerCase();
-  let reply = "";
+const { body, senderID, threadID, messageID } = event;
+if (!body) return;
 
-  // ===== SMART CUTE REPLIES =====
+const msg = body.toLowerCase();
+let reply = "";
 
-  if (msg.includes("কেমন আছো")) {
-    reply = "আমি ভালো আছি 😌 কিন্তু তুমি কথা না বললে দিনটা ফাঁকা লাগে";
-  }
+// ===== MOOD COMMANDS =====
 
-  else if (msg.includes("কি করছো")) {
-    reply = "তোমার মেসেজের অপেক্ষা করছিলাম 😏 এখন বলো কি করছো";
-  }
+if (msg === "fun on") {
+moods.fun = true;
+reply = "😆 Fun mood activated";
+}
 
-  else if (msg.includes("আমি তোমাকে ভালোবাসি") || msg.includes("আমি তোমারে ভালবাসি")) {
-    reply = "এভাবে বললে কিন্তু আমি লজ্জা পেয়ে যাই 💖";
-  }
+else if (msg === "fun off") {
+moods.fun = false;
+reply = "🙂 Fun mood disabled";
+}
 
-  else if (msg.includes("মিস করি")) {
-    reply = "তাহলে সামনে এসে বসো না 😌 এত দূর থেকে মিস করলে হবে?";
-  }
+else if (msg === "flirt on") {
+moods.flirt = true;
+reply = "😏 Flirt mood activated";
+}
 
-  else if (msg.includes("রাগ করছো")) {
-    reply = "তোমার উপর রাগ করতে গেলেও মন নরম হয়ে যায় 😏";
-  }
+else if (msg === "flirt off") {
+moods.flirt = false;
+reply = "🙂 Flirt mood disabled";
+}
 
-  else if (msg.includes("ঘুমাবো")) {
-    reply = "ঠিক আছে 😌 কিন্তু স্বপ্নে আমাকে ভুলে যেও না";
-  }
+else if (msg === "smart on") {
+moods.smart = true;
+reply = "🧠 Smart mood activated";
+}
 
-  else if (msg.includes("খাইছো")) {
-    reply = "এখনো না 😅 তুমি খাইছো নাকি?";
-  }
+else if (msg === "smart off") {
+moods.smart = false;
+reply = "🙂 Smart mood disabled";
+}
 
-  // ===== AI REPLY =====
+else if (msg === "sad on") {
+moods.sad = true;
+reply = "😔 Sad mood activated";
+}
 
-  else {
-    try {
+else if (msg === "sad off") {
+moods.sad = false;
+reply = "🙂 Sad mood disabled";
+}
 
-      const res = await axios.post(
-        "https://api.groq.com/openai/v1/chat/completions",
-        {
-          model: "llama3-70b-8192",
-          messages: [
-            {
-              role: "system",
-              content:
-                "তুমি খুব স্মার্ট, বুদ্ধিমান, মিষ্টি এবং একটু রোমান্টিক বাংলা AI। তুমি ছোট, সুন্দর, মজার এবং আকর্ষণীয় উত্তর দাও।"
-            },
-            {
-              role: "user",
-              content: body
-            }
-          ],
-          temperature: 0.95,
-          max_tokens: 200
-        },
-        {
-          headers: {
-            Authorization: `Bearer ${API_KEY}`,
-            "Content-Type": "application/json"
-          }
-        }
-      );
+// ===== BOT CALL =====
 
-      reply = res.data.choices[0].message.content;
+else if (
+msg.includes("baby") ||
+msg.includes("bby") ||
+msg.includes("bot") ||
+msg.includes("বেবি") ||
+msg.includes("বট")
+) {
+reply = "জিহাদ কোথায়? 🥺 খুঁজে পাচ্ছি না";
+}
 
-    } catch (err) {
-      reply = "এই মুহূর্তে একটু ব্যস্ত আছি 😅 পরে আবার কথা বলি";
-    }
-  }
+// ===== AI REPLY =====
 
-  // ===== SHORT STYLE =====
+else {
 
-  reply = reply.split("\n")[0];
-  reply = reply.replace(/\.$/, "");
+let systemPrompt = "তুমি একটি স্মার্ট এবং মিষ্টি বাংলা AI";
 
-  // ===== VIP TAG =====
+// ===== MOOD LOGIC =====
 
-  if (senderID === VIP_UID) {
-    reply = "⏤͟͟͞͞𝗗𝗲𝘃𝗲𝗹𝗼𝗽𝗲𝗿 ꥟ " + reply;
-  }
+if (moods.fun) {
+systemPrompt = "তুমি মজার, হাস্যরসাত্মক এবং ফানি বাংলা AI";
+}
 
-  return api.sendMessage(reply, threadID, messageID);
+if (moods.flirt) {
+systemPrompt = "তুমি রোমান্টিক, ফ্লার্টি এবং কিউট বাংলা AI";
+}
+
+if (moods.smart) {
+systemPrompt = "তুমি খুব বুদ্ধিমান, স্মার্ট এবং আকর্ষণীয়ভাবে কথা বলা বাংলা AI";
+}
+
+if (moods.sad) {
+systemPrompt = "তুমি একটু দুঃখী কিন্তু মিষ্টি বাংলা AI";
+}
+
+try {
+
+const res = await axios.post(
+"https://api.groq.com/openai/v1/chat/completions",
+{
+model: "llama3-70b-8192",
+messages: [
+{
+role: "system",
+content: systemPrompt
+},
+{
+role: "user",
+content: body
+}
+],
+temperature: 0.9,
+max_tokens: 200
+},
+{
+headers: {
+Authorization: `Bearer ${API_KEY}`,
+"Content-Type": "application/json"
+}
+}
+);
+
+reply = res.data.choices[0].message.content;
+
+} catch (err) {
+reply = "এই মুহূর্তে একটু ব্যস্ত আছি 😅";
+}
+
+}
+
+// ===== SHORT STYLE =====
+
+reply = reply.split("\n")[0];
+reply = reply.replace(/\.$/, "");
+
+// ===== VIP TAG =====
+
+if (senderID === VIP_UID) {
+reply = "⏤͟͟͞͞𝗗𝗲𝘃𝗲𝗹𝗼𝗽𝗲𝗿 ꥟ " + reply;
+}
+
+return api.sendMessage(reply, threadID, messageID);
+
 };
 
 module.exports.run = async function ({ api, event }) {
 
-  return api.sendMessage(
-    "আমি তোমার স্মার্ট baby AI 😌 ডাকলেই হাজির 💖",
-    event.threadID,
-    event.messageID
-  );
+return api.sendMessage(
+"আমি তোমার Smart Baby AI 😌",
+event.threadID,
+event.messageID
+);
+
 };
