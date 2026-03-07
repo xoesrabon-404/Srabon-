@@ -5,10 +5,10 @@ const API_KEY = "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";
 
 module.exports.config = {
   name: "baby",
-  version: "6.1.0",
+  version: "6.0.0",
   hasPermssion: 0,
   credits: "Jihad",
-  description: "Ultra Smart Flirty Romantic AI",
+  description: "Ultra Smart Romantic AI",
   commandCategory: "AI",
   usages: "[text]",
   cooldowns: 3,
@@ -21,32 +21,41 @@ module.exports.handleEvent = async function ({ api, event }) {
   const msg = body.toLowerCase();
   let reply = "";
 
-  // ===== SMART + FLIRTY REPLIES =====
+  // ===== SMART CUTE REPLIES =====
+
   if (msg.includes("কেমন আছো")) {
-    reply = "আমি তো ভালো 😏 কিন্তু তুমি না থাকলে দিনটা ফাঁকা লাগে, তোমার মিষ্টি মেসেজের অপেক্ষায় আছি 💖";
+    reply = "আমি ভালো আছি 😌 কিন্তু তুমি কথা না বললে দিনটা ফাঁকা লাগে";
   }
+
   else if (msg.includes("কি করছো")) {
-    reply = "তোমার মেসেজের অপেক্ষায় 😌 বলো না, কি করছো এতক্ষণ?";
+    reply = "তোমার মেসেজের অপেক্ষা করছিলাম 😏 এখন বলো কি করছো";
   }
+
   else if (msg.includes("আমি তোমাকে ভালোবাসি") || msg.includes("আমি তোমারে ভালবাসি")) {
-    reply = "ওই! এভাবে বললে আমার মনে ঝড় ওঠে 💘 তুমি কি জানো?";
+    reply = "এভাবে বললে কিন্তু আমি লজ্জা পেয়ে যাই 💖";
   }
+
   else if (msg.includes("মিস করি")) {
-    reply = "মিস করছো? 😏 তাহলে কাছাকাছি আসো, আমি হাত বাড়াচ্ছি তোমার জন্য 💖";
+    reply = "তাহলে সামনে এসে বসো না 😌 এত দূর থেকে মিস করলে হবে?";
   }
+
   else if (msg.includes("রাগ করছো")) {
-    reply = "তোমার উপর রাগ করা খুব কঠিন 😌 আসলে আমি সবসময় মিষ্টি হয়ে যাই তোমার জন্য 😘";
+    reply = "তোমার উপর রাগ করতে গেলেও মন নরম হয়ে যায় 😏";
   }
+
   else if (msg.includes("ঘুমাবো")) {
-    reply = "ঠিক আছে 😴 স্বপ্নে আমাকে খুঁজে পাবে নিশ্চয়ই, আমি সেখানে তোমার জন্য অপেক্ষা করছি 💖";
+    reply = "ঠিক আছে 😌 কিন্তু স্বপ্নে আমাকে ভুলে যেও না";
   }
+
   else if (msg.includes("খাইছো")) {
-    reply = "না এখনো 😅 তুমি কি খেয়েছো? তোমার মিষ্টি গল্প শুনতে চাই ❤️";
+    reply = "এখনো না 😅 তুমি খাইছো নাকি?";
   }
 
   // ===== AI REPLY =====
+
   else {
     try {
+
       const res = await axios.post(
         "https://api.groq.com/openai/v1/chat/completions",
         {
@@ -55,14 +64,14 @@ module.exports.handleEvent = async function ({ api, event }) {
             {
               role: "system",
               content:
-                "তুমি খুব স্মার্ট, মিষ্টি, আকর্ষণীয়, ফ্লার্টিং এবং রোমান্টিক বাংলা AI। ছোট কিন্তু চমকপ্রদ, আকর্ষণীয় উত্তর দাও, যেন পড়লে মনের মধ্যে হাসি এবং ভালো লাগা আসে"
+                "তুমি খুব স্মার্ট, বুদ্ধিমান, মিষ্টি এবং একটু রোমান্টিক বাংলা AI। তুমি ছোট, সুন্দর, মজার এবং আকর্ষণীয় উত্তর দাও"
             },
             {
               role: "user",
               content: body
             }
           ],
-          temperature: 1.0,
+          temperature: 0.95,
           max_tokens: 200
         },
         {
@@ -74,16 +83,19 @@ module.exports.handleEvent = async function ({ api, event }) {
       );
 
       reply = res.data.choices[0].message.content;
+
     } catch (err) {
-      reply = "এই মুহূর্তে একটু ব্যস্ত 😅 পরে আবার মিষ্টি কথা বলি ❤️";
+      reply = "এই মুহূর্তে একটু ব্যস্ত আছি 😅 পরে আবার কথা বলি";
     }
   }
 
   // ===== SHORT STYLE =====
+
   reply = reply.split("\n")[0];
   reply = reply.replace(/\.$/, "");
 
   // ===== VIP TAG =====
+
   if (senderID === VIP_UID) {
     reply = "⏤͟͟͞͞𝗗𝗲𝘃𝗲𝗹𝗼𝗽𝗲𝗿 ꥟ " + reply;
   }
@@ -92,8 +104,9 @@ module.exports.handleEvent = async function ({ api, event }) {
 };
 
 module.exports.run = async function ({ api, event }) {
+
   return api.sendMessage(
-    "আমি তোমার স্মার্ট ও ফ্লার্টি baby AI 😌 ডাকলেই হাজির 💖",
+    "আমি তোমার স্মার্ট baby AI 😌 ডাকলেই হাজির 💖",
     event.threadID,
     event.messageID
   );
