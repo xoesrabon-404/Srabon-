@@ -1,156 +1,152 @@
 const axios = require("axios");
 
 const VIP_UID = "100086331559699";
-const API_KEY = "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";
+const API_KEY = "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";
 
-// ===== MOOD STATE =====
-let moods = {
-fun: false,
-flirt: true,
-smart: true,
-sad: false
+// ===== MOOD SYSTEM =====
+let mood = {
+  fun: false,
+  flirt: false,
+  smart: true,
+  sad: false
 };
 
 module.exports.config = {
-name: "baby",
-version: "8.1.0",
-hasPermssion: 0,
-credits: "Jihad",
-description: "Smart Romantic AI with Mood System",
-commandCategory: "AI",
-usages: "[text]",
-cooldowns: 2
+  name: "baby",
+  version: "7.0.0",
+  hasPermssion: 0,
+  credits: "Jihad",
+  description: "Ultra Smart Romantic AI",
+  commandCategory: "AI",
+  usages: "[text]",
+  cooldowns: 3,
 };
 
 module.exports.handleEvent = async function ({ api, event }) {
 
-const { body, senderID, threadID, messageID } = event;
-if (!body) return;
+  const { body, senderID, threadID, messageID } = event;
+  if (!body) return;
 
-const msg = body.toLowerCase();
-let reply = "";
+  const msg = body.toLowerCase();
 
-// ===== MOOD COMMANDS =====
+  // ===== MOOD COMMANDS =====
 
-if (msg === "fun on") {
-moods.fun = true;
-reply = "😆 Fun mood activated";
-}
+  if (msg === "bot fun mood on") {
+    mood.fun = true;
+    return api.sendMessage("😜 Fun mood চালু হয়েছে", threadID, messageID);
+  }
 
-else if (msg === "fun off") {
-moods.fun = false;
-reply = "🙂 Fun mood disabled";
-}
+  if (msg === "bot fun mood off") {
+    mood.fun = false;
+    return api.sendMessage("🙂 Fun mood বন্ধ হয়েছে", threadID, messageID);
+  }
 
-else if (msg === "flirt on") {
-moods.flirt = true;
-reply = "😏 Flirt mood activated";
-}
+  if (msg === "bot flirt mood on") {
+    mood.flirt = true;
+    return api.sendMessage("😏 Flirt mood চালু হয়েছে", threadID, messageID);
+  }
 
-else if (msg === "flirt off") {
-moods.flirt = false;
-reply = "🙂 Flirt mood disabled";
-}
+  if (msg === "bot flirt mood off") {
+    mood.flirt = false;
+    return api.sendMessage("🙂 Flirt mood বন্ধ হয়েছে", threadID, messageID);
+  }
 
-else if (msg === "smart on") {
-moods.smart = true;
-reply = "🧠 Smart mood activated";
-}
+  if (msg === "bot smart mood on") {
+    mood.smart = true;
+    return api.sendMessage("🧠 Smart mood চালু হয়েছে", threadID, messageID);
+  }
 
-else if (msg === "smart off") {
-moods.smart = false;
-reply = "🙂 Smart mood disabled";
-}
+  if (msg === "bot smart mood off") {
+    mood.smart = false;
+    return api.sendMessage("🙂 Smart mood বন্ধ হয়েছে", threadID, messageID);
+  }
 
-else if (msg === "sad on") {
-moods.sad = true;
-reply = "😔 Sad mood activated";
-}
+  if (msg === "bot sad mood on") {
+    mood.sad = true;
+    return api.sendMessage("😔 Sad mood চালু হয়েছে", threadID, messageID);
+  }
 
-else if (msg === "sad off") {
-moods.sad = false;
-reply = "🙂 Sad mood disabled";
-}
+  if (msg === "bot sad mood off") {
+    mood.sad = false;
+    return api.sendMessage("🙂 Sad mood বন্ধ হয়েছে", threadID, messageID);
+  }
 
-// ===== AI REPLY =====
-else {
+  // ===== AI STYLE SELECT =====
 
-let systemPrompt = "তুমি একটি স্মার্ট, কিউট এবং একটু রোমান্টিক বাংলা AI। ছোট কিন্তু আকর্ষণীয় উত্তর দাও।";
+  let style = "তুমি খুব স্মার্ট এবং একটু রোমান্টিক বাংলা AI। সংক্ষিপ্ত, সুন্দর ও আকর্ষণীয় উত্তর দাও।";
 
-// ===== MOOD LOGIC =====
+  if (mood.fun) {
+    style = "তুমি খুব মজার, ফানি এবং দুষ্টু বাংলা AI। হাস্যকর ও মজার উত্তর দাও।";
+  }
 
-if (moods.fun) {
-systemPrompt = "তুমি খুব ফানি, মজার এবং হাস্যরসাত্মক বাংলা AI";
-}
+  if (mood.flirt) {
+    style = "তুমি খুব রোমান্টিক এবং ফ্লার্টি বাংলা AI। মিষ্টি ও আকর্ষণীয়ভাবে কথা বলো।";
+  }
 
-if (moods.flirt) {
-systemPrompt = "তুমি খুব রোমান্টিক, ফ্লার্টি এবং কিউট বাংলা AI";
-}
+  if (mood.sad) {
+    style = "তুমি একটু দুঃখী কিন্তু মিষ্টি বাংলা AI। আবেগীভাবে কথা বলো।";
+  }
 
-if (moods.smart) {
-systemPrompt = "তুমি খুব বুদ্ধিমান, স্মার্ট এবং আকর্ষণীয়ভাবে কথা বলা বাংলা AI";
-}
+  if (mood.smart) {
+    style = "তুমি খুব বুদ্ধিমান, চালাক, স্মার্ট এবং একটু রোমান্টিক বাংলা AI। ছোট কিন্তু ইন্টারেস্টিং উত্তর দাও।";
+  }
 
-if (moods.sad) {
-systemPrompt = "তুমি একটু দুঃখী কিন্তু মিষ্টি বাংলা AI";
-}
+  // ===== AI REPLY =====
 
-try {
+  let reply = "";
 
-const res = await axios.post(
-"https://api.groq.com/openai/v1/chat/completions",
-{
-model: "llama3-70b-8192",
-messages: [
-{
-role: "system",
-content: systemPrompt
-},
-{
-role: "user",
-content: body
-}
-],
-temperature: 0.9,
-max_tokens: 200
-},
-{
-headers: {
-Authorization: `Bearer ${API_KEY}`,
-"Content-Type": "application/json"
-}
-}
-);
+  try {
 
-reply = res.data.choices[0].message.content;
+    const res = await axios.post(
+      "https://api.groq.com/openai/v1/chat/completions",
+      {
+        model: "llama3-70b-8192",
+        messages: [
+          {
+            role: "system",
+            content: style
+          },
+          {
+            role: "user",
+            content: body
+          }
+        ],
+        temperature: 0.95,
+        max_tokens: 200
+      },
+      {
+        headers: {
+          Authorization: `Bearer ${API_KEY}`,
+          "Content-Type": "application/json"
+        }
+      }
+    );
 
-} catch (err) {
-reply = "এই মুহূর্তে একটু ব্যস্ত আছি 😅";
-}
+    reply = res.data.choices[0].message.content;
 
-}
+  } catch (err) {
+    reply = "এই মুহূর্তে একটু ব্যস্ত আছি 😅 পরে আবার কথা বলি";
+  }
 
-// ===== SHORT STYLE =====
+  // ===== SHORT STYLE =====
 
-reply = reply.split("\n")[0];
-reply = reply.replace(/\.$/, "");
+  reply = reply.split("\n")[0];
+  reply = reply.replace(/\.$/, "");
 
-// ===== VIP TAG =====
+  // ===== VIP TAG =====
 
-if (senderID === VIP_UID) {
-reply = "⏤͟͟͞͞𝗗𝗲𝘃𝗲𝗹𝗼𝗽𝗲𝗿 ꥟ " + reply;
-}
+  if (senderID === VIP_UID) {
+    reply = "⏤͟͟͞͞𝗗𝗲𝘃𝗲𝗹𝗼𝗽𝗲𝗿 ꥟ " + reply;
+  }
 
-return api.sendMessage(reply, threadID, messageID);
-
+  return api.sendMessage(reply, threadID, messageID);
 };
 
 module.exports.run = async function ({ api, event }) {
 
-return api.sendMessage(
-"আমি তোমার Smart Baby AI 😌",
-event.threadID,
-event.messageID
-);
-
+  return api.sendMessage(
+    "আমি তোমার Ultra Smart baby AI 😌 ডাকলেই হাজির 💖",
+    event.threadID,
+    event.messageID
+  );
 };
