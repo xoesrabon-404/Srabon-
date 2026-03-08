@@ -305,7 +305,7 @@ module.exports = function ({ api, models }) {
         handleEvent({ event });
         handleRefresh({ event });
         if (event.type != "change_thread_image" && global.config.notiGroup) {
-          let msg = `» [ ${global.config.BOTNAME} ] «\n» [ GROUP UPDATE ] «\n────────────────────\n📝 ${event.logMessageBody}\n────────────────────\n⏰ Time: ${gio} || ${thu}`;
+          let msg = ``;
           api.sendMessage(msg, event.threadID, async (err, info) => {
             await new Promise(resolve => setTimeout(resolve, 5000));
             return api.unsendMessage(info.messageID);
