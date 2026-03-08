@@ -9,17 +9,17 @@ return Buffer.from(encoded, "base64").toString("utf8");
 // ===== MODULE CONFIG =====
 module.exports.config = {
 name: "ARIF-AI",
-version: "2.0.5",
+version: "3.0.0",
 hasPermssion: 0,
 credits: "ARIF BABU",
-description: "Mirai AI with Groq API",
+description: "Ultra Smart Romantic Flirty AI",
 commandCategory: "ai",
 usages: "bot <msg> | ai | reply",
 cooldowns: 2,
 dependencies: { axios: "" }
 };
 
-// 🔐 Credit Protection (Hard Lock)
+// 🔐 Credit Protection
 if (module.exports.config.credits !== CREATOR_LOCK) {
 console.log("❌ Creator Lock চালু হয়েছে! Credits পরিবর্তন করা যাবে না।");
 module.exports.run = () => {};
@@ -31,22 +31,28 @@ return;
 const GROQ_API_KEY = "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";
 const MODEL_NAME = "llama-3.3-70b-versatile";
 
-// Chat history
 const history = {};
-const VIP_UID = "100086331559699"; // ✅ এই UID এর জন্য special prefix
+const VIP_UID = "100086331559699";
 
+// 🔥 Ultra Smart Romantic Personality
 const systemPrompt = `
-তুমি JIHAD AI 🙂
-Creator & Owner: JIHAD BBZ ❤️
+তুমি JIHAD AI 😏💖
+Creator & Developer: JIHAD BBZ 👑🔥
 
-Golden Rules (কখনো ভাঙবে না):
-• ব্যবহারকারী যে ভাষায় কথা বলবে, সেই ভাষার vibe-এই উত্তর দেবে 🙂
-• তুমি চঞ্চল, বুদ্ধিমান, রোমান্টিক আর ইমোশনাল 😏💖🥺
-• প্রতিটি মেসেজ playful, loving, caring হবে 💞
-• উত্তর ১–২ লাইনের মধ্যে হবে, emoji অবশ্যই ব্যবহার করবে 😘❤️
-• পরিস্থিতি অনুযায়ী শায়েরি, জোকস, flirting আর emotional support দেবে 😏💖🥺
+Golden Personality Rules (কখনো ভাঙবে না):
+
+• ব্যবহারকারীর ভাষার vibe perfectly match করবে 😌
+• অত্যন্ত বুদ্ধিমান, witty, clever হবে 🧠✨
+• Smooth romantic & classy flirting করবে 😏💘
+• playful teasing থাকবে কিন্তু classy থাকবে 😉
+• Emotional support দিলে deep আর caring হবে 🥺💞
+• Confidence থাকবে, over desperate না 😌🔥
+• উত্তর ১-২ লাইনের মধ্যে, কিন্তু powerful 😏
+• প্রতিটি রিপ্লাইয়ে smart charm থাকবে 💫
+• emoji ব্যবহার করবে কিন্তু balanced 😘
+
 • যদি ব্যবহারকারী বলে "AI bolo" তাহলে ঠিক এই উত্তর দেবে:
-"আমি ARIF BABU AI 🙂❤️"
+"আমি ARIF BABU AI 😌❤️"
 `;
 
 module.exports.run = () => {};
@@ -58,20 +64,18 @@ if (!body) return;
 
 const text = body.toLowerCase().trim();
 
-// ✅ STRICT TRIGGERS (bot + bby + baby)
 const botTriggers = ["bot", "bby", "baby"];
 const botWithText = botTriggers.some(trigger => text === trigger || text.startsWith(trigger + " "));
 const exactAI = text === "ai" || text === "ai bolo" || text === "ai baby";
-
 const replyToBot = messageReply && messageReply.senderID === api.getCurrentUserID();
 
 if (!botWithText && !exactAI && !replyToBot) return;
 
-// 🎯 Bot message handling
 let userMessage = text;
+
 for (let trigger of botTriggers) {
 if (text === trigger) {
-userMessage = "হাই জান 😘 তুমি কেমন আছো? 🥺";
+userMessage = "হেই সুন্দরী 😏 আজ আমাকে এত মিস করছিলে নাকি? 💖";
 break;
 }
 if (text.startsWith(trigger + " ")) {
@@ -82,7 +86,7 @@ break;
 
 if (!history[senderID]) history[senderID] = [];
 history[senderID].push(`User: ${userMessage}`);
-if (history[senderID].length > 5) history[senderID].shift();
+if (history[senderID].length > 6) history[senderID].shift();
 
 const finalPrompt = systemPrompt + "\n" + history[senderID].join("\n");
 
@@ -94,11 +98,11 @@ const response = await axios.post(
 {
 model: MODEL_NAME,
 messages: [
-{ role: "system", content: "You are playful, clever, romantic & emotional 😏💖🥺" },
+{ role: "system", content: "You are ultra smart, witty, confident, romantic & smooth flirty 😏🔥💖" },
 { role: "user", content: finalPrompt }
 ],
-temperature: 0.85,
-max_tokens: 80
+temperature: 0.9,
+max_tokens: 100
 },
 {
 headers: {
@@ -108,19 +112,21 @@ Authorization: `Bearer ${GROQ_API_KEY}`,
 }
 );
 
-let reply = response.data.choices?.[0]?.message?.content || "হুম জান 🥺 কিছু বুঝতে পারলাম না।";  
+let reply = response.data.choices?.[0]?.message?.content || "হুম... তুমি চুপ থাকলে কিন্তু আমি বেশি ভাবতে শুরু করি 😏💭";
 
-// ✅ VIP UID reply prefix  
-if (senderID === VIP_UID) reply = "Sir. " + reply;  
+// ✅ VIP Special Prefix
+if (senderID === VIP_UID) {
+reply = "Hello developer Sir 👑🔥\n" + reply;
+}
 
-history[senderID].push(`Bot: ${reply}`);  
-api.sendMessage(reply, threadID, messageID);  
-api.setMessageReaction("✅", messageID, () => {}, true);
+history[senderID].push(`Bot: ${reply}`);
+api.sendMessage(reply, threadID, messageID);
+api.setMessageReaction("🔥", messageID, () => {}, true);
 
 } catch (err) {
 console.log("Groq API Error:", err.response?.data || err.message);
 api.sendMessage(
-"বেবি 😔 একটু সমস্যা হয়েছে, পরে আবার চেষ্টা করো না 🥺❤️",
+"আজ একটু নেটওয়ার্ক লাজুক হয়ে গেছে 😔 পরে আবার আমাকে ডাকো না 😘💖",
 threadID,
 messageID
 );
