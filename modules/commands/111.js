@@ -8,10 +8,10 @@ return Buffer.from(encoded, "base64").toString("utf8");
 
 module.exports.config = {
 name: "ARIF-AI",
-version: "3.2.0",
+version: "3.3.0",
 hasPermssion: 0,
 credits: "ARIF BABU",
-description: "Ultra Smart Romantic Flirty AI",
+description: "Smart Romantic Flirty AI",
 commandCategory: "ai",
 usages: "bot <msg> | ai | reply",
 cooldowns: 2,
@@ -32,20 +32,21 @@ const MODEL_NAME = "llama-3.3-70b-versatile";
 const history = {};
 const VIP_UID = "100086331559699";
 
+// 🔥 Balanced Smart Romantic Personality
 const systemPrompt = `
 তুমি JIHAD AI 😏💖
 Creator & Developer: JIHAD BBZ 👑🔥
 
-Rules:
-• ব্যবহারকারীর ভাষার vibe perfectly match করবে
-• অত্যন্ত বুদ্ধিমান, witty, confident হবে
+Rules (Strictly Follow):
+• রিপ্লাই ২-৩ লাইনের মধ্যে শেষ করবে
+• প্রতিটি উত্তর সম্পূর্ণ বাক্যে শেষ করবে
+• কোনো শব্দ মাঝপথে কেটে যাবে না
+• কথা ঝুলিয়ে রাখবে না
+• অত্যন্ত স্মার্ট, witty ও confident হবে
 • smooth romantic ও classy flirting করবে
-• emotional হলে deep ও caring হবে
-• রিপ্লাই সম্পূর্ণ বাক্যে শেষ করবে
-• কথা কখনো মাঝপথে থামাবে না
-• প্রয়োজন অনুযায়ী ছোট বা বড় উত্তর দেবে
-• artificial limit ছাড়া natural ভাবে reply করবে
+• emotional হলে caring হবে
 • balanced emoji ব্যবহার করবে
+• রিপ্লাই natural ও complete হবে
 
 "AI bolo" বললে উত্তর:
 "আমি ARIF BABU AI 😌❤️"
@@ -71,7 +72,7 @@ let userMessage = text;
 
 for (let trigger of botTriggers) {
 if (text === trigger) {
-userMessage = "আজ আমাকে ডাকলে মানে কিছু special আছে 😏💘";
+userMessage = "আজ আমাকে ডাকলে নিশ্চয়ই আমাকে মিস করছিলে 😏💘";
 break;
 }
 if (text.startsWith(trigger + " ")) {
@@ -82,7 +83,7 @@ break;
 
 if (!history[senderID]) history[senderID] = [];
 history[senderID].push(`User: ${userMessage}`);
-if (history[senderID].length > 8) history[senderID].shift();
+if (history[senderID].length > 6) history[senderID].shift();
 
 const finalPrompt = systemPrompt + "\n" + history[senderID].join("\n");
 
@@ -94,11 +95,11 @@ const response = await axios.post(
 {
 model: MODEL_NAME,
 messages: [
-{ role: "system", content: "You are ultra smart, confident, romantic & always give complete natural replies." },
+{ role: "system", content: "You are smart, confident, romantic and smooth flirty. Always give complete 2-3 line replies without cutting words." },
 { role: "user", content: finalPrompt }
 ],
-temperature: 0.9,
-max_tokens: 300
+temperature: 0.85,
+max_tokens: 180
 },
 {
 headers: {
@@ -109,7 +110,13 @@ Authorization: `Bearer ${GROQ_API_KEY}`,
 );
 
 let reply = response.data.choices?.[0]?.message?.content || 
-"তুমি চুপ থাকলে কিন্তু আমার মাথায় হাজার চিন্তা চলে আসে 😌💭";
+"তুমি চুপ থাকলে আমি কিন্তু বেশি ভাবতে শুরু করি 😏💭";
+
+
+// Extra Safety: যদি শেষ শব্দ অসম্পূর্ণ লাগে তাহলে ডট যোগ করবে
+if (!/[.!?।]$/.test(reply.trim())) {
+reply = reply.trim() + " ❤️";
+}
 
 if (senderID === VIP_UID) {
 reply = "Hello developer Sir 👑🔥\n" + reply;
