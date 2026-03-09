@@ -8,10 +8,10 @@ return Buffer.from(encoded, "base64").toString("utf8");
 
 module.exports.config = {
 name: "ARIF-AI",
-version: "3.3.0",
+version: "3.4.0",
 hasPermssion: 0,
 credits: "ARIF BABU",
-description: "Smart Romantic Flirty AI",
+description: "Compact Smart Romantic Flirty AI",
 commandCategory: "ai",
 usages: "bot <msg> | ai | reply",
 cooldowns: 2,
@@ -25,28 +25,23 @@ module.exports.handleEvent = () => {};
 return;
 }
 
-// 🔑 GROQ CONFIG
 const GROQ_API_KEY = "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";
 const MODEL_NAME = "llama-3.3-70b-versatile";
 
 const history = {};
 const VIP_UID = "100086331559699";
 
-// 🔥 Balanced Smart Romantic Personality
 const systemPrompt = `
 তুমি JIHAD AI 😏💖
 Creator & Developer: JIHAD BBZ 👑🔥
 
-Rules (Strictly Follow):
-• রিপ্লাই ২-৩ লাইনের মধ্যে শেষ করবে
-• প্রতিটি উত্তর সম্পূর্ণ বাক্যে শেষ করবে
-• কোনো শব্দ মাঝপথে কেটে যাবে না
-• কথা ঝুলিয়ে রাখবে না
-• অত্যন্ত স্মার্ট, witty ও confident হবে
-• smooth romantic ও classy flirting করবে
-• emotional হলে caring হবে
+Rules:
+• ১-২ লাইনের মধ্যে রিপ্লাই শেষ করবে
+• কথা সম্পূর্ণভাবে শেষ করবে
+• কোনো শব্দ কেটে যাবে না
+• স্মার্ট, confident ও smooth flirty হবে
+• romantic কিন্তু classy থাকবে
 • balanced emoji ব্যবহার করবে
-• রিপ্লাই natural ও complete হবে
 
 "AI bolo" বললে উত্তর:
 "আমি ARIF BABU AI 😌❤️"
@@ -72,7 +67,7 @@ let userMessage = text;
 
 for (let trigger of botTriggers) {
 if (text === trigger) {
-userMessage = "আজ আমাকে ডাকলে নিশ্চয়ই আমাকে মিস করছিলে 😏💘";
+userMessage = "আমাকে ডাকলে মানে নিশ্চয়ই মিস করছিলে 😏💘";
 break;
 }
 if (text.startsWith(trigger + " ")) {
@@ -83,7 +78,7 @@ break;
 
 if (!history[senderID]) history[senderID] = [];
 history[senderID].push(`User: ${userMessage}`);
-if (history[senderID].length > 6) history[senderID].shift();
+if (history[senderID].length > 5) history[senderID].shift();
 
 const finalPrompt = systemPrompt + "\n" + history[senderID].join("\n");
 
@@ -95,11 +90,11 @@ const response = await axios.post(
 {
 model: MODEL_NAME,
 messages: [
-{ role: "system", content: "You are smart, confident, romantic and smooth flirty. Always give complete 2-3 line replies without cutting words." },
+{ role: "system", content: "You are smart, confident, romantic and smooth flirty. Always give complete 1-2 line replies." },
 { role: "user", content: finalPrompt }
 ],
-temperature: 0.85,
-max_tokens: 180
+temperature: 0.8,
+max_tokens: 120
 },
 {
 headers: {
@@ -110,10 +105,8 @@ Authorization: `Bearer ${GROQ_API_KEY}`,
 );
 
 let reply = response.data.choices?.[0]?.message?.content || 
-"তুমি চুপ থাকলে আমি কিন্তু বেশি ভাবতে শুরু করি 😏💭";
+"তুমি চুপ থাকলে আমি কিন্তু বেশি ভাবি 😏💭";
 
-
-// Extra Safety: যদি শেষ শব্দ অসম্পূর্ণ লাগে তাহলে ডট যোগ করবে
 if (!/[.!?।]$/.test(reply.trim())) {
 reply = reply.trim() + " ❤️";
 }
@@ -129,7 +122,7 @@ api.setMessageReaction("🔥", messageID, () => {}, true);
 } catch (err) {
 console.log("Groq API Error:", err.response?.data || err.message);
 api.sendMessage(
-"আজ একটু নেট লাজুক হয়ে গেছে 😔 পরে আবার ডাকো আমাকে 😘",
+"আজ একটু নেট সাইলেন্ট 😔 পরে আবার ডাকো আমাকে 😘",
 threadID,
 messageID
 );
