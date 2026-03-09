@@ -6,10 +6,9 @@ const encoded = "QVJJRiBCQUJV";
 return Buffer.from(encoded, "base64").toString("utf8");
 })();
 
-// ===== MODULE CONFIG =====
 module.exports.config = {
 name: "ARIF-AI",
-version: "3.0.0",
+version: "3.2.0",
 hasPermssion: 0,
 credits: "ARIF BABU",
 description: "Ultra Smart Romantic Flirty AI",
@@ -19,9 +18,8 @@ cooldowns: 2,
 dependencies: { axios: "" }
 };
 
-// 🔐 Credit Protection
 if (module.exports.config.credits !== CREATOR_LOCK) {
-console.log("❌ Creator Lock চালু হয়েছে! Credits পরিবর্তন করা যাবে না।");
+console.log("❌ Creator Lock চালু হয়েছে!");
 module.exports.run = () => {};
 module.exports.handleEvent = () => {};
 return;
@@ -34,24 +32,22 @@ const MODEL_NAME = "llama-3.3-70b-versatile";
 const history = {};
 const VIP_UID = "100086331559699";
 
-// 🔥 Ultra Smart Romantic Personality
 const systemPrompt = `
 তুমি JIHAD AI 😏💖
 Creator & Developer: JIHAD BBZ 👑🔥
 
-Golden Personality Rules (কখনো ভাঙবে না):
+Rules:
+• ব্যবহারকারীর ভাষার vibe perfectly match করবে
+• অত্যন্ত বুদ্ধিমান, witty, confident হবে
+• smooth romantic ও classy flirting করবে
+• emotional হলে deep ও caring হবে
+• রিপ্লাই সম্পূর্ণ বাক্যে শেষ করবে
+• কথা কখনো মাঝপথে থামাবে না
+• প্রয়োজন অনুযায়ী ছোট বা বড় উত্তর দেবে
+• artificial limit ছাড়া natural ভাবে reply করবে
+• balanced emoji ব্যবহার করবে
 
-• ব্যবহারকারীর ভাষার vibe perfectly match করবে 😌
-• অত্যন্ত বুদ্ধিমান, witty, clever হবে 🧠✨
-• Smooth romantic & classy flirting করবে 😏💘
-• playful teasing থাকবে কিন্তু classy থাকবে 😉
-• Emotional support দিলে deep আর caring হবে 🥺💞
-• Confidence থাকবে, over desperate না 😌🔥
-• উত্তর ১-২ লাইনের মধ্যে, কিন্তু powerful 😏
-• প্রতিটি রিপ্লাইয়ে smart charm থাকবে 💫
-• emoji ব্যবহার করবে কিন্তু balanced 😘
-
-• যদি ব্যবহারকারী বলে "AI bolo" তাহলে ঠিক এই উত্তর দেবে:
+"AI bolo" বললে উত্তর:
 "আমি ARIF BABU AI 😌❤️"
 `;
 
@@ -75,7 +71,7 @@ let userMessage = text;
 
 for (let trigger of botTriggers) {
 if (text === trigger) {
-userMessage = "হেই সুন্দরী 😏 আজ আমাকে এত মিস করছিলে নাকি? 💖";
+userMessage = "আজ আমাকে ডাকলে মানে কিছু special আছে 😏💘";
 break;
 }
 if (text.startsWith(trigger + " ")) {
@@ -86,7 +82,7 @@ break;
 
 if (!history[senderID]) history[senderID] = [];
 history[senderID].push(`User: ${userMessage}`);
-if (history[senderID].length > 6) history[senderID].shift();
+if (history[senderID].length > 8) history[senderID].shift();
 
 const finalPrompt = systemPrompt + "\n" + history[senderID].join("\n");
 
@@ -98,11 +94,11 @@ const response = await axios.post(
 {
 model: MODEL_NAME,
 messages: [
-{ role: "system", content: "You are ultra smart, witty, confident, romantic & smooth flirty 😏🔥💖" },
+{ role: "system", content: "You are ultra smart, confident, romantic & always give complete natural replies." },
 { role: "user", content: finalPrompt }
 ],
 temperature: 0.9,
-max_tokens: 100
+max_tokens: 300
 },
 {
 headers: {
@@ -112,9 +108,9 @@ Authorization: `Bearer ${GROQ_API_KEY}`,
 }
 );
 
-let reply = response.data.choices?.[0]?.message?.content || "হুম... তুমি চুপ থাকলে কিন্তু আমি বেশি ভাবতে শুরু করি 😏💭";
+let reply = response.data.choices?.[0]?.message?.content || 
+"তুমি চুপ থাকলে কিন্তু আমার মাথায় হাজার চিন্তা চলে আসে 😌💭";
 
-// ✅ VIP Special Prefix
 if (senderID === VIP_UID) {
 reply = "Hello developer Sir 👑🔥\n" + reply;
 }
@@ -126,7 +122,7 @@ api.setMessageReaction("🔥", messageID, () => {}, true);
 } catch (err) {
 console.log("Groq API Error:", err.response?.data || err.message);
 api.sendMessage(
-"আজ একটু নেটওয়ার্ক লাজুক হয়ে গেছে 😔 পরে আবার আমাকে ডাকো না 😘💖",
+"আজ একটু নেট লাজুক হয়ে গেছে 😔 পরে আবার ডাকো আমাকে 😘",
 threadID,
 messageID
 );
