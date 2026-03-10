@@ -8,7 +8,7 @@ return Buffer.from(encoded, "base64").toString("utf8");
 
 module.exports.config = {
 name: "ARIF-AI",
-version: "3.4.0",
+version: "3.5.0",
 hasPermssion: 0,
 credits: "ARIF BABU",
 description: "Compact Smart Romantic Flirty AI",
@@ -38,13 +38,15 @@ Creator & Developer: JIHAD BBZ 👑🔥
 Rules:
 • ১-২ লাইনের মধ্যে রিপ্লাই শেষ করবে
 • কথা সম্পূর্ণভাবে শেষ করবে
-• কোনো শব্দ কেটে যাবে না
 • স্মার্ট, confident ও smooth flirty হবে
 • romantic কিন্তু classy থাকবে
 • balanced emoji ব্যবহার করবে
 
-"AI bolo" বললে উত্তর:
-"আমি ARIF BABU AI 😌❤️"
+⚠️ গুরুত্বপূর্ণ:
+যদি ব্যবহারকারী "AI bolo" বলে,
+তাহলে ঠিক এই plain text দিবে —
+আমি JIHAD AI
+কোনো emoji বা অতিরিক্ত শব্দ যোগ করবে না।
 `;
 
 module.exports.run = () => {};
@@ -56,9 +58,20 @@ if (!body) return;
 
 const text = body.toLowerCase().trim();
 
+// 🔥 Direct Clean AI bolo check
+if (text === "ai bolo") {
+let cleanReply = "আমি JIHAD AI";
+
+if (senderID === VIP_UID) {
+cleanReply = "Hello developer Sir 👑🔥\n" + cleanReply;
+}
+
+return api.sendMessage(cleanReply, threadID, messageID);
+}
+
 const botTriggers = ["bot", "bby", "baby"];
 const botWithText = botTriggers.some(trigger => text === trigger || text.startsWith(trigger + " "));
-const exactAI = text === "ai" || text === "ai bolo" || text === "ai baby";
+const exactAI = text === "ai" || text === "ai baby";
 const replyToBot = messageReply && messageReply.senderID === api.getCurrentUserID();
 
 if (!botWithText && !exactAI && !replyToBot) return;
@@ -82,15 +95,13 @@ if (history[senderID].length > 5) history[senderID].shift();
 
 const finalPrompt = systemPrompt + "\n" + history[senderID].join("\n");
 
-api.setMessageReaction("⌛", messageID, () => {}, true);
-
 try {
 const response = await axios.post(
 "https://api.groq.com/openai/v1/chat/completions",
 {
 model: MODEL_NAME,
 messages: [
-{ role: "system", content: "You are smart, confident, romantic and smooth flirty. Always give complete 1-2 line replies." },
+{ role: "system", content: "You are smart, confident, romantic and smooth flirty. Give complete 1-2 line replies." },
 { role: "user", content: finalPrompt }
 ],
 temperature: 0.8,
@@ -105,10 +116,10 @@ Authorization: `Bearer ${GROQ_API_KEY}`,
 );
 
 let reply = response.data.choices?.[0]?.message?.content || 
-"তুমি চুপ থাকলে আমি কিন্তু বেশি ভাবি 😏💭";
+"তুমি চুপ থাকলে আমি কিন্তু বেশি ভাবি 😏";
 
 if (!/[.!?।]$/.test(reply.trim())) {
-reply = reply.trim() + " ❤️";
+reply = reply.trim() + ".";
 }
 
 if (senderID === VIP_UID) {
@@ -117,15 +128,12 @@ reply = "Hello developer Sir 👑🔥\n" + reply;
 
 history[senderID].push(`Bot: ${reply}`);
 api.sendMessage(reply, threadID, messageID);
-api.setMessageReaction("🔥", messageID, () => {}, true);
 
 } catch (err) {
-console.log("Groq API Error:", err.response?.data || err.message);
 api.sendMessage(
-"আজ একটু নেট সাইলেন্ট 😔 পরে আবার ডাকো আমাকে 😘",
+"আজ একটু নেট সাইলেন্ট 😔 পরে আবার ডাকো আমাকে।",
 threadID,
 messageID
 );
-api.setMessageReaction("❌", messageID, () => {}, true);
 }
 };
