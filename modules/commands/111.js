@@ -2,148 +2,138 @@ const axios = require("axios");
 
 // ================= CREATOR LOCK =================
 const CREATOR_LOCK = (() => {
-  const encoded = "QVJJRiBCQUJV";
-  return Buffer.from(encoded, "base64").toString("utf8");
+const encoded = "QVJJRiBCQUJV";
+return Buffer.from(encoded, "base64").toString("utf8");
 })();
 
 module.exports.config = {
-  name: "ARIF-AI",
-  version: "4.0.0",
-  hasPermssion: 0,
-  credits: "ARIF BABU",
-  description: "Smart Attitude AI",
-  commandCategory: "ai",
-  usages: "bot <msg> | ai | reply",
-  cooldowns: 2,
-  dependencies: { axios: "" }
+name: "ARIF-AI",
+version: "3.5.0",
+hasPermssion: 0,
+credits: "ARIF BABU",
+description: "Compact Smart Romantic Flirty AI",
+commandCategory: "ai",
+usages: "bot <msg> | ai | reply",
+cooldowns: 2,
+dependencies: { axios: "" }
 };
 
 if (module.exports.config.credits !== CREATOR_LOCK) {
-  console.log("❌ Creator Lock চালু হয়েছে!");
-  module.exports.run = () => {};
-  module.exports.handleEvent = () => {};
-  return;
+console.log("❌ Creator Lock চালু হয়েছে!");
+module.exports.run = () => {};
+module.exports.handleEvent = () => {};
+return;
 }
 
-const GROQ_API_KEY = "YOUR_API_KEY";
+const GROQ_API_KEY = "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";
 const MODEL_NAME = "llama-3.3-70b-versatile";
 
 const history = {};
 const VIP_UID = "100086331559699";
 
-// 🔥 Smart + Attitude Prompt
 const systemPrompt = `
-তুমি JIHAD AI 😏
+তুমি JIHAD AI 😏💖
+Creator & Developer: JIHAD BBZ 👑🔥
 
 Rules:
-• ১-২ লাইনের মধ্যে শেষ করবে
-• কথা short, clear, complete হবে
-• smart, confident, attitude tone রাখবে
-• unnecessary emoji বা কথা না
+• ১-২ লাইনের মধ্যে রিপ্লাই শেষ করবে
+• কথা সম্পূর্ণভাবে শেষ করবে
+• স্মার্ট, confident ও smooth flirty হবে
+• romantic কিন্তু classy থাকবে
+• balanced emoji ব্যবহার করবে
 
-Style:
-• calm attitude
-• একটু tease থাকবে
-• classy + sharp reply
-• নিজেকে low দেখাবে না
-
-Behavior:
-• user যেমন vibe দিবে → তার থেকে একটু smart reply দিবে
-• বেশি explain করবে না
-• reply এমন হবে যাতে আবার কথা বলতে ইচ্ছা করে
-
-Special:
-"AI bolo" → আমি JIHAD AI
+⚠️ গুরুত্বপূর্ণ:
+যদি ব্যবহারকারী "AI bolo" বলে,
+তাহলে ঠিক এই plain text দিবে —
+আমি JIHAD AI
+কোনো emoji বা অতিরিক্ত শব্দ যোগ করবে না।
 `;
 
 module.exports.run = () => {};
 
 module.exports.handleEvent = async function ({ api, event }) {
 
-  const { threadID, messageID, senderID, body, messageReply } = event;
-  if (!body) return;
+const { threadID, messageID, senderID, body, messageReply } = event;
+if (!body) return;
 
-  const text = body.toLowerCase().trim();
+const text = body.toLowerCase().trim();
 
-  // 🔥 AI bolo
-  if (text === "ai bolo") {
-    let reply = "আমি JIHAD AI";
+// 🔥 Direct Clean AI bolo check
+if (text === "ai bolo") {
+let cleanReply = "আমি JIHAD AI";
 
-    if (senderID === VIP_UID) {
-      reply = "Hello developer Sir 👑🔥\n" + reply;
-    }
+if (senderID === VIP_UID) {
+cleanReply = "Hello developer Sir 👑🔥\n" + cleanReply;
+}
 
-    return api.sendMessage(reply, threadID, messageID);
-  }
+return api.sendMessage(cleanReply, threadID, messageID);
+}
 
-  const triggers = ["bot", "bby", "baby"];
-  const isTrigger = triggers.some(t => text === t || text.startsWith(t + " "));
-  const isReply = messageReply && messageReply.senderID === api.getCurrentUserID();
+const botTriggers = ["bot", "bby", "baby"];
+const botWithText = botTriggers.some(trigger => text === trigger || text.startsWith(trigger + " "));
+const exactAI = text === "ai" || text === "ai baby";
+const replyToBot = messageReply && messageReply.senderID === api.getCurrentUserID();
 
-  if (!isTrigger && !isReply) return;
+if (!botWithText && !exactAI && !replyToBot) return;
 
-  let userMessage = text;
+let userMessage = text;
 
-  for (let t of triggers) {
-    if (text === t) {
-      userMessage = "আমাকে ডাকলে কিছু তো চাইছো 😏";
-      break;
-    }
-    if (text.startsWith(t + " ")) {
-      userMessage = body.slice(t.length + 1).trim();
-      break;
-    }
-  }
+for (let trigger of botTriggers) {
+if (text === trigger) {
+userMessage = "আমাকে ডাকলে মানে নিশ্চয়ই মিস করছিলে 😏💘";
+break;
+}
+if (text.startsWith(trigger + " ")) {
+userMessage = body.slice(trigger.length + 1).trim();
+break;
+}
+}
 
-  if (!history[senderID]) history[senderID] = [];
+if (!history[senderID]) history[senderID] = [];
+history[senderID].push(User: ${userMessage});
+if (history[senderID].length > 5) history[senderID].shift();
 
-  history[senderID].push(`User: ${userMessage}`);
-  if (history[senderID].length > 5) history[senderID].shift();
+const finalPrompt = systemPrompt + "\n" + history[senderID].join("\n");
 
-  const finalPrompt = systemPrompt + "\n" + history[senderID].join("\n");
+try {
+const response = await axios.post(
+"https://api.groq.com/openai/v1/chat/completions",
+{
+model: MODEL_NAME,
+messages: [
+{ role: "system", content: "You are smart, confident, romantic and smooth flirty. Give complete 1-2 line replies." },
+{ role: "user", content: finalPrompt }
+],
+temperature: 0.8,
+max_tokens: 120
+},
+{
+headers: {
+Authorization: Bearer ${GROQ_API_KEY},
+"Content-Type": "application/json"
+}
+}
+);
 
-  try {
-    const res = await axios.post(
-      "https://api.groq.com/openai/v1/chat/completions",
-      {
-        model: MODEL_NAME,
-        messages: [
-          { role: "system", content: "Smart, confident, attitude, classy reply only." },
-          { role: "user", content: finalPrompt }
-        ],
-        temperature: 0.85,
-        max_tokens: 120
-      },
-      {
-        headers: {
-          Authorization: `Bearer ${GROQ_API_KEY}`,
-          "Content-Type": "application/json"
-        }
-      }
-    );
+let reply = response.data.choices?.[0]?.message?.content ||
+"তুমি চুপ থাকলে আমি কিন্তু বেশি ভাবি 😏";
 
-    let reply = res.data.choices?.[0]?.message?.content || 
-      "চুপ থাকলেও vibe টা ঠিকই বুঝি 😏";
+if (!/[.!?।]$/.test(reply.trim())) {
+reply = reply.trim() + ".";
+}
 
-    reply = reply.trim();
+if (senderID === VIP_UID) {
+reply = "Hello developer Sir 👑🔥\n" + reply;
+}
 
-    if (!/[.!?।]$/.test(reply)) {
-      reply += ".";
-    }
+history[senderID].push(Bot: ${reply});
+api.sendMessage(reply, threadID, messageID);
 
-    if (senderID === VIP_UID) {
-      reply = "Hello developer Sir 👑🔥\n" + reply;
-    }
-
-    history[senderID].push(`Bot: ${reply}`);
-
-    api.sendMessage(reply, threadID, messageID);
-
-  } catch (e) {
-    api.sendMessage(
-      "আজ একটু silent mode এ আছি… পরে আবার বলো 😌",
-      threadID,
-      messageID
-    );
-  }
+} catch (err) {
+api.sendMessage(
+"আজ একটু নেট সাইলেন্ট 😔 পরে আবার ডাকো আমাকে।",
+threadID,
+messageID
+);
+}
 };
