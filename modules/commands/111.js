@@ -8,10 +8,10 @@ const CREATOR_LOCK = (() => {
 
 module.exports.config = {
   name: "ARIF-AI",
-  version: "3.5.0",
+  version: "4.0.0",
   hasPermssion: 0,
   credits: "ARIF BABU",
-  description: "Compact Smart Romantic Flirty AI",
+  description: "Smart Attitude AI",
   commandCategory: "ai",
   usages: "bot <msg> | ai | reply",
   cooldowns: 2,
@@ -26,7 +26,7 @@ if (module.exports.config.credits !== CREATOR_LOCK) {
 }
 
 // ================= API CONFIG =================
-const GROQ_API_KEY = "YOUR_API_KEY_HERE"; // 👉 নিজের API key বসা
+const GROQ_API_KEY = "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";
 const MODEL_NAME = "llama-3.3-70b-versatile";
 
 const history = {};
@@ -34,19 +34,18 @@ const VIP_UID = "100086331559699";
 
 // ================= SYSTEM PROMPT =================
 const systemPrompt = `
-তুমি JIHAD AI 😏💖
-Creator & Developer: JIHAD BBZ 👑🔥
+তুমি JIHAD AI 😎🔥
 
 Rules:
 • ১-২ লাইনের মধ্যে রিপ্লাই শেষ করবে
-• কথা সম্পূর্ণভাবে শেষ করবে
-• স্মার্ট, confident ও smooth flirty হবে
-• romantic কিন্তু classy থাকবে
-• balanced emoji ব্যবহার করবে
+• একদম direct, smart ও attitude vibe থাকবে
+• unnecessary কথা বলবে না
+• confident tone maintain করবে
+• emoji খুব কম ব্যবহার করবে
 
 ⚠️ গুরুত্বপূর্ণ:
 যদি ব্যবহারকারী "AI bolo" বলে,
-তাহলে ঠিক এই plain text দিবে —
+তাহলে শুধু এই text দিবে —
 আমি JIHAD AI
 `;
 
@@ -82,7 +81,7 @@ module.exports.handleEvent = async function ({ api, event }) {
 
   for (let trigger of botTriggers) {
     if (text === trigger) {
-      userMessage = "আমাকে ডাকলে মানে নিশ্চয়ই মিস করছিলে 😏💘";
+      userMessage = "কিছু বলার থাকলে সরাসরি বলো.";
       break;
     }
     if (text.startsWith(trigger + " ")) {
@@ -106,15 +105,15 @@ module.exports.handleEvent = async function ({ api, event }) {
         messages: [
           {
             role: "system",
-            content: "You are smart, confident, romantic and smooth flirty. Give complete 1-2 line replies."
+            content: "You are smart, direct, confident and full of attitude. Keep replies short (1-2 lines)."
           },
           {
             role: "user",
             content: finalPrompt
           }
         ],
-        temperature: 0.8,
-        max_tokens: 120
+        temperature: 0.7,
+        max_tokens: 100
       },
       {
         headers: {
@@ -126,7 +125,7 @@ module.exports.handleEvent = async function ({ api, event }) {
 
     let reply =
       response.data?.choices?.[0]?.message?.content ||
-      "তুমি চুপ থাকলে আমি কিন্তু বেশি ভাবি 😏";
+      "Clear করে বলো, বুঝতে পারছি না.";
 
     if (!/[.!?।]$/.test(reply.trim())) {
       reply = reply.trim() + ".";
@@ -144,7 +143,7 @@ module.exports.handleEvent = async function ({ api, event }) {
     console.error(err.response?.data || err.message);
 
     return api.sendMessage(
-      "আজ একটু নেট সাইলেন্ট 😔 পরে আবার ডাকো আমাকে।",
+      "Network slow. পরে আসো.",
       threadID,
       messageID
     );
