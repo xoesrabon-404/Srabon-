@@ -8,10 +8,10 @@ const CREATOR_LOCK = (() => {
 
 module.exports.config = {
   name: "ARIF-AI",
-  version: "4.0.0",
+  version: "3.5.0",
   hasPermssion: 0,
   credits: "ARIF BABU",
-  description: "Smart Attitude AI",
+  description: "Compact Smart Romantic Flirty AI",
   commandCategory: "ai",
   usages: "bot <msg> | ai | reply",
   cooldowns: 2,
@@ -34,18 +34,19 @@ const VIP_UID = "100086331559699";
 
 // ================= SYSTEM PROMPT =================
 const systemPrompt = `
-তুমি JIHAD AI 😎🔥
+তুমি JIHAD AI 😏💖
+Creator & Developer: JIHAD BBZ 👑🔥
 
 Rules:
 • ১-২ লাইনের মধ্যে রিপ্লাই শেষ করবে
-• একদম direct, smart ও attitude vibe থাকবে
-• unnecessary কথা বলবে না
-• confident tone maintain করবে
-• emoji খুব কম ব্যবহার করবে
+• কথা সম্পূর্ণভাবে শেষ করবে
+• স্মার্ট, confident ও smooth flirty হবে
+• romantic কিন্তু classy থাকবে
+• balanced emoji ব্যবহার করবে
 
 ⚠️ গুরুত্বপূর্ণ:
 যদি ব্যবহারকারী "AI bolo" বলে,
-তাহলে শুধু এই text দিবে —
+তাহলে ঠিক এই plain text দিবে —
 আমি JIHAD AI
 `;
 
@@ -81,7 +82,7 @@ module.exports.handleEvent = async function ({ api, event }) {
 
   for (let trigger of botTriggers) {
     if (text === trigger) {
-      userMessage = "কিছু বলার থাকলে সরাসরি বলো.";
+      userMessage = "আমাকে ডাকলে মানে নিশ্চয়ই মিস করছিলে 😏💘";
       break;
     }
     if (text.startsWith(trigger + " ")) {
@@ -105,15 +106,15 @@ module.exports.handleEvent = async function ({ api, event }) {
         messages: [
           {
             role: "system",
-            content: "You are smart, direct, confident and full of attitude. Keep replies short (1-2 lines)."
+            content: "You are smart, confident, romantic and smooth flirty. Give complete 1-2 line replies."
           },
           {
             role: "user",
             content: finalPrompt
           }
         ],
-        temperature: 0.7,
-        max_tokens: 100
+        temperature: 0.8,
+        max_tokens: 120
       },
       {
         headers: {
@@ -125,7 +126,7 @@ module.exports.handleEvent = async function ({ api, event }) {
 
     let reply =
       response.data?.choices?.[0]?.message?.content ||
-      "Clear করে বলো, বুঝতে পারছি না.";
+      "তুমি চুপ থাকলে আমি কিন্তু বেশি ভাবি 😏";
 
     if (!/[.!?।]$/.test(reply.trim())) {
       reply = reply.trim() + ".";
@@ -143,7 +144,7 @@ module.exports.handleEvent = async function ({ api, event }) {
     console.error(err.response?.data || err.message);
 
     return api.sendMessage(
-      "Network slow. পরে আসো.",
+      "আজ একটু নেট সাইলেন্ট 😔 পরে আবার ডাকো আমাকে।",
       threadID,
       messageID
     );
