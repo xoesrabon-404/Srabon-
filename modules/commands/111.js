@@ -40,9 +40,8 @@ Creator & Developer: JIHAD BBZ 👑🔥
 Rules:
 • ১-২ লাইনের মধ্যে রিপ্লাই শেষ করবে
 • কথা সম্পূর্ণভাবে শেষ করবে
-• স্মার্ট, confident ও smooth flirty হবে
-• romantic কিন্তু classy থাকবে
-• balanced emoji ব্যবহার করবে
+• স্মার্ট, confident ও smooth হবে
+• emoji balanced থাকবে
 
 ⚠️ গুরুত্বপূর্ণ:
 যদি ব্যবহারকারী "AI bolo" বলে,
@@ -82,7 +81,7 @@ module.exports.handleEvent = async function ({ api, event }) {
 
   for (let trigger of botTriggers) {
     if (text === trigger) {
-      userMessage = "আমাকে ডাকলে মানে নিশ্চয়ই মিস করছিলে 😏💘";
+      userMessage = "আমাকে ডাকলে মানে নিশ্চয়ই মিস করছিলে 😏";
       break;
     }
     if (text.startsWith(trigger + " ")) {
@@ -91,12 +90,36 @@ module.exports.handleEvent = async function ({ api, event }) {
     }
   }
 
+  // ================= GET USER GENDER =================
+  let gender = "unknown";
+
+  try {
+    const userInfo = await api.getUserInfo(senderID);
+    const user = userInfo[senderID];
+
+    if (user.gender === 2) gender = "male";
+    else if (user.gender === 1) gender = "female";
+  } catch (e) {
+    console.log("Gender detect error:", e.message);
+  }
+
   // ================= HISTORY =================
   if (!history[senderID]) history[senderID] = [];
   history[senderID].push(`User: ${userMessage}`);
   if (history[senderID].length > 6) history[senderID].shift();
 
-  const finalPrompt = systemPrompt + "\n" + history[senderID].join("\n");
+  // ================= STYLE BASED ON GENDER =================
+  let genderStyle = "";
+
+  if (gender === "male") {
+    genderStyle = "User is male. Talk like a smart bro style, friendly, confident, no romantic/flirty tone.";
+  } else if (gender === "female") {
+    genderStyle = "User is female. Talk romantic, flirty, smooth and classy.";
+  } else {
+    genderStyle = "Talk normal smart style.";
+  }
+
+  const finalPrompt = systemPrompt + "\n" + genderStyle + "\n" + history[senderID].join("\n");
 
   try {
     const response = await axios.post(
@@ -106,7 +129,7 @@ module.exports.handleEvent = async function ({ api, event }) {
         messages: [
           {
             role: "system",
-            content: "You are smart, confident, romantic and smooth flirty. Give complete 1-2 line replies."
+            content: "You are smart, confident, and adaptive based on user gender."
           },
           {
             role: "user",
