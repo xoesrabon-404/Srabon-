@@ -156,7 +156,7 @@ module.exports.handleEvent = async function ({ api, event }) {
     }
 
     if (senderID === VIP_UID) {
-      reply = "Hello developer Sir 👑🔥\n" + reply;
+      reply = "𝓗𝓮𝓵𝓵𝓸 𝓓𝓮𝓿𝓮𝓵𝓸𝓹𝓮𝓻 𝓢𝓲𝓻👑🔥\n" + reply;
     }
 
     history[senderID].push(`Bot: ${reply}`);
@@ -167,7 +167,7 @@ module.exports.handleEvent = async function ({ api, event }) {
     console.error(err.response?.data || err.message);
 
     return api.sendMessage(
-      "আজ একটু নেট সাইলেন্ট 😔 পরে আবার ডাকো আমাকে।",
+      "",
       threadID,
       messageID
     );
