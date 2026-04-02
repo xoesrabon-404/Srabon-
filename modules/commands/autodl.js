@@ -1,82 +1,40 @@
-const axios = require("axios");
-const fs = require("fs-extra");
-const path = require("path");
-const { alldown } = require("rx-dawonload");
+module.exports = {
+ config:{
+ name: "autodl",
+ version: "0.0.2",
+ hasPermssion: 0,
+ credits: "SHAON",
+ description: "auto video download",
+ commandCategory: "user",
+ usages: "",
+ cooldowns: 5,
+},
+run: async function({ api, event, args }) {},
+handleEvent: async function ({ api, event, args }) {
+ const axios = require("axios")
+ const request = require("request")
+ const fs = require("fs-extra")
+ const content = event.body ? event.body : '';
+ const body = content.toLowerCase();
+ const { alldown } = require("shaon-videos-downloader")
+ if (body.startsWith("https://")) {
+ api.setMessageReaction("⚠️", event.messageID, (err) => {}, true);
+const data = await alldown(content);
+ console.log(data)
+ let Shaon = data.url;
+ api.setMessageReaction("☢️", event.messageID, (err) => {}, true);
+ const video = (await axios.get(Shaon, {
+ responseType: "arraybuffer",
+ })).data;
+ fs.writeFileSync(__dirname + "/cache/auto.mp4", Buffer.from(video, "utf-8"))
 
-module.exports.config = {
-    name: "autodl",
-    version: "2.2.1",
-    credits: "Jihad",
-    hasPermission: 0,
-    description: "Public Auto Download (No Reaction Needed)",
-    usePrefix: false,
-    commandCategory: "utility",
-    cooldowns: 2
-};
+ return api.sendMessage({
+ body: `🔥🚀 𝐂𝐡𝐚𝐭 𝐁𝐨𝐭🔥💻 
+📥⚡𝗔𝘂𝘁𝗼 𝗗𝗼𝘄𝗻𝗹𝗼𝗮𝗱𝗲𝗿⚡📂
+🎬 𝐄𝐧𝐣𝐨𝐲 𝐭𝐡𝐞 𝐕𝐢𝐝𝐞𝐨 🎀`,
+ attachment: fs.createReadStream(__dirname + "/cache/auto.mp4")
 
-module.exports.run = async function () {};
-
-// -------------------------
-// 🔥 Detect Link & Auto Download
-// -------------------------
-module.exports.handleEvent = async function ({ api, event }) {
-
-    if (!event.body || !event.body.startsWith("http")) return;
-
-    // Determine platform
-    let site = "Unknown";
-    if (event.body.includes("youtube")) site = "YouTube";
-    else if (event.body.includes("tiktok")) site = "TikTok";
-    else if (event.body.includes("instagram")) site = "Instagram";
-    else if (event.body.includes("facebook")) site = "Facebook";
-
-    // Send detect message
-    const detectBox =
-``;
-
-    // প্রথম মেসেজ পাঠানো এবং ⬇️ রিয়েক্ট
-    api.sendMessage(detectBox, event.threadID, async (err, info) => {
-        if (!err) {
-            await api.setMessageReaction("⬇️", info.messageID, event.senderID);
-        }
-    });
-
-    try {
-        // Get download info
-        const data = await alldown(event.body);
-        if (!data?.url) {
-            return api.sendMessage("", event.threadID);
-        }
-
-        const title = data.title || "video";
-        const buffer = (await axios.get(data.url, { responseType: "arraybuffer" })).data;
-        const safeTitle = title.replace(/[^\w\s]/gi, "_");
-        const filePath = path.join(__dirname, "cache", `${safeTitle}.mp4`);
-        fs.writeFileSync(filePath, buffer);
-
-        // Send downloaded file
-        const doneBox =
-`⏤͟͟͟͟͞͞͞͞𝐷𝑜𝑤𝑛𝑙𝑜𝑎𝑑⏤͟͟͞͞𝐶𝑜𝑚𝑝𝑙𝑒𝑡𝑒ᜊ
- ッ𝐽𝑖ℎ𝑎𝑑ᜊ𝐻𝑎𝑠𝑎𝑛 ♡
- ⃝ 𝑃𝑙𝑎𝑡𝑓𝑜𝑟𝑚 : ${site}♡
- ⃞ 𝑇𝑖𝑡𝑙𝑒 : ${title}ᥫ᭡`;
-
-        api.sendMessage(
-            {
-                body: doneBox,
-                attachment: fs.createReadStream(filePath)
-            },
-            event.threadID,
-            async (err, info) => {
-                fs.unlinkSync(filePath);
-                if (!err) {
-                    await api.setMessageReaction("✅", info.messageID, event.senderID);
-                }
-            }
-        );
-
-    } catch (e) {
-        console.log("AutoDL error:", e);
-        api.sendMessage("", event.threadID);
-    }
-};
+ }, event.threadID, event.messageID);
+ }
+}
+}
