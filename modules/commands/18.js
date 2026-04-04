@@ -153,7 +153,7 @@ module.exports.run = async function({ api, event }) {
         response.data.pipe(writer);
 
         writer.on('finish', () => {
-            api.sendMessage({ body: "🅙🅘🅗🅐🅓 🅒🅗🅐🅣 🅑🅞🅣", attachment: fs.createReadStream(fileName) }, event.threadID, () => {
+            api.sendMessage({ body: "🥵 𝑆𝑟𝑎𝑏𝑜𝑛 𝐶ℎ𝑎𝑡 𝐵𝑜𝑡 🥵 ", attachment: fs.createReadStream(fileName) }, event.threadID, () => {
                 fs.unlinkSync(fileName); // ফাইল ডিলিট
             });
         });
