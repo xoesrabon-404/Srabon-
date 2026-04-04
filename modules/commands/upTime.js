@@ -4,19 +4,18 @@ const path = require("path");
 
 module.exports.config = {
   name: "upt",
-  version: "1.0.8",
-  hasPermssion: 1, // 🔒 only admin use
+  version: "1.1.1",
+  hasPermssion: 0, // এখন সব ইউজার ব্যবহার করতে পারবে
   credits: "Rx Abdullah + Edit by Srabon",
-  usePrefix: false, // 🚫 no prefix needed
-  description: "Bot status image",
+  usePrefix: false,
+  description: "Bot status image with anime and stylish owner",
   commandCategory: "system",
   usages: "",
   cooldowns: 5,
 };
 
-module.exports.run = async function ({ api, event }) {
+module.exports.run = async function({ api, event }) {
   try {
-
     // 🖼 Background
     const bgPath = path.join(__dirname, "cache", "status_bg.png");
     const bgImage = await loadImage(bgPath);
@@ -26,17 +25,17 @@ module.exports.run = async function ({ api, event }) {
     const ctx = canvas.getContext("2d");
     ctx.drawImage(bgImage, 0, 0, canvas.width, canvas.height);
 
-    // 🕒 Uptime + Ping
+    // ⏰ Uptime + Ping
     const uptime = process.uptime();
     const hours = Math.floor(uptime / 3600);
     const minutes = Math.floor((uptime % 3600) / 60);
     const seconds = Math.floor(uptime % 60);
     const ping = Date.now() - event.timestamp;
 
-    // 👑 Owner
-    const owner = "👑 Ahmed Srabon 👑";
+    // 👑 Owner (স্টাইলিশ ফন্ট)
+    const owner = "𝐴ℎ𝑚𝑒𝑑 𝑆𝑟𝑎𝑏𝑜𝑛";
 
-    // ✍️ Style
+    // ✍️ Text style
     ctx.fillStyle = "#FFFFFF";
     ctx.shadowColor = "black";
     ctx.shadowBlur = 6;
@@ -59,20 +58,20 @@ module.exports.run = async function ({ api, event }) {
     ctx.fillText(`OWNER  : ${owner}`, startX, line3Y);
 
     // 🧩 Emoji
-    const emojiClock = await loadImage("https://cdn.jsdelivr.net/gh/twitter/twemoji@14.0.2/assets/72x72/23f1.png");
-    const emojiSignal = await loadImage("https://cdn.jsdelivr.net/gh/twitter/twemoji@14.0.2/assets/72x72/1f4f6.png");
-    const emojiBolt = await loadImage("https://cdn.jsdelivr.net/gh/twitter/twemoji@14.0.2/assets/72x72/26a1.png");
+    const emojiClock = await loadImage(path.join(__dirname, "cache", "emoji_clock.png"));
+    const emojiSignal = await loadImage(path.join(__dirname, "cache", "emoji_signal.png"));
+    const emojiBolt = await loadImage(path.join(__dirname, "cache", "emoji_bolt.png"));
 
     ctx.drawImage(emojiClock, 50, line1Y - 45, 50, 50);
     ctx.drawImage(emojiSignal, 50, line2Y - 45, 50, 50);
     ctx.drawImage(emojiBolt, 50, line3Y - 45, 50, 50);
 
-    // 🐱 Anime Pic
+    // 🐱 Anime image
     const animePath = path.join(__dirname, "cache", "anime.png");
     const animeImg = await loadImage(animePath);
     ctx.drawImage(animeImg, canvas.width - 280, 100, 250, 400);
 
-    // 🖼 Save
+    // 🖼 Save image
     const outPath = path.join(__dirname, "cache", `status_${event.senderID}.png`);
     fs.writeFileSync(outPath, canvas.toBuffer("image/png"));
 
@@ -86,6 +85,6 @@ module.exports.run = async function ({ api, event }) {
 
   } catch (err) {
     console.error(err);
-    return api.sendMessage("❌ Error while generating status photo!", event.threadID, event.messageID);
+    return api.sendMessage("❌ Error while generating status photo!", event.threadID);
   }
 };
