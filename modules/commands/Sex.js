@@ -21,7 +21,7 @@ module.exports.run = async ({ api, event, args, client, Users, Threads, __GLOBAL
   const request = global.nodemodule["request"];
   const fs = global.nodemodule["fs-extra"];
 
-  var captions = ["🅙🅘🅗🅐🅓 🅒🅗🅐🅣 🅑🅞🅣"];
+  var captions = ["𝑆𝑟𝑎𝑏𝑜𝑛 𝐶ℎ𝑎𝑡 𝐵𝑜𝑡 👉👀👈"];
   var caption = captions[Math.floor(Math.random() * captions.length)];
 
   var links = [
