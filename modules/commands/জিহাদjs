@@ -18,7 +18,7 @@ module.exports.config = {
 };
 
 module.exports.run = async function ({ api, event }) {
- const imageUrl = "https://i.imgur.com/9qCGo4W.jpeg";
+ const imageUrl = "https://i.imgur.com/oI69KWy.jpeg";
  const path = __dirname + "/cache/owner.png";
 
  request(imageUrl)
@@ -28,7 +28,7 @@ module.exports.run = async function ({ api, event }) {
      body:
 `   🌟 𝗢𝗪𝗡𝗘𝗥 𝗜𝗡𝗙𝗢 🌟
 
-👑 𝗡𝗮𝗺𝗲:♛ JIHAD HASAN──😘😈🪼🩶🪽
+👑 𝗡𝗮𝗺𝗲:♛ 𝐴ℎ𝑚𝑒𝑑 𝑆𝑟𝑎𝑏𝑜𝑛 ──😘😈🪼🩶🪽
 😻 𝗔𝗱𝗱𝗿𝗲𝘀𝘀:ᰔᩚ মেয়েদের মনে___🙈
 💼 𝗣𝗿𝗼𝗳𝗲𝘀𝘀𝗶𝗼𝗻:ᰔ মেয়েদের মন জয় করা___😍
 
@@ -40,7 +40,7 @@ module.exports.run = async function ({ api, event }) {
 🎵 𝗧𝗶𝗸𝗧𝗼𝗸:❀ সরি আমি প্রতিবন্ধী না__🥱
 👻 𝗦𝗻𝗮𝗽𝗰𝗵𝗮𝘁:☻ তোদের মতো কালা নাকি ফিল্টার লাগামু__🤭
 
-🤖 𝗕𝗢𝗧 𝗕𝗬: ─⏤͟͟͟͟͟͟͟͟͟͟͟͟͟͟͟͟͞͞͞͞͞͞͞͞͞͞͞͞͞͞͞͞ᰔᩚ𝐽𝐼 𝐻𝐴𝐷 𝐶𝐻𝐴𝑇 𝐵𝑂𝑇 ࿐
+🤖 𝗕𝗢𝗧 𝗕𝗬: ─⏤͟͟͟͟͟͟͟͟͟͟͟͟͟͟͟͟͞͞͞͞͞͞͞͞͞͞͞͞͞͞͞͞ᰔᩚ𝑆𝑟𝑎𝑏𝑜𝑛 𝐶ℎ𝑎𝑡 𝑏𝑜𝑡  ࿐
 `,
      attachment: fs.createReadStream(path)
    }, event.threadID, () => fs.unlinkSync(path));
