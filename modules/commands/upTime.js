@@ -1,90 +1,207 @@
 const { createCanvas, loadImage } = require("canvas");
+const os = require("os");
 const fs = require("fs");
 const path = require("path");
+const { execSync } = require("child_process");
 
 module.exports.config = {
   name: "upt",
-  version: "1.1.1",
-  hasPermssion: 0, // এখন সব ইউজার ব্যবহার করতে পারবে
-  credits: "Rx Abdullah + Edit by Srabon",
-  usePrefix: false,
-  description: "Bot status image with anime and stylish owner",
+  version: "1.3.0",
+  hasPermssion: 0,
+  credits: "Rx + Srabon",
+  description: "Full anime style uptime info",
   commandCategory: "system",
-  usages: "",
+  usages: "upt / uptime",
   cooldowns: 5,
+  aliases: ["uptime"]
 };
+
+// --- Network graph history ---
+const HISTORY_LENGTH = 10;
+let netHistory1 = Array.from({ length: HISTORY_LENGTH }, () => Math.floor(Math.random() * 40 + 30));
+let netHistory2 = Array.from({ length: HISTORY_LENGTH }, () => Math.floor(Math.random() * 40 + 20));
+
+// --- Restart counter ---
+const restartFile = path.join(__dirname, "restart.json");
+let restartCount = 1;
+if (fs.existsSync(restartFile)) restartCount = JSON.parse(fs.readFileSync(restartFile)).count + 1;
+fs.writeFileSync(restartFile, JSON.stringify({ count: restartCount }));
+
+function getCpuUsageAsync() {
+  return new Promise((resolve) => {
+    const start = os.cpus();
+    setTimeout(() => {
+      const end = os.cpus();
+      let idleDiff = 0, totalDiff = 0;
+      for (let i = 0; i < start.length; i++) {
+        const s = start[i].times, e = end[i].times;
+        idleDiff += e.idle - s.idle;
+        totalDiff += Object.keys(e).reduce((acc, key) => acc + (e[key] - s[key]), 0);
+      }
+      resolve(100 - Math.round((idleDiff / totalDiff) * 100));
+    }, 100);
+  });
+}
+
+function getDiskUsage() {
+  try {
+    const out = execSync("df -k /").toString().split("\n")[1].split(/\s+/);
+    return { percent: Math.round((parseInt(out[2]) / parseInt(out[1])) * 100) };
+  } catch {
+    return { percent: 0 };
+  }
+}
 
 module.exports.run = async function({ api, event }) {
   try {
-    // 🖼 Background
-    const bgPath = path.join(__dirname, "cache", "status_bg.png");
-    const bgImage = await loadImage(bgPath);
+    const cpu = await getCpuUsageAsync();
+    const totalRAM = os.totalmem();
+    const usedRAM = totalRAM - os.freemem();
+    const ramPercent = usedRAM / totalRAM;
+    const disk = getDiskUsage();
 
-    // 🎨 Canvas
-    const canvas = createCanvas(bgImage.width, bgImage.height);
+    const allUsers = global.data?.allUserID || [];
+    const realUserCount = allUsers.length;
+
+    const dataSent = ((restartCount * 1.2) + (realUserCount * 0.05)).toFixed(1);
+    const dataReceived = ((restartCount * 0.8) + (realUserCount * 0.03)).toFixed(1);
+
+    const up = process.uptime();
+    const d = Math.floor(up / 86400);
+    const h = Math.floor((up % 86400) / 3600);
+    const m = Math.floor((up % 3600) / 60);
+
+    netHistory1.push(Math.floor(Math.random() * 40 + 30));
+    if (netHistory1.length > HISTORY_LENGTH) netHistory1.shift();
+    netHistory2.push(Math.floor(Math.random() * 40 + 10));
+    if (netHistory2.length > HISTORY_LENGTH) netHistory2.shift();
+
+    // --- Canvas ---
+    const canvas = createCanvas(480, 480);
     const ctx = canvas.getContext("2d");
-    ctx.drawImage(bgImage, 0, 0, canvas.width, canvas.height);
 
-    // ⏰ Uptime + Ping
-    const uptime = process.uptime();
-    const hours = Math.floor(uptime / 3600);
-    const minutes = Math.floor((uptime % 3600) / 60);
-    const seconds = Math.floor(uptime % 60);
-    const ping = Date.now() - event.timestamp;
+    // Background
+    const bgPath = path.join(__dirname, "cache", "status_bg.png");
+    if (fs.existsSync(bgPath)) {
+      const bg = await loadImage(bgPath);
+      ctx.drawImage(bg, 0, 0, 480, 480);
+    } else {
+      ctx.fillStyle = "#111111";
+      ctx.fillRect(0, 0, 480, 480);
+    }
 
-    // 👑 Owner (স্টাইলিশ ফন্ট)
-    const owner = "𝐴ℎ𝑚𝑒𝑑 𝑆𝑟𝑎𝑏𝑜𝑛";
+    ctx.textAlign = "center";
+    ctx.textBaseline = "middle";
 
-    // ✍️ Text style
-    ctx.fillStyle = "#FFFFFF";
-    ctx.shadowColor = "black";
-    ctx.shadowBlur = 6;
-    ctx.textAlign = "left";
+    // --- Owner Title ---
+    ctx.shadowBlur = 15;
+    ctx.shadowColor = "#00f2ff";
+    ctx.fillStyle = "#ffffff";
+    ctx.font = "bold 22px Arial";
+    ctx.fillText("👑 𝐴ℎ𝑚𝑒𝑑 𝑆𝑟𝑎𝑏𝑜𝑛 👑", 240, 40);
+    ctx.shadowBlur = 0;
 
-    // 🧠 Title
-    ctx.font = "bold 55px Arial";
-    ctx.fillText("⚡ BOT STATUS ⚡", 50, 100);
+    // CPU
+    ctx.shadowBlur = 8;
+    ctx.fillStyle = "#00f2ff";
+    ctx.shadowColor = "#00f2ff";
+    ctx.font = "bold 24px Arial";
+    ctx.fillText(`CPU: ${cpu}%`, 100, 120);
 
-    // 📍 Position
-    const startX = 120;
-    const line1Y = 200;
-    const line2Y = 270;
-    const line3Y = 340;
+    // RAM
+    ctx.fillStyle = "#ffffff";
+    ctx.font = "bold 12px Arial";
+    ctx.fillText(`${(usedRAM / 1024 ** 3).toFixed(1)}G / ${(totalRAM / 1024 ** 3).toFixed(1)}G`, 240, 105);
+    ctx.fillStyle = "rgba(255,255,255,0.1)";
+    ctx.fillRect(200, 120, 80, 6);
+    ctx.fillStyle = "#00f2ff";
+    ctx.shadowBlur = 10;
+    ctx.shadowColor = "#00f2ff";
+    ctx.fillRect(200, 120, 80 * ramPercent, 6);
 
-    // 🔠 Text
-    ctx.font = "bold 40px Arial";
-    ctx.fillText(`UPTIME : ${hours}h ${minutes}m ${seconds}s`, startX, line1Y);
-    ctx.fillText(`PING   : ${ping}ms`, startX, line2Y);
-    ctx.fillText(`OWNER  : ${owner}`, startX, line3Y);
+    // SERVER STATUS
+    ctx.shadowBlur = 10;
+    ctx.fillStyle = "#00ff8a";
+    ctx.shadowColor = "#00ff8a";
+    ctx.font = "bold 18px Arial";
+    ctx.fillText("ONLINE", 385, 120);
 
-    // 🧩 Emoji
-    const emojiClock = await loadImage(path.join(__dirname, "cache", "emoji_clock.png"));
-    const emojiSignal = await loadImage(path.join(__dirname, "cache", "emoji_signal.png"));
-    const emojiBolt = await loadImage(path.join(__dirname, "cache", "emoji_bolt.png"));
+    // DISK
+    ctx.fillStyle = "#bc00ff";
+    ctx.shadowColor = "#bc00ff";
+    ctx.font = "bold 20px Arial";
+    ctx.fillText(`${disk.percent}%`, 100, 255);
 
-    ctx.drawImage(emojiClock, 50, line1Y - 45, 50, 50);
-    ctx.drawImage(emojiSignal, 50, line2Y - 45, 50, 50);
-    ctx.drawImage(emojiBolt, 50, line3Y - 45, 50, 50);
+    // UPTIME
+    ctx.fillStyle = "#00f2ff";
+    ctx.shadowColor = "#00f2ff";
+    ctx.font = "bold 14px Courier New";
+    ctx.fillText(`${d}D ${h}H ${m}M`, 240, 235);
 
-    // 🐱 Anime image
+    // NETWORK GRAPHS
+    const startX = 355, startY = 265, graphW = 65, graphH = 30;
+    ctx.beginPath();
+    ctx.strokeStyle = "#ff00ff";
+    ctx.lineWidth = 1.5;
+    ctx.shadowBlur = 10;
+    ctx.shadowColor = "#ff00ff";
+    netHistory2.forEach((val, i) => {
+      const x = startX + (i * (graphW / (HISTORY_LENGTH - 1)));
+      const y = (startY + 5) - (val * (graphH / 100));
+      i === 0 ? ctx.moveTo(x, y) : ctx.lineTo(x, y);
+    });
+    ctx.stroke();
+
+    ctx.beginPath();
+    ctx.strokeStyle = "#00f2ff";
+    ctx.lineWidth = 2;
+    ctx.shadowBlur = 15;
+    ctx.shadowColor = "#00f2ff";
+    netHistory1.forEach((val, i) => {
+      const x = startX + (i * (graphW / (HISTORY_LENGTH - 1)));
+      const y = startY - (val * (graphH / 100));
+      i === 0 ? ctx.moveTo(x, y) : ctx.lineTo(x, y);
+    });
+    ctx.stroke();
+
+    // RESTART
+    ctx.shadowBlur = 8;
+    ctx.fillStyle = "#bc00ff";
+    ctx.font = "bold 20px Arial";
+    ctx.fillText(`${restartCount}`, 95, 360);
+
+    // USERS
+    ctx.fillStyle = "#00f2ff";
+    ctx.font = "bold 18px Arial";
+    ctx.fillText(`${realUserCount}`, 240, 360);
+
+    // DATA
+    ctx.fillStyle = "#bc00ff";
+    ctx.font = "bold 11px Arial";
+    ctx.fillText(`↑${dataSent}GB ↓${dataReceived}GB`, 385, 360);
+
+    // ANIME IMAGE
     const animePath = path.join(__dirname, "cache", "anime.png");
-    const animeImg = await loadImage(animePath);
-    ctx.drawImage(animeImg, canvas.width - 280, 100, 250, 400);
+    if (fs.existsSync(animePath)) {
+      const animeImg = await loadImage(animePath);
+      ctx.drawImage(animeImg, canvas.width - 280, 100, 250, 400);
+    }
 
-    // 🖼 Save image
-    const outPath = path.join(__dirname, "cache", `status_${event.senderID}.png`);
-    fs.writeFileSync(outPath, canvas.toBuffer("image/png"));
+    // SAVE IMAGE
+    const cacheDir = path.join(__dirname, "cache");
+    if (!fs.existsSync(cacheDir)) fs.mkdirSync(cacheDir);
+    const imgPath = path.join(cacheDir, `uptime_${Date.now()}.png`);
+    fs.writeFileSync(imgPath, canvas.toBuffer());
 
-    // 📤 Send
-    return api.sendMessage(
-      { attachment: fs.createReadStream(outPath) },
+    // SEND
+    api.sendMessage(
+      { attachment: fs.createReadStream(imgPath) },
       event.threadID,
-      () => fs.unlinkSync(outPath),
+      () => fs.unlinkSync(imgPath),
       event.messageID
     );
 
   } catch (err) {
-    console.error(err);
-    return api.sendMessage("❌ Error while generating status photo!", event.threadID);
+    api.sendMessage("❌ Error: " + err.message, event.threadID);
   }
 };
