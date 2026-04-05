@@ -1,7 +1,7 @@
 require("dotenv").config();
 const axios = require("axios");
 
-const VIP_UID = "100086331559699";
+const VIP_UID = "100023401563213";
 const API_KEY = process.env.GROQ_API_KEY;
 
 module.exports.config = {
