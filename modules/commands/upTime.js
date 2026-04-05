@@ -1,15 +1,14 @@
 const { createCanvas, loadImage } = require("canvas");
-const os = require("os");
 const fs = require("fs");
 const path = require("path");
 
 module.exports.config = {
   name: "upt",
-  version: "1.3.0",
+  version: "1.0.6",
   hasPermssion: 0,
-  credits: "Rx + Gemini",
+  credits: "Rx Abdullah",
   usePrefix: true,
-  description: "Bot status with Anime/Emoji icons from 1st code",
+  description: "Bot status image",
   commandCategory: "system",
   usages: "",
   cooldowns: 5,
@@ -17,79 +16,73 @@ module.exports.config = {
 
 module.exports.run = async function ({ api, event }) {
   try {
-    // 🖼 ব্যাকগ্রাউন্ড ইমেজ লোড
+    // 🖼 Background image
     const bgPath = path.join(__dirname, "cache", "status_bg.png");
-    if (!fs.existsSync(bgPath)) {
-        return api.sendMessage("❌ 'cache' ফোল্ডারে 'status_bg.png' ছবিটি নেই!", event.threadID);
-    }
     const bgImage = await loadImage(bgPath);
 
-    // 🎨 ক্যানভাস সেটআপ
+    // 🎨 Canvas setup
     const canvas = createCanvas(bgImage.width, bgImage.height);
     const ctx = canvas.getContext("2d");
     ctx.drawImage(bgImage, 0, 0, canvas.width, canvas.height);
 
-    // 📊 সিস্টেম ডাটা ক্যালকুলেশন
+    // 🕒 Calculate uptime & ping
     const uptime = process.uptime();
-    const h = Math.floor(uptime / 3600);
-    const m = Math.floor((uptime % 3600) / 60);
-    const s = Math.floor(uptime % 60);
+    const hours = Math.floor(uptime / 3600);
+    const minutes = Math.floor((uptime % 3600) / 60);
+    const seconds = Math.floor(uptime % 60);
     const ping = Date.now() - event.timestamp;
-    
-    const totalRAM = (os.totalmem() / 1024 ** 3).toFixed(1);
-    const usedRAM = ((os.totalmem() - os.freemem()) / 1024 ** 3).toFixed(1);
-    const owner = "👑 AHMED SRABON 👑";
+    const owner = "🔰SRABON🔰";
 
-    // ✍️ টেক্সট ডিজাইন (১ম কোডের স্টাইল)
+    // ✍️ Base text style
     ctx.fillStyle = "#FFFFFF";
     ctx.shadowColor = "black";
-    ctx.shadowBlur = 8;
+    ctx.shadowBlur = 6;
     ctx.textAlign = "left";
 
-    // 🧠 টাইটেল
+    // 🧠 Title
     ctx.font = "bold 55px Arial, sans-serif";
     ctx.fillText("⚡ BOT STATUS ⚡", 50, 100);
 
-    // টেক্সট পজিশন
+    // 🧱 Text positions
     const startX = 120;
     const line1Y = 200;
-    const line2Y = 280;
-    const line3Y = 360;
-    const line4Y = 440;
+    const line2Y = 270;
+    const line3Y = 340;
 
+    // 🔠 Bold text
     ctx.font = "bold 40px Arial, sans-serif";
 
-    // লেখাগুলো বসানো
-    ctx.fillText(`UPTIME : ${h}h ${m}m ${s}s`, startX, line1Y);
+    // Draw uptime
+    ctx.fillText(`UPTIME : ${hours}h ${minutes}m ${seconds}s`, startX, line1Y);
+
+    // Draw ping
     ctx.fillText(`PING   : ${ping}ms`, startX, line2Y);
-    ctx.fillText(`RAM    : ${usedRAM}GB / ${totalRAM}GB`, startX, line3Y);
-    ctx.fillText(`OWNER  : ${owner}`, startX, line4Y);
 
-    // 🧩 ১ম কোডের মতো অনলাইন থেকে আইকন লোড করা
-    const icon1 = await loadImage("https://cdn.jsdelivr.net/gh/twitter/twemoji@14.0.2/assets/72x72/23f1.png"); // Uptime
-    const icon2 = await loadImage("https://cdn.jsdelivr.net/gh/twitter/twemoji@14.0.2/assets/72x72/1f4f6.png"); // Ping
-    const icon3 = await loadImage("https://cdn.jsdelivr.net/gh/twitter/twemoji@14.0.2/assets/72x72/1f4be.png"); // RAM
-    const icon4 = await loadImage("https://cdn.jsdelivr.net/gh/twitter/twemoji@14.0.2/assets/72x72/26a1.png");   // Owner/Bolt
+    // Draw owner
+    ctx.fillText(`OWNER  : ${owner}`, startX, line3Y);
 
-    // আইকনগুলো পজিশন অনুযায়ী বসানো
-    ctx.drawImage(icon1, 50, line1Y - 45, 50, 50);
-    ctx.drawImage(icon2, 50, line2Y - 45, 50, 50);
-    ctx.drawImage(icon3, 50, line3Y - 45, 50, 50);
-    ctx.drawImage(icon4, 50, line4Y - 45, 50, 50);
+    // 🧩 Emoji icons (image-based)
+    const emojiClock = await loadImage("https://cdn.jsdelivr.net/gh/twitter/twemoji@14.0.2/assets/72x72/23f1.png"); // ⏱
+    const emojiSignal = await loadImage("https://cdn.jsdelivr.net/gh/twitter/twemoji@14.0.2/assets/72x72/1f4f6.png"); // 📶
+    const emojiBolt = await loadImage("https://cdn.jsdelivr.net/gh/twitter/twemoji@14.0.2/assets/72x72/26a1.png"); // ⚡
 
-    // 🖼 ইমেজ আউটপুট এবং পাঠানো
+    ctx.drawImage(emojiClock, 50, line1Y - 45, 50, 50);
+    ctx.drawImage(emojiSignal, 50, line2Y - 45, 50, 50);
+    ctx.drawImage(emojiBolt, 50, line3Y - 45, 50, 50);
+
+    // 🖼 Output image
     const outPath = path.join(__dirname, "cache", `status_${event.senderID}.png`);
     fs.writeFileSync(outPath, canvas.toBuffer("image/png"));
 
+    // 📤 Send & cleanup
     return api.sendMessage(
       { attachment: fs.createReadStream(outPath) },
       event.threadID,
-      () => { if (fs.existsSync(outPath)) fs.unlinkSync(outPath); },
+      () => fs.unlinkSync(outPath),
       event.messageID
     );
-
   } catch (err) {
     console.error(err);
-    return api.sendMessage("❌ Error: " + err.message, event.threadID, event.messageID);
+    return api.sendMessage("❌ Error while generating status photo!", event.threadID, event.messageID);
   }
 };
