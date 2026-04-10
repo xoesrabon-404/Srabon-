@@ -43,7 +43,7 @@ module.exports.handleEvent = async function ({ api, event, Users }) {
 
     const firstMessage =
 `┏━━━━━❖❖━━━━━❖❖━━━━━┓
-      🐰 𝔸𝕚 𝕒𝕤𝕤𝕚𝕤𝕥𝕒𝕟𝕥 🐰
+      🐰𝑆𝑟𝑎𝑏𝑜𝑛 𝐶ℎ𝑎𝑇 𝐵𝑜𝑡🐰
 
   🌸 Dear : ${name}
 
