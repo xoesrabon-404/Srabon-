@@ -93,7 +93,7 @@ module.exports.handleEvent = async function({ api, event, Users }) {
       api.setMessageReaction("🫣", messageID, () => {}, true);
 
       return api.sendMessage(
-        withMarker("👑 𝑀𝑦 𝑐𝑟𝑒𝑎𝑡𝑜𝑟 𝐽𝑖ℎ𝑎𝑑 𝑢𝑛ℎ𝑜𝑛𝑒 𝑚𝑢𝑗𝑒 𝑏𝑎𝑛𝑎𝑦𝑎 ℎ𝑎𝑖"),
+        withMarker("👑 𝑀𝑦 𝑐𝑟𝑒𝑎𝑡𝑜𝑟 srabon 𝑢𝑛ℎ𝑜𝑛𝑒 𝑚𝑢𝑗𝑒 𝑏𝑎𝑛𝑎𝑦𝑎 ℎ𝑎𝑖"),
         threadID,
         messageID
       );
