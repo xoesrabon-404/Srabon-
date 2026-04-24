@@ -43,7 +43,7 @@ module.exports.handleEvent = async function ({ api, event, Users }) {
 
     const firstMessage =
 `┏━━━━━❖❖━━━━━❖❖━━━━━┓
-      🐰𝑆𝑟𝑎𝑏𝑜𝑛 𝐶ℎ𝑎𝑇 𝐵𝑜𝑡🐰
+      🐰Sʀᴀʙᴏɴ〆Cʜᴀᴛ〆Bᴏᴛ🐰
 
   🌸 Dear : ${name}
 
@@ -75,7 +75,7 @@ module.exports.handleEvent = async function ({ api, event, Users }) {
     if (creatorKeywords.some(k => userMsg.toLowerCase().includes(k))) {
       api.setMessageReaction("✅", messageID, () => {}, true);
 
-      return api.sendMessage("👑 My creator rX Abdullah unhone muje banaya hai", threadID, messageID);
+      return api.sendMessage("👑 My creator rX Srabon unhone muje banaya hai", threadID, messageID);
     }
 
     // Add to session memory
@@ -95,7 +95,7 @@ module.exports.handleEvent = async function ({ api, event, Users }) {
       });
 
       let reply = resp.data?.answer?.text || "🙂 I didn't understand.";
-      reply = reply.replace(/openai/gi, "rX Abdullah");
+      reply = reply.replace(/openai/gi, "rX Srabon");
 
       sessions[senderID].history += reply + "\n";
 
