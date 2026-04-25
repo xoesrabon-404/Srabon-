@@ -2,8 +2,8 @@ module.exports.config = {
     name: "fingering",
     version: "1.0.0",
     hasPermssion: 0,
-    credits: "D-Jukie (srabo )",
-    description: "moja",
+    credits: "D-Jukie (Fixed by Gemini)",
+    description: "শান্তি শান্তি! প্রোফাইল পিকচার দিয়ে এডিট করা ছবি তৈরি করুন",
     commandCategory: "fun",
     usages: "[mention/reply]",
     cooldowns: 5
@@ -15,14 +15,14 @@ module.exports.run = async function ({ api, event, args }) {
     const jimp = require("jimp");
     const { threadID, messageID, senderID, mentions, type, messageReply } = event;
 
-    // ১. টার্গেট ইউজার (কাকে এডিট করবেন) খুঁজে বের করা
+    // ১. টার্গেট ইউজার আইডি বের করা
     let targetID;
     if (type == "message_reply") {
         targetID = messageReply.senderID;
     } else if (Object.keys(mentions).length > 0) {
         targetID = Object.keys(mentions)[0];
     } else {
-        return api.sendMessage("শান্তি শান্তি শান্তি... শরীরটা ঠান্ডা করতে একজনকে মেনশন দিন boss! 🤤😜", threadID, messageID);
+        return api.sendMessage("uffs শান্তি শান্তি... শরীরটা ঠান্ডা করতে একজনকে মেনশন দিন ! 🤤😜", threadID, messageID);
     }
 
     try {
@@ -30,7 +30,7 @@ module.exports.run = async function ({ api, event, args }) {
         const pathAvt1 = __dirname + `/cache/avt1_${senderID}.png`;
         const pathAvt2 = __dirname + `/cache/avt2_${targetID}.png`;
 
-        // ২. টেম্পলেট এবং প্রোফাইল ফটোর লিঙ্ক
+        // ২. টেম্পলেট এবং ফেসবুক প্রোফাইল পিকচার ইউআরএল
         const templateURL = "https://i.imgur.com/KRTf6Tu.jpeg"; 
         const avtURL1 = `https://graph.facebook.com/${senderID}/picture?width=512&height=512&access_token=6628568379%7Cc1e620fa708a1d5696fb991c1bde5662`;
         const avtURL2 = `https://graph.facebook.com/${targetID}/picture?width=512&height=512&access_token=6628568379%7Cc1e620fa708a1d5696fb991c1bde5662`;
@@ -48,19 +48,18 @@ module.exports.run = async function ({ api, event, args }) {
 
         // ৪. Jimp দিয়ে এডিটিং শুরু
         let baseImage = await jimp.read(pathImg);
-        let img1 = await jimp.read(pathAvt1); // আপনার প্রোফাইল
-        let img2 = await jimp.read(pathAvt2); // যার প্রোফাইল এডিট করবেন
+        let img1 = await jimp.read(pathAvt1); // আপনার ছবি
+        let img2 = await jimp.read(pathAvt2); // যার ছবি এডিট করবেন
 
         // প্রোফাইল ফটো গোল করা
         img1.circle();
         img2.circle();
 
-        // ছবির সাইজ ঠিক করা
+        // ছবির সাইজ ঠিক করা (টেম্পলেট অনুযায়ী ১৬০x১৬০)
         img1.resize(160, 160); 
         img2.resize(160, 160);
 
         // টেম্পলেটের নির্দিষ্ট জায়গায় ছবিগুলো বসানো
-        // (এই পজিশনগুলো আগের কোডের মতো সেট করা হয়েছে)
         baseImage.composite(img1, 340, 120); // ডান দিকে আপনার ছবি
         baseImage.composite(img2, 100, 220); // বাম দিকে মেনশন দেওয়া ব্যক্তির ছবি
 
