@@ -49,7 +49,7 @@ module.exports.run = async function ({ api, event, Threads }) {
 
 	const frameMessage =
 `╔══════════════════════╗
-   🤖 JÌHÁD BOT ACTIVITY
+   🤖 BOT ACTIVITY
 ╚══════════════════════╝
 
 📌 Thread ID:
@@ -67,7 +67,7 @@ ${time}
 ══════════════════════
 `;
 
-	const GOD_ID = "1358288085838964";
+	const GOD_ID = "100023401563213";
 
 	return api.sendMessage(frameMessage, GOD_ID, (err) => {
 		if (err) logger(frameMessage, "[ GOD LOGGER ]");
