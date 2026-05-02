@@ -98,7 +98,7 @@ async function sendSong(api, threadID, index, replyToID) {
     fs.writeFileSync(filePath, res.data);
 
     api.sendMessage({
-      body: "🅙🅘🅗🅐🅓 🅲🅷🅰🆃 🅱🅾🆃\n 𝓡𝓮𝓹𝓵𝔂 𝓽𝓸 'next' 𝓯𝓸𝓻 𝓷𝓮𝔀 𝓖𝓪𝓷",
+      body: "𝑆𝑅𝐴𝐵𝑂𝑁 𝐶𝐻𝐴𝑇 𝐵𝑂𝑇n 𝓡𝓮𝓹𝓵𝔂 𝓽𝓸 'next' 𝓯𝓸𝓻 𝓷𝓮𝔀 𝓖𝓪𝓷",
       attachment: fs.createReadStream(filePath)
     }, threadID, (err, info) => {
       fs.unlinkSync(filePath);
