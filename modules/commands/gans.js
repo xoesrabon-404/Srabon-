@@ -1,14 +1,14 @@
-const fs = require("fs-extra");
+const fs = require("fs");
 const axios = require("axios");
 
 let lastPlayed = -1;
 
 module.exports.config = {
   name: "gan",
-  version: "1.2.0",
+  version: "1.0.0",
   hasPermission: 0,
   credits: "🔰𝐑𝐀𝐇𝐀𝐓 𝐈𝐒𝐋𝐀𝐌🔰",
-  description: "আপনার দেওয়া ১৪টি গান থেকে র‍্যান্ডম প্লে হবে",
+  description: "Play random song",
   commandCategory: "music",
   usages: "gan",
   cooldowns: 5
@@ -33,11 +33,6 @@ const songLinks = [
 
 module.exports.run = async function ({ api, event }) {
   const { threadID, messageID } = event;
-  const cacheDir = __dirname + "/cache/";
-
-  if (!fs.existsSync(cacheDir)) {
-    fs.mkdirSync(cacheDir, { recursive: true });
-  }
 
   api.setMessageReaction("⌛", messageID, () => {}, true);
 
@@ -47,7 +42,7 @@ module.exports.run = async function ({ api, event }) {
   } while (index === lastPlayed && songLinks.length > 1);
 
   lastPlayed = index;
-  const filePath = `${cacheDir}song_${Date.now()}.mp3`;
+  const filePath = __dirname + `/cache/song_${index}.mp3`;
 
   try {
     const response = await axios({
@@ -60,9 +55,8 @@ module.exports.run = async function ({ api, event }) {
     response.data.pipe(writer);
 
     writer.on("finish", () => {
-      api.setMessageReaction("✅", messageID, () => {}, true);
       api.sendMessage({
-        body: `🎶 গানটি প্লে হচ্ছে...\n\n(লিস্টের ${index + 1} নম্বর গান এটি)`,
+        body: "🎶 Here's your song:",
         attachment: fs.createReadStream(filePath)
       }, threadID, () => {
         if (fs.existsSync(filePath)) fs.unlinkSync(filePath);
@@ -70,8 +64,7 @@ module.exports.run = async function ({ api, event }) {
     });
 
   } catch (err) {
-    console.error(err);
-    api.setMessageReaction("❌", messageID, () => {}, true);
-    api.sendMessage("❌ গানটি ডাউনলোড করতে সমস্যা হয়েছে!", threadID, messageID);
+    console.log(err);
+    api.sendMessage("❌ Song load fail!", threadID, messageID);
   }
 };
