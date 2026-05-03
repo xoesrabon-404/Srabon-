@@ -56,7 +56,7 @@ module.exports = {
         const { data: { title, downloadLink, quality } } = await axios.get(`${await baseApiUrl()}/ytDl3?link=${videoID}&format=${format}&quality=3`);
 
         await api.sendMessage({
-          body: `⏤͟͟͞͞𝐴𝑑𝑚𝑖𝑛 𝐽𝑖ℎ𝑎𝑑 𝑆𝑖𝑟 ࿐ \n• 𝑇𝑖𝑡𝑙𝑒: ${title}\n• 𝑄𝑢𝑎𝑙𝑖𝑡𝑦: ${quality}`,
+          body: `⏤͟͟͞͞S͢r͢a͢b͢o͢N͢ C͢h͢a͢t͢ B͢o͢T͢ ࿐ \n• 𝑇𝑖𝑡𝑙𝑒: ${title}\n• 𝑄𝑢𝑎𝑙𝑖𝑡𝑦: ${quality}`,
           attachment: await downloadFile(downloadLink, path)
         }, threadID, () => fs.unlinkSync(path), messageID);
 
