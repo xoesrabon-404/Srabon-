@@ -1,14 +1,15 @@
-const fs = require("fs");
 const axios = require("axios");
+const fs = require("fs-extra");
+const path = require("path");
 
 let lastPlayed = -1;
 
 module.exports.config = {
   name: "gan",
-  version: "1.0.0",
+  version: "1.0.5",
   hasPermission: 0,
-  credits: "🔰𝐑𝐀𝐇𝐀𝐓 𝐈𝐒𝐋𝐀𝐌🔰",
-  description: "Play random song",
+  credits: "Srabon",
+  description: "Play random song using Axios Buffer",
   commandCategory: "music",
   usages: "gan",
   cooldowns: 5
@@ -34,37 +35,39 @@ const songLinks = [
 module.exports.run = async function ({ api, event }) {
   const { threadID, messageID } = event;
 
-  api.setMessageReaction("⌛", messageID, () => {}, true);
-
+  // র‍্যান্ডম গান সিলেকশন লজিক
   let index;
   do {
     index = Math.floor(Math.random() * songLinks.length);
   } while (index === lastPlayed && songLinks.length > 1);
-
   lastPlayed = index;
-  const filePath = __dirname + `/cache/song_${index}.mp3`;
+
+  const url = songLinks[index];
+  const cacheDir = path.join(__dirname, "cache");
+  const filePath = path.join(cacheDir, `gan_${Date.now()}.mp3`);
 
   try {
-    const response = await axios({
-      method: "GET",
-      url: songLinks[index],
-      responseType: "stream"
-    });
+    // ১. বালুঘড়ি রিয়্যাকশন
+    api.setMessageReaction("⌛", messageID, () => {}, true);
 
-    const writer = fs.createWriteStream(filePath);
-    response.data.pipe(writer);
+    // ২. ফোল্ডার না থাকলে তৈরি করা
+    if (!fs.existsSync(cacheDir)) fs.mkdirSync(cacheDir);
 
-    writer.on("finish", () => {
-      api.sendMessage({
-        body: "🎶 Here's your song:",
-        attachment: fs.createReadStream(filePath)
-      }, threadID, () => {
-        if (fs.existsSync(filePath)) fs.unlinkSync(filePath);
-      }, messageID);
-    });
+    // ৩. আপনার দেওয়া "আধুনিক নিয়ম" (Axios Buffer)
+    const res = await axios.get(url, { responseType: 'arraybuffer' });
+    fs.writeFileSync(filePath, Buffer.from(res.data, 'binary'));
+
+    // ৪. গান পাঠানো
+    return api.sendMessage({
+      body: "🎶 𝑆𝑅𝐴𝐵𝑂𝑁 𝐶𝐻𝐴𝑇 𝐵𝑂𝑇\n» গানটি আপনার জন্য লোড করা হয়েছে।",
+      attachment: fs.createReadStream(filePath)
+    }, threadID, () => {
+      // ৫. পাঠানোর পর সাথে সাথে ডিলিট (যাতে মেমোরি ফুল না হয়)
+      if (fs.existsSync(filePath)) fs.unlinkSync(filePath);
+    }, messageID);
 
   } catch (err) {
-    console.log(err);
-    api.sendMessage("❌ Song load fail!", threadID, messageID);
+    console.error("Download Error:", err.message);
+    return api.sendMessage("❌ গানটি ডাউনলোড করতে ব্যর্থ হয়েছে। ড্রাইভ লিঙ্কটি চেক করুন।", threadID, messageID);
   }
 };
