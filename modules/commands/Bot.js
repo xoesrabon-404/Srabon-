@@ -31,7 +31,7 @@ const customReplies = [
   "আরে বলদ এতো ডাকিস কেন🤬"
   "আরে বুঝলাম তোমার birn পুটকিতে 🦍"
   "বট না বলে প্রতিদিন হাইহেন গু সব মাথাই😂"
-  "⚡️boss শ্রাবন অনুমতি দেন তারে চুটকি মারি দেয়🦍"
+  "⚡️boss শ্রাবন অনুমতি দেন তারে চুটকি মারি দেয়🦍"
   "কিরে বলদ কী বলবি বল 😏🤧"
   
 ];
@@ -114,7 +114,7 @@ module.exports.handleEvent = async function ({ api, event, Users }) {
     } catch (err) {
       api.setMessageReaction("❌", messageID, () => {}, true);
       console.log(err);
-      return api.sendMessage("❌ Maria API error.", threadID, messageID);
+      return api.sendMessage("❌ uffs কি holo.", threadID, messageID);
     }
   }
 };
