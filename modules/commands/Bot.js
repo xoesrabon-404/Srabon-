@@ -2,16 +2,16 @@ const axios = require("axios");
 
 module.exports.config = {
   name: "bot",
-  version: "3.0.2",
-  hasPermssion: 0,
-  credits: "rX Abdullah",
+  version: "3.0.3",
+  hasPermission: 0,
+  credits: "Srabon",
   description: "Maria first frame only, then normal AI chat plain",
   commandCategory: "noprefix",
   usages: "bot",
   cooldowns: 3
 };
 
-// Sessions
+// Sessions memory
 const sessions = {};
 
 // Maria API endpoint
@@ -26,14 +26,13 @@ const customReplies = [
   "এতো ডেকো না, প্রেমে পরে যাবো 🙈",
   "বার বার ডাকলে মাথা গরম হয়ে যায়😑",
   "𝐓𝐨𝐫 𝐧𝐚𝐧𝐢𝐫 𝐮𝐢𝐝 𝐦𝐞 𝐝𝐞 𝐤𝐡𝐚𝐢 𝐝𝐢 𝐚𝐦𝐢 🦆",
-  "এতো ডাকছিস কেন? গালি শুনবি নাকি? 🤬"
-  "বস বল বলদ মার্কা পোলাপান 😑"
-  "আরে বলদ এতো ডাকিস কেন🤬"
-  "আরে বুঝলাম তোমার birn পুটকিতে 🦍"
-  "বট না বলে প্রতিদিন হাইহেন গু সব মাথাই😂"
-  "⚡️boss শ্রাবন অনুমতি দেন তারে চুটকি মারি দেয়🦍"
+  "এতো ডাকছিস কেন? গালি শুনবি নাকি? 🤬",
+  "বস বল বলদ মার্কা পোলাপান 😑",
+  "আরে বলদ এতো ডাকিস কেন🤬",
+  "আরে বুঝলাম তোমার birn পুটকিতে 🦍",
+  "বট না বলে প্রতিদিন হাইহেন গু সব মাথাই😂",
+  "⚡️boss শ্রাবন অনুমতি দেন তারে চুটকি মারি দেয়🦍",
   "কিরে বলদ কী বলবি বল 😏🤧"
-  
 ];
 
 module.exports.handleEvent = async function ({ api, event, Users }) {
@@ -48,25 +47,21 @@ module.exports.handleEvent = async function ({ api, event, Users }) {
 
     const rand = customReplies[Math.floor(Math.random() * customReplies.length)];
 
-    const firstMessage =
-`┏━━━━━❖❖━━━━━❖❖━━━━━┓
+    const firstMessage = `┏━━━━━❖❖━━━━━❖❖━━━━━┓
       🐰Sʀᴀʙᴏɴ〆Cʜᴀᴛ〆Bᴏᴛ🐰
 
   🌸 Dear : ${name}
-
   💬 Reply : ⏤͟͟͞͞☻ ${rand}
 ┗━━━━━❖❖━━━━━❖❖━━━━━┛`;
 
     try {
-      await api.sendTypingIndicatorV2(true, threadID);
-      await new Promise(r => setTimeout(r, 2000));
-      await api.sendTypingIndicatorV2(false, threadID);
-    } catch {}
+      api.sendTypingIndicator(threadID); // সহজ টাইপিং ইন্ডিকেটর
+    } catch (e) {}
 
     return api.sendMessage(firstMessage, threadID, messageID);
   }
 
-  // STEP 2: Normal AI chat (plain text, no frame)
+  // STEP 2: Normal AI chat (Reply interaction)
   if (
     messageReply &&
     messageReply.senderID === api.getCurrentUserID() &&
@@ -77,44 +72,35 @@ module.exports.handleEvent = async function ({ api, event, Users }) {
 
     api.setMessageReaction("⏳", messageID, () => {}, true);
 
-    // Creator check
-    const creatorKeywords = ["tera creator", "developer kaun"];
+    // Developer details logic
+    const creatorKeywords = ["creator", "developer", "owner", "বানাইছে"];
     if (creatorKeywords.some(k => userMsg.toLowerCase().includes(k))) {
       api.setMessageReaction("✅", messageID, () => {}, true);
-
-      return api.sendMessage("👑 My creator rX Srabon unhone muje banaya hai", threadID, messageID);
+      return api.sendMessage("👑 My creator is Srabon. He is my boss.", threadID, messageID);
     }
 
-    // Add to session memory
-    sessions[senderID].history += `User: ${userMsg}\nMaria: `;
-
     try {
-      await api.sendTypingIndicatorV2(true, threadID);
-      await new Promise(r => setTimeout(r, 2000));
-      await api.sendTypingIndicatorV2(false, threadID);
-    } catch {}
-
-    try {
+      // API call to Maria
       const resp = await axios.post(MARIA_API_URL, {
         user_id: senderID,
-        query: sessions[senderID].history,
+        query: userMsg, // সরাসরি ইউজার মেসেজ পাঠানো সেশনের জন্য ভালো
         meta: { need_realtime: true }
       });
 
       let reply = resp.data?.answer?.text || "🙂 I didn't understand.";
-      reply = reply.replace(/openai/gi, "rX Srabon");
-
-      sessions[senderID].history += reply + "\n";
+      
+      // ব্র্যান্ডিং পরিবর্তন
+      reply = reply.replace(/openai|google|gpt/gi, "Srabon");
 
       api.setMessageReaction("✅", messageID, () => {}, true);
 
-      // Plain text reply, no frame
+      // Plain text reply
       return api.sendMessage(reply, threadID, messageID);
 
     } catch (err) {
       api.setMessageReaction("❌", messageID, () => {}, true);
-      console.log(err);
-      return api.sendMessage("❌ uffs কি holo.", threadID, messageID);
+      console.error(err);
+      return api.sendMessage("❌ সার্ভারে সমস্যা হচ্ছে, পরে চেষ্টা করো।", threadID, messageID);
     }
   }
 };
