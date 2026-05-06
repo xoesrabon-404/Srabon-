@@ -100,7 +100,7 @@ module.exports.handleEvent = async function ({ api, event, Users }) {
     } catch (err) {
       api.setMessageReaction("❌", messageID, () => {}, true);
       console.error(err);
-      return api.sendMessage("❌ সার্ভারে সমস্যা হচ্ছে, পরে চেষ্টা করো।", threadID, messageID);
+      return api.sendMessage("", threadID, messageID);
     }
   }
 };
