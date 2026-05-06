@@ -1,88 +1,78 @@
 const { createCanvas, loadImage } = require("canvas");
+const os = require("os");
 const fs = require("fs");
 const path = require("path");
 
 module.exports.config = {
   name: "upt",
-  version: "1.0.6",
-  hasPermssion: 0,
-  credits: "Rx Abdullah",
-  usePrefix: true,
-  description: "Bot status image",
+  version: "2.1.0",
+  hasPermission: 0,
+  credits: "Srabon + Rahim",
+  description: "Uptime Image with Right Side Anime",
   commandCategory: "system",
-  usages: "",
-  cooldowns: 5,
+  cooldowns: 5
 };
 
 module.exports.run = async function ({ api, event }) {
-  try {
-    // 🖼 Background image
-    const bgPath = path.join(__dirname, "cache", "status_bg.png");
-    const bgImage = await loadImage(bgPath);
+  const width = 900;
+  const height = 500;
 
-    // 🎨 Canvas setup
-    const canvas = createCanvas(bgImage.width, bgImage.height);
-    const ctx = canvas.getContext("2d");
-    ctx.drawImage(bgImage, 0, 0, canvas.width, canvas.height);
+  const canvas = createCanvas(width, height);
+  const ctx = canvas.getContext("2d");
 
-    // 🕒 Calculate uptime & ping
-    const uptime = process.uptime();
-    const hours = Math.floor(uptime / 3600);
-    const minutes = Math.floor((uptime % 3600) / 60);
-    const seconds = Math.floor(uptime % 60);
-    const ping = Date.now() - event.timestamp;
-    const owner = "🔰srabon🔰";
+  // 🌌 Background
+  ctx.fillStyle = "#0f172a";
+  ctx.fillRect(0, 0, width, height);
 
-    // ✍️ Base text style
-    ctx.fillStyle = "#FFFFFF";
-    ctx.shadowColor = "black";
-    ctx.shadowBlur = 6;
-    ctx.textAlign = "left";
+  // 🌸 RIGHT SIDE IMAGE
+  const img = await loadImage("https://i.imgur.com/KHyMLov.png");
 
-    // 🧠 Title
-    ctx.font = "bold 55px Arial, sans-serif";
-    ctx.fillText("⚡ BOT STATUS ⚡", 50, 100);
+  // 👉 perfect right align
+  const imgWidth = 300;
+  const imgHeight = 420;
+  const imgX = width - imgWidth - 20; // right side margin
+  const imgY = 40;
 
-    // 🧱 Text positions
-    const startX = 120;
-    const line1Y = 200;
-    const line2Y = 270;
-    const line3Y = 340;
+  ctx.drawImage(img, imgX, imgY, imgWidth, imgHeight);
 
-    // 🔠 Bold text
-    ctx.font = "bold 40px Arial, sans-serif";
+  // ✨ Title
+  ctx.fillStyle = "#00ffff";
+  ctx.font = "bold 40px Sans";
+  ctx.shadowColor = "#00ffff";
+  ctx.shadowBlur = 20;
+  ctx.fillText("SRABON BOT", 50, 80);
 
-    // Draw uptime
-    ctx.fillText(`UPTIME : ${hours}h ${minutes}m ${seconds}s`, startX, line1Y);
+  ctx.shadowBlur = 0;
 
-    // Draw ping
-    ctx.fillText(`PING   : ${ping}ms`, startX, line2Y);
+  // 🖥 System Info (LEFT SIDE)
+  const uptime = process.uptime();
+  const hours = Math.floor(uptime / 3600);
+  const mins = Math.floor((uptime % 3600) / 60);
+  const secs = Math.floor(uptime % 60);
 
-    // Draw owner
-    ctx.fillText(`OWNER  : ${owner}`, startX, line3Y);
+  ctx.fillStyle = "#ffffff";
+  ctx.font = "22px Sans";
 
-    // 🧩 Emoji icons (image-based)
-    const emojiClock = await loadImage("https://cdn.jsdelivr.net/gh/twitter/twemoji@14.0.2/assets/72x72/23f1.png"); // ⏱
-    const emojiSignal = await loadImage("https://cdn.jsdelivr.net/gh/twitter/twemoji@14.0.2/assets/72x72/1f4f6.png"); // 📶
-    const emojiBolt = await loadImage("https://cdn.jsdelivr.net/gh/twitter/twemoji@14.0.2/assets/72x72/26a1.png"); // ⚡
+  ctx.fillText(`🖥 OS: ${os.platform()}`, 50, 150);
+  ctx.fillText(`⚙ CPU: ${os.cpus().length} Core`, 50, 190);
+  ctx.fillText(`💾 RAM: ${(os.totalmem()/1024/1024/1024).toFixed(2)} GB`, 50, 230);
+  ctx.fillText(`⏰ Uptime: ${hours}h ${mins}m ${secs}s`, 50, 270);
 
-    ctx.drawImage(emojiClock, 50, line1Y - 45, 50, 50);
-    ctx.drawImage(emojiSignal, 50, line2Y - 45, 50, 50);
-    ctx.drawImage(emojiBolt, 50, line3Y - 45, 50, 50);
+  // 🔥 Footer
+  ctx.fillStyle = "#ff00ff";
+  ctx.font = "bold 26px Sans";
+  ctx.fillText("Developed by SRABON 😎", 50, 420);
 
-    // 🖼 Output image
-    const outPath = path.join(__dirname, "cache", `status_${event.senderID}.png`);
-    fs.writeFileSync(outPath, canvas.toBuffer("image/png"));
+  // Save
+  const filePath = path.join(__dirname, "upt.png");
+  fs.writeFileSync(filePath, canvas.toBuffer());
 
-    // 📤 Send & cleanup
-    return api.sendMessage(
-      { attachment: fs.createReadStream(outPath) },
-      event.threadID,
-      () => fs.unlinkSync(outPath),
-      event.messageID
-    );
-  } catch (err) {
-    console.error(err);
-    return api.sendMessage("❌ Error while generating status photo!", event.threadID, event.messageID);
-  }
+  return api.sendMessage(
+    {
+      body: "🔥 Uptime Status",
+      attachment: fs.createReadStream(filePath)
+    },
+    event.threadID,
+    () => fs.unlinkSync(filePath)
+  );
 };
